@@ -1,0 +1,376 @@
+{% extends "base1.html" %} {%block title %}
+<title>Home</title>
+{% endblock %} {%block content%}
+<!-- <div
+  class="p-4 p-md-5 text-white rounded bg-dark bg-image overlay bg-dark container-fluid"
+  style="
+    background-image: url('https://cinebox.vn/en/wp-content/uploads/how-much-does-netflix-pay-for-a-movie.jpg');
+    width: 100%;
+    height: 25vh;
+    background-size: 1980px 1080px;
+    background-repeat: no-repeat;
+  "
+>
+  <hr />
+</div> -->
+<div>
+  <div
+    id="carouselVideoExample"
+    class="carousel slide carousel-fade bg-image-full - mb-0"
+    data-mdb-ride="carousel"
+  >
+    <!-- Indicators -->
+
+    <div class="carousel-indicators">
+      <button
+        type="button"
+        data-mdb-target="#carouselVideoExample"
+        data-mdb-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Slide 1"
+      ></button>
+      <button
+        type="button"
+        data-mdb-target="#carouselVideoExample"
+        data-mdb-slide-to="1"
+        aria-label="Slide 2"
+      ></button>
+      <button
+        type="button"
+        data-mdb-target="#carouselVideoExample"
+        data-mdb-slide-to="2"
+        aria-label="Slide 3"
+      ></button>
+    </div>
+
+    <!-- Inner -->
+    <div class="carousel-inner">
+      <!-- Single item -->
+      <div class="carousel-item active">
+        <video class="img-fluid" autoplay loop muted>
+          <source
+            src="https://mdbcdn.b-cdn.net/img/video/Tropical.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <div class="carousel-caption d-none d-md-block">
+          <h5>First slide label</h5>
+          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+        </div>
+      </div>
+
+      <!-- Single item -->
+      <div class="carousel-item">
+        <video class="img-fluid" autoplay loop muted>
+          <source
+            src="https://mdbcdn.b-cdn.net/img/video/forest.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Second slide label</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+      </div>
+
+      <!-- Single item -->
+      <div class="carousel-item">
+        <video class="img-fluid" autoplay loop muted>
+          <source
+            src="https://mdbcdn.b-cdn.net/img/video/Agua-natural.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Third slide label</h5>
+          <p>
+            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Inner -->
+
+    <!-- Controls -->
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-mdb-target="#carouselVideoExample"
+      data-mdb-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-mdb-target="#carouselVideoExample"
+      data-mdb-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+
+<!--Bottom-->
+<div class="bg-dark text-light text-center mt-1 mb-5">
+  <div
+    class="overlay"
+    style="background-color: rgba(0, 0, 0, 0.455); background-size: cover"
+  ></div>
+  <div class="overlay">
+    <div class="col-md-6 px-0">
+      <h1 class="display-4 fst-italic text-center">Movie Rate</h1>
+    </div>
+    <div class="container">
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <div
+            class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+          >
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-primary">World</strong>
+              <h3 class="mb-0">Featured post</h3>
+              <div class="mb-1 text-muted">Nov 12</div>
+              <p class="card-text mb-auto">
+                This is a wider card with supporting text below as a natural
+                lead-in to additional content.
+              </p>
+              <a href="#" class="stretched-link">Continue reading</a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <svg
+                class="bd-placeholder-img"
+                width="200"
+                height="250"
+                xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="Placeholder: Thumbnail"
+                preserveAspectRatio="xMidYMid slice"
+                focusable="false"
+              >
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#55595c"></rect>
+                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div
+            class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+          >
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-success">Design</strong>
+              <h3 class="mb-0">Post title</h3>
+              <div class="mb-1 text-muted">Nov 11</div>
+              <p class="mb-auto">
+                This is a wider card with supporting text below as a natural
+                lead-in to additional content.
+              </p>
+              <a href="#" class="stretched-link">Continue reading</a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <svg
+                class="bd-placeholder-img"
+                width="200"
+                height="250"
+                xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="Placeholder: Thumbnail"
+                preserveAspectRatio="xMidYMid slice"
+                focusable="false"
+              >
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#55595c"></rect>
+                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="album py-5 bg-dark text-dark overlay">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                style="height: 225px; width: 100%; display: block"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e4d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e4d%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e4d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e4d%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e4e%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e4e%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e4e%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e4e%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e4f%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e4f%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e50%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e50%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e50%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e50%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e51%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e51%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img
+                class="card-img-top"
+                data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                alt="Thumbnail [100%x225]"
+                src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22508%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20508%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18a51504e51%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18a51504e51%22%3E%3Crect%20width%3D%22508%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22169.7562484741211%22%20y%3D%22123.78000068664551%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                data-holder-rendered="true"
+                style="height: 225px; width: 100%; display: block"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}
