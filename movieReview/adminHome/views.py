@@ -34,3 +34,10 @@ def login(request):
 def calender(request):
     template = loader.get_template('calender.html')
     return HttpResponse(template.render())
+
+def home(request):
+    template = loader.get_template('home.html')
+    return HttpResponse(template.render())
+def register(request):
+    template = loader.get_template('register.html')
+    return HttpResponse(template.render())

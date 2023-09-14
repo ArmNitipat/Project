@@ -1,4 +1,5 @@
 {% extends "base1.html" %} {%block title %}
+<link rel="stylesheet" href="static/login_register.css" />
 <title>Login</title>
 {% endblock %} {%block content%}
 <div>
@@ -63,15 +64,17 @@
           </div>
 
           <div class="pt-1 mb-4">
-            <a href="/calender"><button class="btn btn-dark btn-lg btn-block" type="button">
-              Login
-            </button></a>
+            <a href="/calender"
+              ><button class="btn btn-dark btn-lg btn-block" type="button">
+                Login
+              </button></a
+            >
           </div>
 
           <a class="small text-muted" href="#!">Forgot password?</a>
           <p class="mb-5 pb-lg-2" style="color: #393f81">
             Don't have an account?
-            <a href="#!" style="color: #393f81">Register here</a>
+            <a href="/register" style="color: #393f81">Register here</a>
           </p>
           <a href="#!" class="small text-muted">About us</a>
         </form>

@@ -7,7 +7,9 @@ urlpatterns = [
     path('dataMG',views.dataMG),
     path('reportCM',views.reportCM),
     path('dashBD',views.dashBD),
-    path('',views.login),
+    path('',views.home),
     path('calender',views.calender),
+    path('login',views.login),
+    path('register',views.register)
     
 ]
