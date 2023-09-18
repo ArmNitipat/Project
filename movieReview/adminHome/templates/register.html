@@ -22,15 +22,16 @@
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-lg-8 col-xl-6">
-          <div class="card rounded-2">
+          <div class="card rounded-2 ">
+            <div class=" card h-25">
             <img
               src="https://images.unsplash.com/photo-1574894078563-01e879b89809?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80"
-              class="h-25 w-100"
+             
               style="
                 border-top-left-radius: 0.3rem;
                 border-top-right-radius: 0.3rem;
               "
-            />
+            /></div>
             <div class="card-body p-4 p-md-5">
               <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">
                 Registration Info
@@ -38,50 +39,61 @@
 
               <form class="px-md-2">
                 <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example1q" 
+                    >Username</label
+                  >
+                  <input type="text" id="form3Example1q" class="form-control" placeholder="Username" />
+                </div>
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example1q"
+                    >Password</label
+                  >
+                  <input type="password" id="form3Example1q" class="form-control" placeholder="Password"/>
+                </div>
+                <div class="form-outline mb-4">
                   <label class="form-label" for="form3Example1q"
                     >Firstname</label
                   >
-                  <input type="text" id="form3Example1q" class="form-control" />
+                  <input type="text" id="form3Example1q" class="form-control" placeholder="Firstname"/>
                 </div>
                 <div class="form-outline mb-4">
                   <label class="form-label" for="form3Example1q"
                     >Lastname</label
                   >
-                  <input type="text" id="form3Example1q" class="form-control" />
+                  <input type="text" id="form3Example1q" class="form-control" placeholder="Lastname"/>
                 </div>
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline datepicker">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="exampleDatepicker1"
-                      />
                       <label for="exampleDatepicker1" class="form-label"
-                        >Select a date</label
+                        >Select a date of birth</label
                       >
+
+                    
+                        <div class="form-group">
+                          <input
+                            id="startDate"
+                            class="form-control"
+                            type="date"
+                          />
+                        </div>
+                      </form>
+                      
                     </div>
                   </div>
-                </div>
-
-                <div class="row mb-4 pb-2 pb-md-0 mb-md-5">
-                  <div class="col-md-6">
-                    <div class="form-outline">
-                      <input
-                        type="text"
-                        id="form3Example1w"
-                        class="form-control"
-                      />
-                      <label class="form-label" for="form3Example1w"
-                        >Registration code</label
-                      >
-                    </div>
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="form3Example1q"
+                      >Email</label
+                    >
+                    <input type="text" id="form3Example1q" class="form-control"
+                    placeholder="YourEmail@gmail.com" />
                   </div>
                 </div>
-
-                <button type="submit" class="btn btn-success btn-lg mb-1">
-                  Submit
-                </button>
+                <div class="position-relative mt-4">
+               <div class="position-absolute top-100 start-50 translate-middle">
+                <button type="submit" class="btn btn-success btn-lg mb-1 ">
+                  Register
+                </button></div></div>
               </form>
             </div>
           </div>
@@ -89,5 +101,20 @@
       </div>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    // JavaScript code to format date as "วัน เดือน ปี"
+    document.getElementById("bdate").addEventListener("change", function () {
+      var selectedDate = new Date(this.value);
+      var day = selectedDate.getDate();
+      var month = selectedDate.toLocaleDateString("th-TH", { month: "long" });
+      var year = selectedDate.getFullYear() + 543; // แปลงปีเป็น พ.ศ.
+      var formattedDate = day + " " + month + " " + year;
+      this.value = formattedDate;
+    });
+  </script>
 </section>
 {% endblock %}
