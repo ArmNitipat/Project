@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'adminHome',
     'jazzmin',
-    # 'bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -96,10 +95,22 @@ WSGI_APPLICATION = 'movieReview.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# ของเดิมเตรียม (ลบ)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'DBMovie',
+        'USER': 'root',
+        'PASSWORD': 'mypassword',
+        'HOST': 'localhost',  # หรือ IP ที่ MySQL Server ทำงานอยู่
+        'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
     }
 }
 
