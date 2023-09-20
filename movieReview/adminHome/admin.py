@@ -1,8 +1,8 @@
 from django.contrib import admin
-from adminHome.models import Member
+from adminHome.models import myuser
 # Register your models here.
 
-class MemberAdmin(admin.ModelAdmin):
-  list_display = ("firstname", "lastname","age","phone", "joined_date",)
+class Member(admin.ModelAdmin):
+  list_display = ('username', 'email')
 
-admin.site.register(Member,MemberAdmin)
+admin.site.register(myuser,Member)
