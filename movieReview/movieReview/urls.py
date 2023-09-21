@@ -19,5 +19,4 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('adminHome.urls')),
-    #path('jazzmin/', include('jazzmin.urls')),  # เพิ่ม URL patterns สำหรับ Django-Jazzmin
 ]

@@ -30,7 +30,8 @@
               <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">
                 Registration Info
               </h3>
-
+              <form class="px-md-2" action="{% url 'register' %}" method="post">
+                {% csrf_token %}
                 <form class="px-md-2">
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example1q">Username</label>
@@ -68,7 +69,7 @@
             <button type="submit" class="btn btn-success btn-lg mb-1 " id="getUser">
               Register
             </button>
-            
+          </form>
           </form>
           </div>
         </div>
@@ -94,5 +95,35 @@
       var formattedDate = day + " " + month + " " + year;
       this.value = formattedDate;
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.getElementById("registrationForm");
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const formData = {
+        username: document.getElementById("inuser").value,
+        password: document.getElementById("inpassword").value,
+        firstname: document.getElementById("infirstname").value,
+        lastname: document.getElementById("inlastname").value,
+        dob: document.getElementById("startDate").value,
+        email: document.getElementById("inemail").value,
+      };
+
+      fetch('http://192.168.1.90:8000/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'  // Django CSRF token
+      },
+      body: JSON.stringify(formData),
+    })  
+    .then(response => response.json())
+    .then(data => console.log('Success:', data))
+    .catch((error) => console.error('Error:', error));
+  });
+});
+
   </script>
   {% endblock %}
