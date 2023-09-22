@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
     },
 ]
 
@@ -113,6 +114,9 @@ DATABASES = {
         'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
     }
 }
+
+#USE Session_Engine:
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
