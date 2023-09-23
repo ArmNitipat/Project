@@ -1,59 +1,76 @@
 .overlay {
-    min-height: 100%;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.548), rgba(0, 0, 0, 0.373));
-    background-size: cover;
-  }
-  .bgimgmax {
-    background-color: #000000;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-  }
-  .description {
-    left: 50%;
-    position: absolute;
-    top: 45%;
-    transform: translate(-50%, -55%);
-    text-align: center;
-  }
-  .description h1 {
-    color: #00ff04;
-  }
-  .description p {
-    color: #ffffff;
-    font-size: 1.3rem;
-    line-height: 1.5;
-  }
-  body {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-  }
-  .header {
-    background-image: url("images/header-background.jpg");
-    background-size: cover;
-    background-position: center;
-    position: relative;
-  }
-  .bg-imag.nav.content {
-    color: #fff;
-  }
-  .power {
-    color: aqua;
-  }
-  .max {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .max:before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    background: #e5e5e5;
-    z-index: -1;
-  }
-  
+  min-height: 100%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.548), rgba(0, 0, 0, 0.373));
+  background-size: cover;
+}
+.bgimgmax {
+  background-color: #000000;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.description {
+  left: 50%;
+  position: absolute;
+  top: 45%;
+  transform: translate(-50%, -55%);
+  text-align: center;
+}
+.description h1 {
+  color: #00ff04;
+}
+.description p {
+  color: #ffffff;
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+body {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+}
+.header {
+  background-image: url("images/header-background.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.bg-imag.nav.content {
+  color: #fff;
+}
+.power {
+  color: aqua;
+}
+.max {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.max:before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  background: #e5e5e5;
+  z-index: -1;
+}
+.button-container {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-button {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.round-image {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}

@@ -57,12 +57,26 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+def account(request):
+    if request.user.is_authenticated:
+        template = loader.get_template('account.html')
+        context = {'username': request.user.username}
+        return HttpResponse(template.render(context, request))
+    else:
+        template = loader.get_template('home.html')
+        return HttpResponse(template.render())
 
 
 
 def home(request):
-    template = loader.get_template('home.html')
-    return HttpResponse(template.render())
+    
+    if request.user.is_authenticated:
+        template = loader.get_template('home.html')
+        context = {'username': request.user.username}
+        return HttpResponse(template.render(context, request))
+    else:
+        template = loader.get_template('home.html')
+        return HttpResponse(template.render())
 
 def calender(request):
     template = loader.get_template('calender.html')
