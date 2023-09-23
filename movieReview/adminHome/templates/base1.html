@@ -40,16 +40,22 @@
             </form>
             
           </div>
-          <button  type="button" class=" btn navbar-dark "  ><a href="/login" class="nav-link text-light " >Login</a></button>
+          <!-- <button  type="button" class=" btn navbar-dark "  ><a href="/login" class="nav-link text-light " >Login</a></button> -->
+          <button  type="button" class=" btn navbar-dark "  ><a href="{% url 'login' %}" class="nav-link text-light " >Login</a></button> |
+          <button  type="button" class=" btn navbar-dark "  ><a href="{% url 'home' %}" class="nav-link text-light " >Logout</a></button>
         </div>
         
       </nav>
       
         
       </div>
-     
-        
           {% block content %}
+          {% if user.is_authenticated %}
+            Hi {{ user.username }}!
+          {% else %}
+            <p>You are not logged in</p>
+            <a href="{% url 'login' %}">Log In</a>
+          {% endif %}
           {%endblock%}
       </div>
 </body>

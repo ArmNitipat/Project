@@ -3,82 +3,151 @@
 <title>Register</title>
 {% endblock %} {%block content%}
 <section class="h-100 h-custom" style="background-color: #000000">
-  <div class="bg-dark img-fluid position-relative" style="
+  <div
+    class="bg-dark img-fluid position-relative"
+    style="
       background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
       background-size: cover;
       background-position: center;
       height: 100%;
-    ">
+    "
+  >
     <!-- Overlay -->
-    <div class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-50" style="background-color: #00000083">
-    </div>
+    <div
+      class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-50"
+      style="background-color: #00000083"
+    ></div>
     <!-- ส่วนเนื้อหาภายใน div -->
-    
+
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-lg-8 col-xl-6">
-          <div class="card rounded-2 ">
-            <div class=" card h-25">
+          <div class="card rounded-2">
+            <div class="card h-25">
               <img
                 src="https://images.unsplash.com/photo-1574894078563-01e879b89809?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80"
                 style="
-                border-top-left-radius: 0.3rem;
-                border-top-right-radius: 0.3rem;
-              " />
+                  border-top-left-radius: 0.3rem;
+                  border-top-right-radius: 0.3rem;
+                "
+              />
             </div>
             <div class="card-body p-4 p-md-5">
               <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">
                 Registration Info
               </h3>
-              <form class="px-md-2" action="{% url 'register' %}" method="post">
+              <form class="px-md-2" method="post">
                 {% csrf_token %}
-                <form class="px-md-2">
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example1q">Username</label>
-                    <input type="text" id="inuser" class="form-control" placeholder="Username" />
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="id_username">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    maxlength="15"
+                    required
+                    id="id_username"
+                    class="form-control"
+                    placeholder="Username"
+                  />
+                </div>
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="id_password">Password</label>
+                  <input
+                    type="password"
+                    name="password1"
+                    maxlength="15"
+                    required
+                    id="id_password2"
+                    class="form-control"
+                    placeholder="Password"
+                    autocomplete="new-password"
+                  />
+                </div>
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="id_password">Password confirmation</label>
+                  <input
+                    type="password"
+                    name="password2"
+                    maxlength="15"
+                    required
+                    id="id_password1"
+                    class="form-control"
+                    placeholder="Password"
+                    autocomplete="new-password"
+                  />
+                </div>
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="id_firstname">Firstname</label>
+                  <input
+                    type="text"
+                    name="firstname"
+                    maxlength="20"
+                    required
+                    id="id_firstname "
+                    class="form-control"
+                    placeholder="Firstname"
+                  />
+                </div>
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="id_lastname">Lastname</label>
+                  <input
+                    type="text"
+                    name="lastname"
+                    maxlength="20"
+                    required
+                    id="id_lastname"
+                    class="form-control"
+                    placeholder="Lastname"
+                  />
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline datepicker">
+                      <div class="form-group">
+                        <label for="id_date_of_birth">Date of birth</label>
+                        <input
+                          required
+                          id="id_date_of_birth"
+                          name="date_of_birth"
+                          class="form-control"
+                          type="date"
+                          placeholder="Date of birth"
+                        />
+                      </div>
+                      <div class="form-outline mb-4">
+                        <label class="form-label" for="id_email">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          maxlength="254"
+                          required
+                          id="id_email"
+                          class="form-control"
+                          placeholder="YourEmail@gmail.com"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example1q">Password</label>
-                    <input type="password" id="inpassword" class="form-control" placeholder="Password" />
+                </div>
+                <div class="position-relative mt-4">
+                  <div
+                    class="position-absolute top-100 start-50 translate-middle"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-success btn-lg mb-1"
+                      id="getUser"
+                    >
+                      Register
+                    </button>
                   </div>
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example1q">Firstname</label>
-                    <input type="text" id="infirstname" class="form-control" placeholder="Firstname" />
-                  </div>
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example1q">Lastname</label>
-                    <input type="text" id="inlastname" class="form-control" placeholder="Lastname" />
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6 mb-4">
-                      <div class="form-outline datepicker">
-                        <label for="exampleDatepicker1" class="form-label">Select a date of birth</label>
-                        <div class="form-group">
-                          <input id="startDate" class="form-control" type="date" />
-                        </div>
-                </form>
+                </div>
+              </form>
             </div>
           </div>
-          <div class="form-outline mb-4">
-            <label class="form-label" for="form3Example1q">Email</label>
-            <input type="text" id="inemail" class="form-control" placeholder="YourEmail@gmail.com" />
-          </div>
         </div>
-        <div class="position-relative mt-4">
-          <div class="position-absolute top-100 start-50 translate-middle">
-            <button type="submit" class="btn btn-success btn-lg mb-1 " id="getUser">
-              Register
-            </button>
-          </form>
-          </form>
-          </div>
-        </div>
-        </form>
       </div>
     </div>
-  </div>
-  </div>
-  </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -96,34 +165,36 @@
       this.value = formattedDate;
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       const form = document.getElementById("registrationForm");
 
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-      const formData = {
-        username: document.getElementById("inuser").value,
-        password: document.getElementById("inpassword").value,
-        firstname: document.getElementById("infirstname").value,
-        lastname: document.getElementById("inlastname").value,
-        dob: document.getElementById("startDate").value,
-        email: document.getElementById("inemail").value,
-      };
+        const formData = {
+          username: document.getElementById("inuser").value,
+          password: document.getElementById("inpassword").value,
+          firstname: document.getElementById("infirstname").value,
+          lastname: document.getElementById("inlastname").value,
+          dob: document.getElementById("startDate").value,
+          email: document.getElementById("inemail").value,
+        };
 
-      fetch('http://192.168.1.90:8000/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{ csrf_token }}'  // Django CSRF token
-      },
-      body: JSON.stringify(formData),
-    })  
-    .then(response => response.json())
-    .then(data => console.log('Success:', data))
-    .catch((error) => console.error('Error:', error));
-  });
-});
-
+        fetch("http://192.168.1.90:8000/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}", // Django CSRF token
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log("Success:", data))
+          .catch((error) => console.error("Error:", error));
+      });
+    });
   </script>
   {% endblock %}
+</section>
+
+<!--Django sugoi-->

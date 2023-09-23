@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'adminHome',
     'jazzmin',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -92,6 +93,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'movieReview.wsgi.application'
 
+#login and logout in homepage
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -108,9 +112,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DBMovie',
-        'USER': 'root',
+        'USER': 'admin02',
         'PASSWORD': 'mypassword',
-        'HOST': 'localhost',  # หรือ IP ที่ MySQL Server ทำงานอยู่
+        'HOST': '25.48.97.110',  # หรือ IP ที่ MySQL Server ทำงานอยู่
         'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
     }
 }

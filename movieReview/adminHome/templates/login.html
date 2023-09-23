@@ -18,7 +18,11 @@
     </div>
     <div class="card bg-white">
       <div class="card-body p-4 p-lg-5 text-black">
-        <form>
+
+          <form method="post" action="/login/">
+            {% csrf_token %}
+            {{ form.as_p }}
+
           <div class="d-flex align-items-center mb-3 pb-1">
             <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219"></i>
             <span class="h1 fw-bold mb-0">MovieReview</span>
@@ -27,14 +31,20 @@
           <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px">
             Sign into your account
           </h5>
-          <label class="form-label" for="MovieReview" style="margin-left: 0px"
-            >Email address</label
-          >
+
           <div class="form-outline mb-4">
-            <input
-              type="email"
-              id="MovieReview"
-              class="form-control form-control-lg"
+            <label class="form-label" for="id_username" style="margin-left: 0px"
+              >Username</label
+            >
+            <input 
+            type="text" 
+            name="username" 
+            autofocus autocapitalize="none" 
+            autocomplete="username" 
+            maxlength="30" 
+            required id="id_username"
+            class="form-control form-control-lg"
+            placeholder="Enter username"
             />
 
             <div class="form-notch">
@@ -43,17 +53,20 @@
               <div class="form-notch-trailing"></div>
             </div>
           </div>
-          <label
-            class="form-label"
-            for="form2Example27"
-            style="margin-left: 0px"
-            >Password</label
-          >
+
           <div class="form-outline mb-4">
-            <input
-              type="password"
-              id="form2Example27"
-              class="form-control form-control-lg"
+            <label class="form-label" for="id_password" style="margin-left: 0px"
+              >Password</label
+            >
+            <input 
+            type="password" 
+            name="password" 
+            autocomplete="current-password" 
+            maxlength="30"
+            required 
+            id="id_password" 
+            class="form-control form-control-lg"
+            placeholder="Enter password"
             />
 
             <div class="form-notch">
@@ -64,11 +77,11 @@
           </div>
 
           <div class="pt-1 mb-4">
-            <a href="/calender"
-              ><button class="btn btn-dark btn-lg btn-block" type="button">
+
+              <button class="btn btn-dark btn-lg btn-block" type="submit">
                 Login
               </button>
-            </a>
+          
           </div>
 
           <a class="small text-muted" href="#!">Forgot password?</a>
@@ -78,6 +91,9 @@
           </p>
           <a href="#!" class="small text-muted">About us</a>
         </form>
+        {% if error %}
+        <p>{{ error }}</p>
+        {% endif %}
       </div>
     </div>
   </div>
