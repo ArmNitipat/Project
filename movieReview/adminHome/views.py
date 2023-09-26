@@ -43,6 +43,7 @@ def signup_view(request):
         form = SignupForm()
         return render(request, 'register.html', {'form': form})
 
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -53,18 +54,30 @@ def login_view(request):
             return redirect('home')
     return render(request, 'login.html')
 
+
+
 def logout_view(request):
     logout(request)
     return redirect('login')
 
+
 def account(request):
     if request.user.is_authenticated:
-        template = loader.get_template('account.html')
-        context = {'username': request.user.username}
-        return HttpResponse(template.render(context, request))
+        user = request.user  # Get the logged-in user
+        context = {
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+            #'date_of_birth' : user.date_of_birth
+            if user 
+            else None  # Replace with your actual field name
+        } 
+        return render(request, 'account.html', context)
     else:
         template = loader.get_template('home.html')
         return HttpResponse(template.render())
+
 
 
 
