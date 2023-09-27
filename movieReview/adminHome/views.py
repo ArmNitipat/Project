@@ -68,8 +68,8 @@ def account(request):
             'username': user.username,
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'email': user.email
-            #'date_of_birth' : user.date_of_birth
+            'email': user.email,
+            'date_of_birth' : user.date_of_birth
             if user 
             else None  # Replace with your actual field name
         } 
