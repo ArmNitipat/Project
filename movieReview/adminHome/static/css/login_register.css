@@ -1,0 +1,9 @@
+body::-webkit-scrollbar {
+  display: none;
+}
+body span {
+  color: purple;
+} 
+h1{
+  color: red;
+}

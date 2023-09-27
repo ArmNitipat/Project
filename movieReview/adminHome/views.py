@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignupForm
-
+from datetime import date
 
 
 # from django.shortcuts import render, redirect
@@ -41,7 +41,7 @@ def signup_view(request):
     else:
         # form = UserForm()
         form = SignupForm()
-        return render(request, 'register.html', {'form': form})
+        return render(request, 'Login_Register/register.html', {'form': form})
 
 
 def login_view(request):
@@ -52,28 +52,38 @@ def login_view(request):
         if user:
             login(request, user)
             return redirect('home')
-    return render(request, 'login.html')
-
+    return render(request, 'Login_Register/login.html')
 
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('Login_Register/login')
+
+
+def calculate_age(date_of_birth):
+    if date_of_birth:
+        today = date.today()
+        age = today.year - date_of_birth.year - ((today.month, today.day) < (date_of_birth.month, date_of_birth.day))
+        return age
+    else:
+        return 18 
 
 
 def account(request):
     if request.user.is_authenticated:
         user = request.user  # Get the logged-in user
+        user_age = calculate_age(user.date_of_birth)
         context = {
             'username': user.username,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
-            'date_of_birth' : user.date_of_birth
+            'date_of_birth' : user.date_of_birth,
+            'user_age': user_age
             if user 
             else None  # Replace with your actual field name
         } 
-        return render(request, 'account.html', context)
+        return render(request, 'Account/account.html', context)
     else:
         template = loader.get_template('home.html')
         return HttpResponse(template.render())
@@ -94,28 +104,6 @@ def home(request):
 def calender(request):
     template = loader.get_template('calender.html')
     return HttpResponse(template.render())
-
-# def login(request):
-#     template = loader.get_template('login.html')
-#     return HttpResponse(template.render())
-
-def register(request):
-    # if request.user.is_authenticated:
-    #     print(request.user.is_authenticated)
-    #     return redirect('login')  # ถ้าผู้ใช้เข้าสู่ระบบแล้ว ให้เปลี่ยนเส้นทางไปยังหน้าเข้าสู่ระบบ
-
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # template = loader.get_template('login.html')
-            # return HttpResponse(template.render())  # หลังจากการสมัครสมาชิกเสร็จสิ้น ให้เปลี่ยนเส้นทางไปยังหน้าเข้าสู่ระบบ
-            return redirect('login') 
-        else:
-            return render(request, 'register.html', {'form': form})
-    else:
-        form = SignupForm()
-        return render(request, 'register.html', {'form': form})
 
 # @login_required
 # def protected_view(request):

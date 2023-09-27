@@ -111,7 +111,7 @@ LOGOUT_REDIRECT_URL = "/"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'testdb',
+        'NAME': 'dbmovie',
         'USER': 'admin02',
         'PASSWORD': 'mypassword',
         'HOST': '25.48.97.110',  # หรือ IP ที่ MySQL Server ทำงานอยู่

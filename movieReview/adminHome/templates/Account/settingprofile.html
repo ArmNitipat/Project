@@ -1,0 +1,109 @@
+{% extends "base1.html" %}
+
+{% block title %}
+<link rel="stylesheet" href="static/login_register.css" />
+<title>Setting Profile</title>
+{% endblock %}
+
+{% block content %}
+<body class="bg-body-tertiary bg-dark">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-flex flex-column p-3 text-white bg-dark collapse" style="width: 280px; height: 100vh;">
+          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4">Sidebar</span>
+          </a>
+          <hr>
+          <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item mb-2">
+              <a href="/account" class="nav-link active" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                Account Info
+              </a>
+            </li>
+            <li class="nav-item mb-2">
+              <a href="/account" class="nav-link text-light " style="background-color: rgb(77, 75, 75);" aria-current="page">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                Setting Profile
+              </a>
+            </li>
+          </ul>
+          <hr>
+        </div>
+      <!-- Main Content -->
+      <div class="col-md-5 mx-auto text-center">
+        <div class="container h-100">
+          <div class="row justify-content-start bg-dark">
+            <div class="card bg-dark">
+      <main class="card-body bg-dark text-light">
+        <div class="d-flex justify-content-center align-items-center">
+          <img alt="" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" title="" class="img-circle img-thumbnail isTooltip" src="https://stevivor.com/wp-content/uploads/2022/02/elden-ring.jpg" data-original-title="Usuario">
+      </div>
+          <h2 class="mb-3 mt-3 text-center">{{ user.username }}</h2>
+          <form class="needs-validation mb-3">
+            <div class="mb-2">
+              <label for="id_username" class="form-label">Username</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">@</span>
+                <input type="text" id="username" class="form-control" placeholder="{{ user.username }}" value="{{ user.username }}" readonly disabled>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6">
+                  <label for="firstName" class="form-label">First name</label>
+                  <input type="text" class="form-control" id="firstname" name="firstname" placeholder="{{ user.first_name }}" value="{{ user.first_name }}"readonly disabled>
+              </div>
+              
+              <div class="col-md-6">
+                  <label for="lastName" class="form-label">Last name</label>
+                  <input type="text" class="form-control" id="lastName" name="lastname" placeholder="{{ user.last_name }}" value="{{ user.last_name }}" required=""readonly disabled>
+              </div>
+          </div>
+
+          
+          
+          <div class="mb-2 mt-2">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="{{ user.email }}" value="{{ user.email }}" readonly disabled>
+            
+          </div>
+
+           
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-2 mt-2">
+                <label for="id_date_of_birth" class="form-label">Date_of_birth</label>
+                <input type="text" class="form-control" id="date_of_birth" name="date_of_birth " placeholder="{{ user.date_of_birth }}" value="{{ user.date_of_birth }}" readonly disabled>
+              </div> 
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3 mt-2">
+                <label for="id_age" class="form-label">AGE</label>
+                <input type="age" class="form-control" id="age" name="age " placeholder="{{ user_age }}" value="{{ user_age }}" readonly disabled>
+              </div> 
+            </div>
+        <!-- </div>
+          <hr class="my-4">
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Setting Your Account</button>
+        </div> -->
+        
+        
+      </form>
+    </div>
+  </main>
+</div>
+</div>
+
+<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="checkout.js"></script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+{% endblock %}
