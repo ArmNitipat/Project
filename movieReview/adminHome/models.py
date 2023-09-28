@@ -23,3 +23,4 @@ class myuser(models.Model):
   class User(models.Model):
     # ... ส่วนอื่นๆ ของ model ของคุณ ...
     date_of_birth = models.DateField(null=True, blank=True)
+    

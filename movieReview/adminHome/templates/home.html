@@ -1,7 +1,22 @@
 {% extends "base1.html" %} {%block title %}
-<link rel="stylesheet" href="static/login_register.css" />
+<link rel="stylesheet" href="./static/abc.css" />
 <title>Home</title>
 {% endblock %} {%block content%}
+<style>
+  .fill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  height: 50vh;
+}
+.vdo {
+  flex-shrink: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+</style>
 <!-- <div
   class="p-4 p-md-5 text-white rounded bg-dark bg-image overlay bg-dark container-fluid"
   style="
@@ -48,8 +63,8 @@
     <!-- Inner -->
     <div class="carousel-inner">
       <!-- Single item -->
-      <div class="carousel-item active">
-        <video class="img-fluid" autoplay loop muted>
+      <div class="carousel-item active fill">
+        <video class="img-fluid mx-auto d-block vdo" autoplay loop muted>
           <source
             src="https://mdbcdn.b-cdn.net/img/video/Tropical.mp4"
             type="video/mp4"
@@ -374,4 +389,10 @@
     </div>
   </div>
 </div>
+
+
+{% for message in messages %}
+{% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+{% endfor %}
+
 {%endblock%}

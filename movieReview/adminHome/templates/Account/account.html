@@ -13,24 +13,23 @@
         <div class="col-md-3 col-lg-2 d-flex flex-column p-3 text-white bg-dark collapse" style="width: 280px; height: 100vh;">
           <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
             <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-            <span class="fs-4">Sidebar</span>
+            <span class="fs-4">{{ user.username }}</span>
           </a>
           <hr>
           <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item mb-2">
               <a href="/account" class="nav-link active" aria-current="page">
                 <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                Account Info
+                My account
               </a>
             </li>
             <li class="nav-item mb-2">
-              <a href="/account" class="nav-link text-light " style="background-color: rgb(77, 75, 75);" aria-current="page">
+              <a href="/settingprofile" class="nav-link text-light " style="background-color: rgb(77, 75, 75);" aria-current="page">
                 <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                Setting Profile
+                Profile setting
               </a>
             </li>
           </ul>
-          <hr>
         </div>
       <!-- Main Content -->
       <div class="col-md-5 mx-auto ">
@@ -46,7 +45,7 @@
             <div class="mb-2">
               <label for="id_username" class="form-label">Username</label>
               <div class="input-group has-validation">
-                <span class="input-group-text">@</span>
+                <span class="input-group-text me-1">@</span>
                 <input type="text" id="username" class="form-control" placeholder="{{ user.username }}" value="{{ user.username }}" readonly disabled>
               </div>
             </div>
