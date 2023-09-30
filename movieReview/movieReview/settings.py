@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 JAZZMIN_SETTINGS = {
@@ -57,9 +58,12 @@ JAZZMIN_SETTINGS = {
 
 JAZZMIN_UI_TWEAKS = {
 
-    "theme": "darkly",
-    "dark_mode_theme": "darkly",
-    
+    "theme": "cerulean",
+    #"dark_mode_theme": "darkly",
+    #Small Text
+    "navbar_small_text": True,
+    #SideBar
+    "sidebar_nav_legacy_style": True,
 }
 
 MIDDLEWARE = [
@@ -70,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',#jazzmin language_chooser 
 ]
 
 ROOT_URLCONF = 'movieReview.urls'

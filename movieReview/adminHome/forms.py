@@ -10,7 +10,6 @@ class UserForm(forms.ModelForm):
 
 from django.contrib.auth.models import User
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
 # class SignupForm(UserCreationForm):
@@ -44,4 +43,3 @@ class SignupForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-

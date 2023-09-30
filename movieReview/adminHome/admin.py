@@ -13,3 +13,4 @@ admin.site.register(myuser,Member)
 # # ปรับแต่ง UserAdmin ให้แสดง date_of_birth
 # class CustomUserAdmin(UserAdmin):
 #     list_display = ('username', 'email', 'date_of_birth', 'first_name', 'last_name', 'is_staff')
+

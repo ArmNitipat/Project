@@ -7,17 +7,17 @@ from django.template import loader
 #from adminHome.models import myuser
 # from .forms import UserForm 
 from django.contrib.auth.decorators import login_required
-
+from django.http import JsonResponse
 
 # Create your views here.
-
+# from .forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignupForm
 from datetime import date
-
+from django.contrib.auth import update_session_auth_hash
 # from django.shortcuts import render, redirect
 # from .forms import SignupForm
 
@@ -32,13 +32,47 @@ from datetime import date
 #         form = SignupForm()
 #     return render(request, 'your_template_name.html', {'form': form})
 
+@login_required
+def update_user(request):
+    if request.method == 'POST':
+        # รับข้อมูลจาก POST request
+        new_firstname = request.POST.get('firstname')
+        new_lastname = request.POST.get('lastname')
+        new_email = request.POST.get('email')
+        
+        # อัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
+        user = request.user
+        user.first_name = new_firstname
+        user.last_name = new_lastname
+        user.email = new_email
+        user.save()
+        
+        messages.success(request, 'ข้อมูลของคุณถูกอัปเดตแล้ว')
+        return redirect('settingprofile')  # ลิงก์ไปยังหน้าโปรไฟล์หลังจากอัปเดตข้อมูล
+
+    return redirect('account')
+
+
+
+@login_required
+def get_user_data(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        user_data = {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+        }
+        return JsonResponse(user_data)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found"}, status=404)
+
 def signup_view(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.info(request,'Your account has been signup successfully')
             return redirect('home')  # Redirect to a 'home' view, for instance.
     else:
         form = SignupForm()
@@ -51,9 +85,19 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            messages.info(request,'login successfully')
             return redirect('home')
     return render(request, 'Login_Register/login.html')
+
+def resetpassword(request):
+    if request.method == 'POST':
+        
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        user = authenticate(request, username=username, email=email)
+        if user:
+            resetpassword(request, user)
+            return redirect('resetpassword2')
+    return render(request, 'Login_Register/resetpassword.html')
 
 
 def logout_view(request):
@@ -116,6 +160,30 @@ def settingprofile(request):
             else None  # Replace with your actual field name
         } 
         return render(request, 'Account/settingprofile.html', context)
+    else:
+        template = loader.get_template('home.html')
+        return HttpResponse(template.render())
+
+@login_required
+def changepassword(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            current_password = request.POST.get('current_password')
+            new_password = request.POST.get('new_password')
+            
+            # ตรวจสอบว่ารหัสผ่านปัจจุบันถูกต้อง
+            if request.user.check_password(current_password):
+                # ตั้งรหัสผ่านใหม่และบันทึก
+                request.user.set_password(new_password)
+                request.user.save()
+                
+                # อัปเดตเซสชันและแจ้งให้ผู้ใช้รู้ว่ารหัสผ่านถูกเปลี่ยนแล้ว
+                update_session_auth_hash(request, request.user)
+                messages.success(request, 'รหัสผ่านถูกเปลี่ยนแล้ว')
+            else:
+                messages.error(request, 'รหัสผ่านปัจจุบันไม่ถูกต้อง')
+        
+        return render(request, 'Account/changepassword.html')
     else:
         template = loader.get_template('home.html')
         return HttpResponse(template.render())
