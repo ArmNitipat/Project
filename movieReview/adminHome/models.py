@@ -24,6 +24,22 @@ class myuser(models.Model):
     # ... ส่วนอื่นๆ ของ model ของคุณ ...
     date_of_birth = models.DateField(null=True, blank=True)
 
+
+# class Bannerslide(models.Model):
+#     title = models.CharField(max_length=255, verbose_name="Title")
+#     image = models.ImageField(upload_to='bannerslides/', verbose_name="Image")
+#     description = models.TextField(blank=True, verbose_name="Description")
+#     active = models.BooleanField(default=True, verbose_name="Is Active")
+#     order = models.PositiveIntegerField(default=0, verbose_name="Order")
+    
+#     class Meta:
+#         ordering = ['order',]
+#         verbose_name = 'Banner Slide'
+#         verbose_name_plural = 'Banner Slides'
+
+#     def __str__(self):
+#         return self.title
+
 # from django.db import models
 
 # class IPAddress(models.Model):

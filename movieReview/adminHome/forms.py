@@ -43,3 +43,4 @@ class SignupForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
