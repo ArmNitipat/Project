@@ -44,3 +44,7 @@ class SignupForm(forms.ModelForm):
             user.save()
         return user
 
+class ResetPasswordForm(forms.Form):
+    current_password = forms.CharField(label='รหัสผ่านปัจจุบัน', widget=forms.PasswordInput)
+    new_password = forms.CharField(label='รหัสผ่านใหม่', widget=forms.PasswordInput)
+    confirm_new_password = forms.CharField(label='ยืนยันรหัสผ่านใหม่', widget=forms.PasswordInput)

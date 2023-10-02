@@ -3,19 +3,19 @@
 <title>Home</title>
 {% endblock %} {%block content%}
 <style>
-  .fill {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  .carousel-inner,
+  .carousel-item img {
+    width: 100%; /* ปรับความกว้างตามที่คุณต้องการ */
+    height: 50vh; /* ปรับความสูงตามที่คุณต้องการ */
+    object-fit: cover; /* การปรับขนาดรูปภาพเพื่อให้พอดีกับพื้นที่ */
+}
 
-  height: 50vh;
+.carousel-caption {
+    background-color: #0000007a; /* กำหนดสีพื้นหลังสำหรับ h5 */
+    color: white; /* กำหนดสีตัวอักษร */
+    padding: 5px; /* กำหนดระยะห่างของขอบ */
 }
-.vdo {
-  flex-shrink: 0;
-  min-width: 100%;
-  min-height: 100%;
-}
+
 </style>
 <!-- <div
   class="p-4 p-md-5 text-white rounded bg-dark bg-image overlay bg-dark container-fluid"
@@ -30,105 +30,39 @@
   <hr />
 </div> -->
 <div>
-  <div
-    id="carouselVideoExample"
-    class="carousel slide carousel-fade bg-image-full - mb-0"
-    data-mdb-ride="carousel"
-  >
-    <!-- Indicators -->
-
-    <div class="carousel-indicators">
-      <button
-        type="button"
-        data-mdb-target="#carouselVideoExample"
-        data-mdb-slide-to="0"
-        class="active"
-        aria-current="true"
-        aria-label="Slide 1"
-      ></button>
-      <button
-        type="button"
-        data-mdb-target="#carouselVideoExample"
-        data-mdb-slide-to="1"
-        aria-label="Slide 2"
-      ></button>
-      <button
-        type="button"
-        data-mdb-target="#carouselVideoExample"
-        data-mdb-slide-to="2"
-        aria-label="Slide 3"
-      ></button>
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators";>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
-
-    <!-- Inner -->
     <div class="carousel-inner">
-      <!-- Single item -->
-      <div class="carousel-item active fill">
-        <video class="img-fluid mx-auto d-block vdo" autoplay loop muted>
-          <source
-            src="https://mdbcdn.b-cdn.net/img/video/Tropical.mp4"
-            type="video/mp4"
-          />
-        </video>
-        <div class="carousel-caption d-none d-md-block">
-          <h5>First slide label</h5>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </div>
+    
+        <div class="carousel-inner">
+          {% for slide in slides %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="8000">
+              <img src="{{ slide.image.url }}" alt="Banner Slide Image" class="d-block w-100">
+              <div class="carousel-caption d-none d-md-block">
+                  <h5>{{ slide.title }}</h5>
+                  <p>{{ slide.description }}</p>
+              </div>
+          </div>
+          {% endfor %}
       </div>
-
-      <!-- Single item -->
-      <div class="carousel-item">
-        <video class="img-fluid" autoplay loop muted>
-          <source
-            src="https://mdbcdn.b-cdn.net/img/video/forest.mp4"
-            type="video/mp4"
-          />
-        </video>
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Second slide label</h5>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-      </div>
-
-      <!-- Single item -->
-      <div class="carousel-item">
-        <video class="img-fluid" autoplay loop muted>
-          <source
-            src="https://mdbcdn.b-cdn.net/img/video/Agua-natural.mp4"
-            type="video/mp4"
-          />
-        </video>
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Third slide label</h5>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </div>
-      </div>
+      
+      
+      
     </div>
-    <!-- Inner -->
-
-    <!-- Controls -->
-    <button
-      class="carousel-control-prev"
-      type="button"
-      data-mdb-target="#carouselVideoExample"
-      data-mdb-slide="prev"
-    >
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      data-mdb-target="#carouselVideoExample"
-      data-mdb-slide="next"
-    >
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
   </div>
-</div>
 
 <!--Bottom-->
 <div class="bg-dark text-light text-center mt-1 mb-5">
@@ -388,5 +322,44 @@
       </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      $('#myCarousel').carousel();
+    });
+
+    const carousel = document.querySelector('.carousel');
+        const items = document.querySelectorAll('.carousel-item');
+        let currentIndex = 0;
+
+        function showItem(index) {
+            if (index < 0) {
+                index = items.length - 1;
+            } else if (index >= items.length) {
+                index = 0;
+            }
+
+            const itemWidth = items[0].offsetWidth;
+            const offset = -index * itemWidth;
+
+            carousel.style.transform = `translateX(${offset}px)`;
+            currentIndex = index;
+        }
+
+        // รับอ้างอิงของปุ่ม "ก่อนหน้า" และ "ถัดไป"
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+
+        // เพิ่มการกำหนดค่ากิจกรรมกดปุ่ม
+        prevButton.addEventListener('click', () => {
+            showItem(currentIndex - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            showItem(currentIndex + 1);
+        });
+
+        // เริ่มต้นโดยการแสดงรายการแรก
+        showItem(currentIndex);
+  </script>
 </div>
 {%endblock%}

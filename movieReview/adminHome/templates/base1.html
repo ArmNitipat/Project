@@ -58,7 +58,7 @@
                 <span>{{ user.username }}</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item " href="account">Account</a></li>
+                <li><a class="dropdown-item " href="{% url 'account' %}">Account</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>

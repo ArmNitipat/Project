@@ -165,3 +165,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#media file
+MEDIA_URL = 'adminHome/templates/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'adminHome/templates/')

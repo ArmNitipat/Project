@@ -53,7 +53,6 @@ def update_user(request):
     return redirect('account')
 
 
-
 @login_required
 def get_user_data(request, user_id):
     try:
@@ -67,6 +66,7 @@ def get_user_data(request, user_id):
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found"}, status=404)
 
+
 def signup_view(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -78,6 +78,7 @@ def signup_view(request):
         form = SignupForm()
         return render(request, 'Login_Register/register.html', {'form': form})
 
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -88,17 +89,73 @@ def login_view(request):
             return redirect('home')
     return render(request, 'Login_Register/login.html')
 
+
+
+
 def resetpassword(request):
     if request.method == 'POST':
-        
         username = request.POST.get('username')
         email = request.POST.get('email')
-        user = authenticate(request, username=username, email=email)
+        
+        # ตรวจสอบว่ามีผู้ใช้ที่ตรงกับ username และ email ในฐานข้อมูลหรือไม่
+        try:
+            user = User.objects.get(username=username, email=email)
+        except User.DoesNotExist:
+            user = None
+        
         if user:
-            resetpassword(request, user)
-            return redirect('resetpassword2')
+            # สร้างรหัสผ่านรีเซ็ตใหม่ โดยอาจใช้ไลบรารี่ random หรือวิธีอื่น ๆ
+            new_password = 'new_password_here'
+            
+            # กำหนดรหัสผ่านใหม่ให้กับผู้ใช้
+            user.set_password(new_password)
+            user.save()
+            
+            # ส่งอีเมลหรือลิงก์รีเซ็ตรหัสผ่านไปยังผู้ใช้ ตามที่คุณต้องการ
+            # ในตัวอย่างนี้เราจะใช้ send_mail สำหรับการส่งอีเมล
+            subject = 'รีเซ็ตรหัสผ่าน'
+            message = f'รหัสผ่านใหม่ของคุณคือ: {new_password}'
+            from_email = 'your_email@example.com'
+            recipient_list = [user.email]
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+            
+            return redirect('resetpassword2')  # เปลี่ยนไปยังหน้า resetpassword2 หลังจากกระบวนการรีเซ็ตสำเร็จ
+    
     return render(request, 'Login_Register/resetpassword.html')
 
+
+from .forms import ResetPasswordForm 
+
+def resetpassword2(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = ResetPasswordForm(request.POST)
+            
+            if form.is_valid():
+                current_password = form.cleaned_data['current_password']
+                new_password = form.cleaned_data['new_password']
+                
+                # ตรวจสอบว่ารหัสผ่านปัจจุบันถูกต้อง
+                if request.user.check_password(current_password):
+                    # ตั้งรหัสผ่านใหม่และบันทึก
+                    request.user.set_password(new_password)
+                    request.user.save()
+                    
+                    # อัปเดตเซสชันและแจ้งให้ผู้ใช้รู้ว่ารหัสผ่านถูกเปลี่ยนแล้ว
+                    update_session_auth_hash(request, request.user)
+                    messages.success(request, 'รหัสผ่านถูกเปลี่ยนแล้ว')
+                    
+                    # หลังจากเปลี่ยนรหัสผ่านเรียบร้อยแล้ว สามารถเด้งไปหน้า Login หรือหน้าอื่นๆ ตามที่คุณต้องการได้
+                    return redirect('login')  # เด้งไปยังหน้า Login หลังจากเปลี่ยนรหัสผ่านสำเร็จ
+            else:
+                messages.error(request, 'กรุณากรอกข้อมูลให้ถูกต้อง')
+        else:
+            form = ResetPasswordForm()
+        
+        return render(request, 'Login_Register/resetpassword2.html', {'form': form})
+    else:
+        template = loader.get_template('home.html')
+        return HttpResponse(template.render())
 
 def logout_view(request):
     logout(request)
@@ -112,6 +169,7 @@ def calculate_age(date_of_birth):
         return age
     else:
         return 18 
+
 
 @login_required
 def account(request):
@@ -133,6 +191,7 @@ def account(request):
         template = loader.get_template('home.html')
         return HttpResponse(template.render())
 
+
 def update_profile(request):
     if request.method == 'POST':
         # รับข้อมูลจากแบบฟอร์มและอัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
@@ -143,6 +202,7 @@ def update_profile(request):
         return redirect('/account')  # หลังจากอัปเดตข้อมูลเรียบร้อยแล้วให้ redirect ไปยังหน้า My account หรือหน้าที่คุณต้องการ
 
     return render(request, 'settingprofile.html')  # หากเป็น GET request ให้แสดงแบบฟอร์มข้อมูลแก้ไขผู้ใช้
+
 
 @login_required
 def settingprofile(request):
@@ -163,6 +223,7 @@ def settingprofile(request):
     else:
         template = loader.get_template('home.html')
         return HttpResponse(template.render())
+
 
 @login_required
 def changepassword(request):
@@ -190,16 +251,20 @@ def changepassword(request):
 
 
 
-
+from .models import Bannerslide
 def home(request):
-    
+    slides = Bannerslide.objects.filter(active=True).order_by('order')
+
     if request.user.is_authenticated:
         template = loader.get_template('home.html')
-        context = {'username': request.user.username}
-        return HttpResponse(template.render(context, request))
+        context = {
+                    'username': request.user.username,
+                    'slides': slides
+                   }
+        return render(request, 'home.html', context)
     else:
-        template = loader.get_template('home.html')
-        return HttpResponse(template.render())
+        return render(request, 'home.html', {'slides': slides})
+
 
 def calender(request):
     template = loader.get_template('calender.html')
@@ -222,23 +287,3 @@ def calender(request):
 #     else:
 #         # Return an 'invalid login' error message.
 #         ...
-
-# def handleUpdate(request, id):
-#     if request.method == "POST":
-#         username=request.POST['username']
-#         email=request.POST['email']
-#         fname=request.POST['fname']
-#         lname=request.POST['lname']
-
-#         if len(username)>15:
-#             messages.error(request, "Your username must not be more than 15 characters")
-#             return redirect('/account') 
-
-#         myuser=User.objects.get(pk=id)
-#         myuser.first_name=fname 
-#         myuser.last_name=lname
-#         myuser.email=email
-#         myuser.username=username
-#         myuser.save()
-#         messages.success(request, "Your account has been updated successfully")
-#         return redirect('/account') 
