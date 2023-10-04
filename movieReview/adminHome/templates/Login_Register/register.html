@@ -62,8 +62,12 @@ body {
                     required
                     id="id_username"
                     class="form-control"
-                    placeholder="Username"
-                  />
+                    placeholder="Username"/>
+                    {% if form.username.errors %}
+                    <div class="text-danger">
+                        {{ form.username.errors|join:", " }}
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="form-outline mb-4">
                   <label class="form-label" for="id_password">Password</label>
@@ -75,7 +79,7 @@ body {
                     id="id_password2"
                     class="form-control"
                     placeholder="Password"
-                    autocomplete="new-password"
+                    tocomplete="new-password"au
                   />
                 </div>
                 <div class="form-outline mb-4">
@@ -88,8 +92,7 @@ body {
                     id="id_password1"
                     class="form-control"
                     placeholder="Password"
-                    autocomplete="new-password"
-                  />
+                    autocomplete="new-password"/>
                 </div>
                 <div class="row">
                 <div class="form-outline mb-4">
@@ -97,24 +100,22 @@ body {
                   <input
                     type="text"
                     name="first_name"
-                    maxlength="20"
+                    maxlength="30"
                     required
                     id="id_firstname "
                     class="form-control"
-                    placeholder="Firstname"
-                  />
+                    placeholder="Firstname"/>
                 </div>
                 <div class="form-outline mb-4">
                   <label class="form-label" for="id_lastname">Lastname</label>
                   <input
                     type="text"
                     name="last_name"
-                    maxlength="20"
+                    maxlength="30"
                     required
                     id="id_lastname"
                     class="form-control"
-                    placeholder="Lastname"
-                  />
+                    placeholder="Lastname"/>
                 </div></div>
                 <div class="row">
                   <div class="col-md-12 mb-4">
@@ -127,8 +128,7 @@ body {
                           name="date_of_birth"
                           class="form-control"
                           type="date"
-                          placeholder="Date of birth"
-                        />
+                          placeholder="Date of birth"/>
                       </div>
                       <div class="form-outline mb-4 mt-3">
                         <label class="form-label" for="id_email">Email</label>
@@ -139,8 +139,7 @@ body {
                           required
                           id="id_email"
                           class="form-control"
-                          placeholder="YourEmail@gmail.com"
-                        />
+                          placeholder="YourEmail@gmail.com"/>
                       </div>
                     </div>
                   </div>
@@ -149,11 +148,7 @@ body {
                   <div
                     class="position-absolute top-100 start-50 translate-middle"
                   >
-                    <button
-                      type="submit"
-                      class="btn btn-success btn-lg mb-1"
-                      id="getUser"
-                    >
+                    <button type="submit" class="btn btn-success btn-lg mb-1" id="getUser">
                       Register
                     </button>
                   </div>

@@ -76,7 +76,7 @@ def signup_view(request):
             return redirect('home')  # Redirect to a 'home' view, for instance.
     else:
         form = SignupForm()
-        return render(request, 'Login_Register/register.html', {'form': form})
+    return render(request, 'Login_Register/register.html', {'form': form}) #form จะถูกหรือไม่ view จะส่งกลับ HttpResponse ในทุกสถานการณ์.
 
 
 def login_view(request):
@@ -108,31 +108,6 @@ def resetpassword(request):
 
     return render(request, 'Login_Register/resetpassword.html')
 
-
-# from .forms import ResetPasswordForm 
-
-# def resetpassword2(request):
-#         if request.method == 'POST':
-#             form = ResetPasswordForm(request.POST)
-            
-#             if form.is_valid():
-#                 new_password = form.cleaned_data['new_password']
-                
-#                 # ตั้งรหัสผ่านใหม่และบันทึก
-#                 request.user.set_password(new_password)
-#                 request.user.save()
-                    
-#                 # อัปเดตเซสชันและแจ้งให้ผู้ใช้รู้ว่ารหัสผ่านถูกเปลี่ยนแล้ว
-#                 update_session_auth_hash(request, request.user)
-#                 messages.success(request, 'รหัสผ่านถูกเปลี่ยนแล้ว')
-                    
-#                 # หลังจากเปลี่ยนรหัสผ่านเรียบร้อยแล้ว สามารถเด้งไปหน้า Login หรือหน้าอื่นๆ ตามที่คุณต้องการได้
-#                 return redirect('login')  # เด้งไปยังหน้า Login หลังจากเปลี่ยนรหัสผ่านสำเร็จ
-
-#         else:
-#             form = ResetPasswordForm()
-#             return render(request, 'Login_Register/resetpassword2.html', {'form': form})
-
 def check_credentials(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -143,7 +118,7 @@ def check_credentials(request):
             # User found, redirect to the password reset page and store user_id in the session
             request.session['user_id_for_reset'] = user.id
             # messages.success(request, 'User found, please reset your password!')
-            return redirect('resetpassword2')
+            return redirect('resetpassword')
         except User.DoesNotExist:
             messages.error(request, 'No user found with provided username and email.')
             return redirect('credentials')
@@ -151,7 +126,7 @@ def check_credentials(request):
     return render(request, 'Login_Register/credentials.html')
 
 from django.contrib.auth.forms import SetPasswordForm
-def reset_password2(request):
+def reset_password(request):
     user_id = request.session.get('user_id_for_reset')
     if user_id is not None:
         user = User.objects.get(id=user_id)
@@ -164,7 +139,7 @@ def reset_password2(request):
         else:
             form = SetPasswordForm(user)
 
-        return render(request, 'Login_Register/resetpassword2.html', {'form': form})
+        return render(request, 'Login_Register/resetpassword.html', {'form': form})
 
     else:
         messages.error(request, 'No reset request found. Please submit your username and email again.')

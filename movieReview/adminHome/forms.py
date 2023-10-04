@@ -26,11 +26,17 @@ class SignupForm(forms.ModelForm):
         model = User
         fields = ['username',  'password1', 'password2','first_name', 'last_name', 'date_of_birth', 'email']
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already in use.")
+        return username
+
     def clean(self):
         cleaned_data = super().clean()
         password1 = cleaned_data.get('password1')
         password2 = cleaned_data.get('password2')
-        if password1 and password2 and password1 != password2:
+        if password1 != password2:
             raise ValidationError("Passwords don't match")
         return cleaned_data
 

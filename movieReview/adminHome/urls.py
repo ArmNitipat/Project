@@ -19,7 +19,7 @@ urlpatterns = [
     path('update_user/', views.update_user, name='update_user'),
     path('changepassword/', views.changepassword, name='changepassword'),
     path('credentials/', views.check_credentials, name='credentials'),
-    path('resetpassword2/', views.reset_password2, name='resetpassword2'),
+    path('resetpassword/', views.reset_password, name='resetpassword'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
