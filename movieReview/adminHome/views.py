@@ -98,64 +98,79 @@ def resetpassword(request):
         email = request.POST.get('email')
         
         # ตรวจสอบว่ามีผู้ใช้ที่ตรงกับ username และ email ในฐานข้อมูลหรือไม่
-        try:
-            user = User.objects.get(username=username, email=email)
-        except User.DoesNotExist:
-            user = None
-        
+        user = User.objects.filter(username=username, email=email).exists()
         if user:
-            # สร้างรหัสผ่านรีเซ็ตใหม่ โดยอาจใช้ไลบรารี่ random หรือวิธีอื่น ๆ
-            new_password = 'new_password_here'
-            
-            # กำหนดรหัสผ่านใหม่ให้กับผู้ใช้
-            user.set_password(new_password)
-            user.save()
-            
-            # ส่งอีเมลหรือลิงก์รีเซ็ตรหัสผ่านไปยังผู้ใช้ ตามที่คุณต้องการ
-            # ในตัวอย่างนี้เราจะใช้ send_mail สำหรับการส่งอีเมล
-            subject = 'รีเซ็ตรหัสผ่าน'
-            message = f'รหัสผ่านใหม่ของคุณคือ: {new_password}'
-            from_email = 'your_email@example.com'
-            recipient_list = [user.email]
-            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-            
-            return redirect('resetpassword2')  # เปลี่ยนไปยังหน้า resetpassword2 หลังจากกระบวนการรีเซ็ตสำเร็จ
-    
+            # ถ้าผ่านการตรวจสอบ, ไปที่หน้า resetpassword2
+            return redirect(user,'resetpassword2')
+        else:
+            messages.error(request, 'ไม่พบผู้ใช้ที่มีชื่อผู้ใช้และอีเมลนี้')
+            return render(request, 'Login_Register/resetpassword.html')
+
     return render(request, 'Login_Register/resetpassword.html')
 
 
-from .forms import ResetPasswordForm 
+# from .forms import ResetPasswordForm 
 
-def resetpassword2(request):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = ResetPasswordForm(request.POST)
+# def resetpassword2(request):
+#         if request.method == 'POST':
+#             form = ResetPasswordForm(request.POST)
             
-            if form.is_valid():
-                current_password = form.cleaned_data['current_password']
-                new_password = form.cleaned_data['new_password']
+#             if form.is_valid():
+#                 new_password = form.cleaned_data['new_password']
                 
-                # ตรวจสอบว่ารหัสผ่านปัจจุบันถูกต้อง
-                if request.user.check_password(current_password):
-                    # ตั้งรหัสผ่านใหม่และบันทึก
-                    request.user.set_password(new_password)
-                    request.user.save()
+#                 # ตั้งรหัสผ่านใหม่และบันทึก
+#                 request.user.set_password(new_password)
+#                 request.user.save()
                     
-                    # อัปเดตเซสชันและแจ้งให้ผู้ใช้รู้ว่ารหัสผ่านถูกเปลี่ยนแล้ว
-                    update_session_auth_hash(request, request.user)
-                    messages.success(request, 'รหัสผ่านถูกเปลี่ยนแล้ว')
+#                 # อัปเดตเซสชันและแจ้งให้ผู้ใช้รู้ว่ารหัสผ่านถูกเปลี่ยนแล้ว
+#                 update_session_auth_hash(request, request.user)
+#                 messages.success(request, 'รหัสผ่านถูกเปลี่ยนแล้ว')
                     
-                    # หลังจากเปลี่ยนรหัสผ่านเรียบร้อยแล้ว สามารถเด้งไปหน้า Login หรือหน้าอื่นๆ ตามที่คุณต้องการได้
-                    return redirect('login')  # เด้งไปยังหน้า Login หลังจากเปลี่ยนรหัสผ่านสำเร็จ
-            else:
-                messages.error(request, 'กรุณากรอกข้อมูลให้ถูกต้อง')
-        else:
-            form = ResetPasswordForm()
+#                 # หลังจากเปลี่ยนรหัสผ่านเรียบร้อยแล้ว สามารถเด้งไปหน้า Login หรือหน้าอื่นๆ ตามที่คุณต้องการได้
+#                 return redirect('login')  # เด้งไปยังหน้า Login หลังจากเปลี่ยนรหัสผ่านสำเร็จ
+
+#         else:
+#             form = ResetPasswordForm()
+#             return render(request, 'Login_Register/resetpassword2.html', {'form': form})
+
+def check_credentials(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+
+        try:
+            user = User.objects.get(username=username, email=email)
+            # User found, redirect to the password reset page and store user_id in the session
+            request.session['user_id_for_reset'] = user.id
+            # messages.success(request, 'User found, please reset your password!')
+            return redirect('resetpassword2')
+        except User.DoesNotExist:
+            messages.error(request, 'No user found with provided username and email.')
+            return redirect('credentials')
+
+    return render(request, 'Login_Register/credentials.html')
+
+from django.contrib.auth.forms import SetPasswordForm
+def reset_password2(request):
+    user_id = request.session.get('user_id_for_reset')
+    if user_id is not None:
+        user = User.objects.get(id=user_id)
         
+        if request.method == "POST":
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('login')
+        else:
+            form = SetPasswordForm(user)
+
         return render(request, 'Login_Register/resetpassword2.html', {'form': form})
+
     else:
-        template = loader.get_template('home.html')
-        return HttpResponse(template.render())
+        messages.error(request, 'No reset request found. Please submit your username and email again.')
+        return redirect('credentials')
+
+
 
 def logout_view(request):
     logout(request)
@@ -286,4 +301,3 @@ def calender(request):
 #         ...
 #     else:
 #         # Return an 'invalid login' error message.
-#         ...

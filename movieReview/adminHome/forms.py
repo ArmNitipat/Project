@@ -1,16 +1,13 @@
 from django import forms
 from .models import myuser
-
+from django import forms
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = myuser
         fields = ['username', 'password', 'firstname', 'lastname', 'date_of_birth', 'email']
-
-
-from django.contrib.auth.models import User
-from django import forms
-from django.core.exceptions import ValidationError
 
 # class SignupForm(UserCreationForm):
 #     email = forms.EmailField(max_length=200, required=True)

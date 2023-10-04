@@ -145,6 +145,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+# password hasher = Argon2!!!
+PASSWORD_HASHERS = [
+    'adminHome.my_hashers.MyArgon2PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+]
 
 
 # Internationalization
@@ -169,3 +178,14 @@ STATIC_URL = '/static/'
 #media file
 MEDIA_URL = 'adminHome/templates/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'adminHome/templates/')
+
+#SMTP Server
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# สำหรับการใช้งานจริง:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = '25.48.97.110'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = '6511850015@mut.ac.th'
+# EMAIL_HOST_PASSWORD = '*********'
