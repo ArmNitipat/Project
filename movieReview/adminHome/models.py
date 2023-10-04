@@ -21,10 +21,9 @@ class myuser(models.Model):
   def __str__(self):
     return f"{self.firstname} {self.lastname}"
   
-  class User(models.Model):
-    # ... ส่วนอื่นๆ ของ model ของคุณ ...
-    date_of_birth = models.DateField(null=True, blank=True)
-    image = models.ImageField(upload_to='profile_User/', verbose_name="Image", null=True,)
+  # class User(models.Model):
+  #   # ... ส่วนอื่นๆ ของ model ของคุณ ...
+  #   date_of_birth = models.DateField(null=True, blank=True)
 
 
 class Bannerslide(models.Model):
@@ -52,12 +51,3 @@ class Bannerslide(models.Model):
 #     count = models.PositiveIntegerField(default=0)
 
 
-def validate_file_size(value):
-    filesize = value.size
-    if filesize > 1024000:  # 1MB
-        raise ValidationError("The maximum file size that can be uploaded is 1MB")
-
-def validate_file_extension(value):
-    ext = value.name.split('.')[-1]
-    if not ext.lower() in ['jpeg', 'jpg', 'png']:
-        raise ValidationError('Only JPEG, JPG, and PNG files are allowed.')

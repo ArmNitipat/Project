@@ -149,7 +149,7 @@ def reset_password(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('Login_Register/login')
+    return redirect('login')
 
 
 def calculate_age(date_of_birth):
