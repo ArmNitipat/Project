@@ -7,40 +7,53 @@
 
 {% block content %}
 <style>
-/* รูปภาพปกติ */
-.image-container {
-  position: relative;
-  cursor: pointer; /* เมื่อนำเมาส์ไปชี้ที่รูปภาพให้เปลี่ยนเป็นเคอร์เซอร์แบบปรับขนาด */
-}
+  /* รูปภาพปกติ */
+  .image-container {
+    position: relative;
+    cursor: pointer;
+    /* เมื่อนำเมาส์ไปชี้ที่รูปภาพให้เปลี่ยนเป็นเคอร์เซอร์แบบปรับขนาด */
+  }
 
-#profile-image {
-  transition: filter 0.5s; /* ให้เอฟเฟกต์การเบลอเริ่มทำงานในระยะเวลา 0.5 วินาที */
-}
+  #profile-image {
+    transition: filter 0.5s;
+    /* ให้เอฟเฟกต์การเบลอเริ่มทำงานในระยะเวลา 0.5 วินาที */
+  }
 
-/* เมื่อเรานำเมาส์เข้ามาบนรูปภาพ */
-#profile-image:hover {
-  filter: blur(5px); /* ปรับระดับการเบลอตามความต้องการของคุณ */
-}
+  /* เมื่อเรานำเมาส์เข้ามาบนรูปภาพ */
+  #profile-image:hover {
+    filter: blur(5px);
+    /* ปรับระดับการเบลอตามความต้องการของคุณ */
+  }
 
-/* ข้อความ "Change Image" ที่จะแสดงเมื่อนำเมาส์ไปชี้ที่รูปภาพ */
-.change-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 20px;
-  display: none;
-}
+  /* ข้อความ "Change Image" ที่จะแสดงเมื่อนำเมาส์ไปชี้ที่รูปภาพ */
+  .change-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
+    display: none;
+  }
 
-/* ข้อความ "Change Image" เมื่อรูปภาพเบลอ */
-#profile-image:hover + .change-text {
-  display: block;
-}
+  /* ข้อความ "Change Image" เมื่อรูปภาพเบลอ */
+  #profile-image:hover+.change-text {
+    display: block;
+  }
 </style>
+<script>
+  function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var output = document.getElementById('profile-image');
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
 
 <body class="bg-body-tertiary bg-dark">
-  
+
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
@@ -74,89 +87,97 @@
         </ul>
       </div>
       <!-- Main Content -->
+      
       <div class="col-md-7 mx-auto ">
         <div class="container h-100">
           <div class="row justify-content-start bg-dark">
             <div class="card bg-dark">
               <main class="card-body bg-dark text-light">
                 <div class="row ">
+                  <form id="updateUserForm" method="POST" action="{% url 'update_user' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
                   <div class="col-md-10">
-                    <div class="d-flex justify-content-center align-items-center">
-                      <div class="image-container">
-                        <img alt="Profile Image" id="profile-image" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" title="Profile" class="img-circle img-thumbnail isTooltip" src="https://image.api.playstation.com/vulcan/ap/rnd/202108/0410/UAnLUUMdxA9cow8TEe8IfhuC.png" data-original-title="Usuario" onclick="changeProfileImage()" onmouseover="blurImage()" onmouseout="unblurImage()">
-                        <span class="change-text ">Change image</span>
+                    <div class="d-flex justify-content-center align-items-center image-container">
+                      {% if user.image %}
+                      <img alt="Profile Image" id="profile-image" name="image" accept="image/*"
+                        style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" title="Profile"
+                        class="img-circle img-thumbnail isTooltip" src="{{ user.image.url }}"
+                        data-original-title="Usuario" onclick="changeProfileImage()" onmouseover="blurImage()"
+                        onmouseout="unblurImage()">
+                      {% else %}
+                      <img alt="Profile Image" id="profile-image"
+                        style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" title="Profile"
+                        class="img-circle img-thumbnail isTooltip"
+                        src="https://image.api.playstation.com/vulcan/ap/rnd/202108/0410/UAnLUUMdxA9cow8TEe8IfhuC.png"
+                        data-original-title="Usuario" onclick="changeProfileImage()" onmouseover="blurImage()"
+                        onmouseout="unblurImage()">
+                      {% endif %}
+                      <span class="change-text">Change image</span>
+                    </div>
+                  </div>
+                  <!-- <input type="file" name="image" id="id_image" accept="image/*"> -->
+                  <input type="file" name="profile_image" id="hiddenFileInput" style="display: none;" accept="image/*">
+                </div>
+
+                  <div class="row mt-1 align-items-center">
+                    <div class="row">
+                      <div class="col-md-10">
+                        <hr class="my-4">
+                      </div>
+                    </div>
+                    <div class="row mt-1 align-items-center">
+
+                      <div class="col-md-5">
+                        <label for="firstName" class="form-label">First name</label>
+                        <input type="text" class="form-control" id="firstname" name="firstname"
+                          value="{{ user.first_name }}" readonly>
+                      </div>
+                      <div class="col-md-5">
+                        <label for="lastname" class="form-label">Last name</label>
+                        <input type="text" class="form-control" id="lastname" name="lastname"
+                          value="{{ user.last_name }}" readonly>
+                      </div>
+
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-md-10 mt-2">
+
+                        <label for="email" class="form-label">Email</label>
+                        <input class="form-control" value="{{ user.email }}" readonly type="email" name="email"
+                          maxlength="254" required id="id_email" class="form-control" placeholder="YourEmail@gmail.com">
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-10">
+                        <hr class="my-4">
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+
+                      <div class="col-md-5 ">
+                        <button class="w-100 text-light " style="background-color: rgb(65, 67, 181);" type="button"
+                          id="editButton">Edit</button>
+                        <button class="w-100 text-light " style="display: none; background-color: rgb(65, 67, 181);"
+                          type="submit" id="saveButton">Save</button>
+                      </div>
+                      <div class="col-md-5 ">
+                        <button class="w-100 text-light bg-secondary " style="display: none;" type="button"
+                          id="cancleB">Cancle</button>
                       </div>
                     </div>
                   </div>
-<form id="updateUserForm" method="POST" action="{% url 'update_user' %}">
-{% csrf_token %}
-<div class="row mt-1 align-items-center">
-<div class="row">
-  <div class="col-md-10">
-    <hr class="my-4">
-  </div>
-</div>
-<div class="row mt-1 align-items-center">
-  
-  <div class="col-md-5">
-    <label for="firstName" class="form-label">First name</label>
-    <input type="text" class="form-control" id="firstname" name="firstname"  value="{{ user.first_name }}" readonly>
-  </div>
-  <div class="col-md-5">
-    <label for="lastname" class="form-label">Last name</label>
-    <input type="text" class="form-control" id="lastname" name="lastname"  value="{{ user.last_name }}" readonly>
-  </div>
-  
-</div>
-<div class="row mt-2"> 
-  <div class="col-md-10 mt-2">
-    
-    <label for="email" class="form-label">Email</label>
-    <input class="form-control" value="{{ user.email }}" readonly 
-      type="email"
-      name="email"
-      maxlength="254"
-      required
-      id="id_email"
-      class="form-control"
-      placeholder="YourEmail@gmail.com"
-    >
-    
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-10">
-    <hr class="my-4">
-  </div>
-</div>
-<div class="row mt-2">
- 
-  <div class="col-md-5 ">
-    <button class="w-100 text-light " style="background-color: rgb(65, 67, 181);" type="button" id="editButton">Edit</button>
-    <button class="w-100 text-light " style="display: none; background-color: rgb(65, 67, 181);" type="submit" id="saveButton">Save</button>
-  </div>
-  <div class="col-md-5 ">
-    <button class="w-100 text-light bg-secondary " style="display: none;" type="button" id="cancleB">Cancle</button>
-  </div>
-</div>
-</div>
-</form>
-<div class="row mt-2 ">
-  <div class="col-md-10">
-    <hr class="my-4">
-    <form method="get" action="/changepassword">
-        <button class="w-100 btn-lg text-light" style="background-color: rgb(65, 67, 181);" type="submit">Change password</button>
-    </form>
-    <hr class="my-4">
-</div>
-</div>
-
-
-                <!-- </div>
-          <hr class="my-4">
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Setting Your Account</button>
-        </div> -->
-
+                </form>
+                <div class="row mt-2 ">
+                  <div class="col-md-10">
+                    <hr class="my-4">
+                    <form method="get" action="/changepassword">
+                      <button class="w-100 btn-lg text-light" style="background-color: rgb(65, 67, 181);"
+                        type="submit">Change password</button>
+                    </form>
+                    <hr class="my-4">
+                  </div>
+                </div>
 
                 </form>
             </div>
@@ -167,115 +188,117 @@
           integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
           crossorigin="anonymous"></script>
         <script src="checkout.js"></script>
-        
-<script>
-  // JavaScript to toggle between "Edit" and "Save" for First name
-  const editButton = document.getElementById("editButton");
-  const cancleB = document.getElementById("cancleB");
-  const saveButton = document.getElementById("saveButton"); // เพิ่มปุ่ม Save ใน HTML ของคุณ
-  const firstnameInput = document.getElementById("firstname");
-  const lastnameInput = document.getElementById("lastname");
-  const emailInput = document.getElementById("id_email");
-  const updateUserForm = document.getElementById("updateUserForm");
-  const newEmail = emailInput.value;
-  const currentEmail = "{{ user.email }}";
-  
-  editButton.addEventListener("click", function () {
-    if (firstnameInput.readOnly && lastnameInput.readOnly && emailInput.readOnly) {
-      firstnameInput.readOnly = false;
-      lastnameInput.readOnly = false;
-      emailInput.readOnly = false;
-      editButton.style.display = "none";
-      saveButton.style.display = "block"; // แสดงปุ่ม Save
-      cancleB.style.display = "block";
-    }
-  });
-  
-  saveButton.addEventListener("click", function () {
-    // หลังจากคลิกปุ่ม Save
-    firstnameInput.readOnly = true;
-    lastnameInput.readOnly = true;
-    emailInput.readOnly = true;
-    editButton.style.display = "block";
-    saveButton.style.display = "none";
-    cancleB.style.display = "none";
-    const newFirstName = firstnameInput.value;
-    const newLastName = lastnameInput.value;
-    const newEmail = emailInput.value;
-    const currentEmail = "{{ user.email }}"; // ใช้ Email ปัจจุบันจาก Django template
-    fetch(`/update_user/${userId}/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": "{{ csrf_token }}", // เพิ่ม CSRF token ของ Django ในการส่งคำขอ
-      },
-      body: JSON.stringify({
-        first_name: newFirstName,
-        last_name: newLastName,
-        email: newEmail,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // หลังจากอัปเดตข้อมูลสำเร็จ
-        firstnameInput.readOnly = true;
-        lastnameInput.readOnly = true;
-        emailInput.readOnly = true;
-        editButton.style.display = "block";
-        saveButton.style.display = "none";
-        editButton.innerText = "Edit"; // คืนค่าปุ่ม Edit
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-      updateUserForm.submit(); 
-  });
-  
-    cancleB.addEventListener("click", function () {
-      // ยกเลิกการแก้ไขและเปลี่ยนกลับเป็นโหมดแสดงข้อมูล
-      firstnameInput.readOnly = true;
-      lastnameInput.readOnly = true;
-      emailInput.readOnly = true;
-      editButton.style.display = "block";
-      saveButton.style.display = "none";
-      cancleB.style.display = "none";
-    });
-  // ฟังก์ชันที่ใช้ในการเปิดเอฟเฟกต์การเบลอเมื่อนำเมาส์เข้ามาบนรูปภาพ
-function blurImage() {
-  const profileImage = document.getElementById('profile-image');
-  profileImage.classList.add('blurred');
-}
 
-// ฟังก์ชันที่ใช้ในการยกเลิกเอฟเฟกต์การเบลอเมื่อนำเมาส์ออกจากรูปภาพ
-function unblurImage() {
-  const profileImage = document.getElementById('profile-image');
-  profileImage.classList.remove('blurred');
-}
+        <script>
+          // JavaScript to toggle between "Edit" and "Save" for First name
+          const editButton = document.getElementById("editButton");
+          const cancleB = document.getElementById("cancleB");
+          const saveButton = document.getElementById("saveButton"); // เพิ่มปุ่ม Save ใน HTML ของคุณ
+          const firstnameInput = document.getElementById("firstname");
+          const lastnameInput = document.getElementById("lastname");
+          const emailInput = document.getElementById("id_email");
+          const updateUserForm = document.getElementById("updateUserForm");
+          const newEmail = emailInput.value;
+          const currentEmail = "{{ user.email }}";
 
-// ฟังก์ชันที่ใช้ในการเปลี่ยนรูปภาพเมื่อคลิกที่รูปภาพ
-function changeProfileImage() {
-  const fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.accept = 'image/*';
-  fileInput.addEventListener('change', handleImageChange);
-  fileInput.click();
-}
+          editButton.addEventListener("click", function () {
+            if (firstnameInput.readOnly && lastnameInput.readOnly && emailInput.readOnly) {
+              firstnameInput.readOnly = false;
+              lastnameInput.readOnly = false;
+              emailInput.readOnly = false;
+              editButton.style.display = "none";
+              saveButton.style.display = "block"; // แสดงปุ่ม Save
+              cancleB.style.display = "block";
+            }
+          });
 
-// ฟังก์ชันที่ใช้ในการอ่านไฟล์รูปภาพและแสดงในองค์ประกอบ <img>
-function handleImageChange(event) {
-  const file = event.target.files[0];
-  if (file) {
-    const profileImage = document.getElementById('profile-image');
-    const reader = new FileReader();
+          saveButton.addEventListener("click", function () {
+            // หลังจากคลิกปุ่ม Save
+            firstnameInput.readOnly = true;
+            lastnameInput.readOnly = true;
+            emailInput.readOnly = true;
+            editButton.style.display = "block";
+            saveButton.style.display = "none";
+            cancleB.style.display = "none";
+            const newFirstName = firstnameInput.value;
+            const newLastName = lastnameInput.value;
+            const newEmail = emailInput.value;
+            const currentEmail = "{{ user.email }}"; // ใช้ Email ปัจจุบันจาก Django template
+            fetch(`/update_user/${userId}/`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}", // เพิ่ม CSRF token ของ Django ในการส่งคำขอ
+              },
+              body: JSON.stringify({
+                first_name: newFirstName,
+                last_name: newLastName,
+                email: newEmail,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // หลังจากอัปเดตข้อมูลสำเร็จ
+                firstnameInput.readOnly = true;
+                lastnameInput.readOnly = true;
+                emailInput.readOnly = true;
+                editButton.style.display = "block";
+                saveButton.style.display = "none";
+                editButton.innerText = "Edit"; // คืนค่าปุ่ม Edit
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+            updateUserForm.submit();
+          });
 
-    reader.onload = function (e) {
-      profileImage.src = e.target.result;
-      unblurImage(); // ยกเลิกเอฟเฟกต์การเบลอเมื่อแสดงรูปภาพใหม่
-    };
+          cancleB.addEventListener("click", function () {
+            // ยกเลิกการแก้ไขและเปลี่ยนกลับเป็นโหมดแสดงข้อมูล
+            firstnameInput.readOnly = true;
+            lastnameInput.readOnly = true;
+            emailInput.readOnly = true;
+            editButton.style.display = "block";
+            saveButton.style.display = "none";
+            cancleB.style.display = "none";
+          });
+          // ฟังก์ชันที่ใช้ในการเปิดเอฟเฟกต์การเบลอเมื่อนำเมาส์เข้ามาบนรูปภาพ
+          function blurImage() {
+            const profileImage = document.getElementById('profile-image');
+            profileImage.classList.add('blurred');
+          }
 
-    reader.readAsDataURL(file);
-  }
-}
+          // ฟังก์ชันที่ใช้ในการยกเลิกเอฟเฟกต์การเบลอเมื่อนำเมาส์ออกจากรูปภาพ
+          function unblurImage() {
+            const profileImage = document.getElementById('profile-image');
+            profileImage.classList.remove('blurred');
+          }
+
+          // ฟังก์ชันที่ใช้ในการเปลี่ยนรูปภาพเมื่อคลิกที่รูปภาพ
+          function changeProfileImage() {
+          const fileInput = document.getElementById('hiddenFileInput');
+          fileInput.addEventListener('change', handleImageChange);
+          fileInput.click();
+          }
+
+          // ฟังก์ชันที่ใช้ในการอ่านไฟล์รูปภาพและแสดงในองค์ประกอบ <img>
+          function handleImageChange(event) {
+          const file = event.target.files[0];
+          if (file) {
+              const profileImage = document.getElementById('profile-image');
+              const reader = new FileReader();
+
+              reader.onload = function (e) {
+                  profileImage.src = e.target.result;
+                  unblurImage(); // ยกเลิกเอฟเฟกต์การเบลอเมื่อแสดงรูปภาพใหม่
+              };
+
+              reader.readAsDataURL(file);
+
+              // ส่งฟอร์ม
+              const form = document.getElementById('updateUserForm');
+              form.submit();
+              }
+          }
         </script>
       </div>
     </div>

@@ -14,12 +14,13 @@
         src="https://wallpapers.com/images/featured/movie-9pvmdtvz4cb0xl37.jpg"
         class="img-fluid"
         style="object-fit: cover; height: 100%"
+        alt="movie"
       />
     </div>
     <div class="card bg-white">
       <div class="card-body p-4 p-lg-5 text-black">
 
-          <form method="post" action="/login/">
+          <form method="post" action="/login/" id="formcontan">
             {% csrf_token %}
             {{ form.as_p }}
           <div class="d-flex align-items-center mb-3 pb-1">
@@ -89,8 +90,10 @@
           </p>
           <a href="#!" class="small text-muted">About us</a>
         </form>
-        {% if error %}
-        <p>{{ error }}</p>
+        {% if login_error %}
+        <script>
+            alert("{{ login_error }}");
+        </script>
         {% endif %}
       </div>
     </div>
@@ -100,12 +103,10 @@
   style="
     background-image: url('https://hcdevilsadvocate.com/wp-content/uploads/2019/01/netflix-background-9-900x506.jpg');
     background-size: cover;
-    background-repeat: no-repeat;
-  "
->
+    background-repeat: no-repeat;">
   <div
     class="bgimgmax"
-    style="background-color: rgba(0, 0, 0, 0.6); height: 100lvh"
-  ></div>
+    style="background-color: rgba(0, 0, 0, 0.6); height: 100lvh">
+  </div>
 </div>
 {%endblock%}

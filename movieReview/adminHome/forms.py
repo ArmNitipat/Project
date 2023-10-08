@@ -16,11 +16,17 @@ class UserForm(forms.ModelForm):
 #         model = User
 #         fields = ('username', 'email', 'password1', 'password2')
 
+# class UserProfile(forms.ModelForm):
+#     image = forms.models.ImageField(upload_to='profile_images/')
+#     class Meta:
+#         model = User
+#         fields = ['image']
 
 class SignupForm(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput, label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput, label="Password confirmation")
-    date_of_birth = forms.DateField()
+    date_of_birth = forms.DateField()   
+    # image = forms.ImageField()
 
     class Meta:
         model = User

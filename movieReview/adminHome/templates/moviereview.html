@@ -1,0 +1,427 @@
+{% extends "base1.html" %} {%block title %}
+<link rel="stylelogin" href="../static/css/login_register.css" />
+<title>MovieReview</title>
+{% endblock %} {%block content%}
+<style>
+    body{
+        background-color: black;
+    }
+
+    .card-link {
+        color: rgb(88, 189, 247);
+        text-decoration: none;
+    }
+
+    .card-link:hover {
+        text-decoration: underline;
+        color: rgb(88, 189, 247);
+    }
+
+    .card-link:active {
+        color: rgb(47, 0, 255); /* เปลี่ยนสีลิงก์เมื่อคลิก */
+    }
+
+    .carousel-item img {
+        width: 364px;
+        height: 560px;
+        object-fit: cover;
+    }
+    .divider {
+    border-left: 1px solid #000; /* สีเส้นแบ่ง */
+    height: 30px; /* ความสูงของเส้นแบ่ง */
+    margin: 0 10px; /* ระยะห่างของเส้นแบ่งจากข้อความ */
+}
+</style>
+<main class="container bg-light bg-dark text-light border border-light" style="width: 120%;">
+      <div class="p-4 p-md-5  text-white rounded" style="background-color: rgba(35, 35, 35, 0.879);">
+        <!--รูปภาพของภาพยนตร์-->
+        <div class="row">
+            <div class="col-md-3" style="align-items: center; justify-content: center;">
+                <div class="card" style="display: flex; height: 432px; overflow: hidden; position: relative; background: none; border: none;">
+                    <img src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/60eca3ac155247e21850c7d075d01ebf0f3f5dbf19ccd2a1.jpg" 
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+        <!--คลิปของภาพยนตร์-->
+        <div class="col-md-7 bg-dark">
+            <div class="card" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 432px; background: transparent; border-radius: 15px; overflow: hidden;">
+                <div class="row text-dark" style="width: 100%; height: 432px;">
+                  <iframe id="myVideo" width="80%" height="432px" src="https://www.youtube.com/embed/bgqGdIoa52s?autoplay=1&mute=1&rel=0" 
+                          title="YouTube video player" 
+                          frameborder="0" 
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                          allowfullscreen>
+                  </iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 bg-dark">
+            <hr>
+            <h4 style="justify-content: center; align-items: center; " class="text-center mb-2"> Movie Rate</h4>
+
+            <!--คะแนนจากเว็บต่างๆ-->
+            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/5977/5977585.png" style="width: 100px; height: 60px;">
+                <h5>8.1/10</h5>
+            </div>
+            <div class="card mt-3" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
+                <img class="mt-1" src="https://cdn.cookielaw.org/logos/17e5cb00-ad90-47f5-a58d-77597d9d2c16/7e979733-6841-4fce-9182-515fac69187f/30d6331f-cc9b-43d7-a9d5-c035c834a1f9/rottentomatoes_logo_40.png" style="width: 100px; height: 40px;">
+                <h5>8.1/10</h5>
+            </div>
+            <hr>
+
+            <!--Tagของภาพยนตร์-->
+            <div class="card bg-dark ">
+                <h4 style="justify-content: center; align-items: center; " class="text-center"> Movie Tag</h4>
+
+                
+                <div class="mt-1 mb-1 border-secondary card bg-transparent text-light" style="display: flex; justify-content: center; align-items: center; border-radius: 10px;">
+                    <h6 class="m-0">Action</h6>
+                </div>
+                <div class="mt-1 mb-1 border-secondary card bg-transparent text-light" style="display: flex; justify-content: center; align-items: center; border-radius: 10px;">
+                    <h6 class="m-0">Sci-fi</h6>
+                </div>
+                <div class="mt-1 mb-1 border-secondary card bg-transparent text-light" style="display: flex; justify-content: center; align-items: center; border-radius: 10px;">
+                    <h6 class="m-0">Hrror</h6>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  
+    
+    <div class="row mb-2 mt-1 ">
+      <div class="col-md-8 bg-dark">
+        <div class=" row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+          <div class="text-light bg-dark col p-4 d-flex flex-column position-static">
+
+            <div class="row">
+              <div class="col-md-7"></div>
+              
+              
+                <div class="col-md-5 d-flex align-items-center mt-2">
+                  <!-- Positive Comment -->
+                  <svg width="20px" height="20px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#0ef69d">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <title>like [#000000]</title>
+                        <desc>Created with Sketch.</desc>
+                        <defs></defs>
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="Dribbble-Light-Preview" transform="translate(-259.000000, -760.000000)" fill="#0ef69d">
+                                <g id="icons" transform="translate(56.000000, 160.000000)">
+                                    <path d="M203,620 L207.200006,620 L207.200006,608 L203,608 L203,620 Z M223.924431,611.355 L222.100579,617.89 C221.799228,619.131 220.638976,620 219.302324,620 L209.300009,620 L209.300009,608.021 L211.104962,601.825 C211.274012,600.775 212.223214,600 213.339366,600 C214.587817,600 215.600019,600.964 215.600019,602.153 L215.600019,608 L221.126177,608 C222.97313,608 224.340232,609.641 223.924431,611.355 L223.924431,611.355 Z" id="like-[#000000]"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                  </svg>
+                  <p class="mb-0 ms-3">Positive</p>
+                  <strong class="d-inline-block ms-1 text-center text-light">94%</strong>  
+                  <div class="divider"></div>
+                  <!-- Negative Comment -->
+                  <svg class="mt-2 ms-2" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                      <g id="SVGRepo_iconCarrier">
+                          <path d="M15.609 5.49953V15.6595C15.609 16.0595 15.489 16.4495 15.269 16.7795L12.539 20.8395C12.109 21.4895 11.039 21.9495 10.129 21.6095C9.14904 21.2795 8.49904 20.1795 8.70904 19.1995L9.22904 15.9295C9.26904 15.6295 9.18904 15.3595 9.01904 15.1495C8.84904 14.9595 8.59904 14.8395 8.32904 14.8395H4.21904C3.42904 14.8395 2.74904 14.5195 2.34904 13.9595C1.96904 13.4195 1.89904 12.7195 2.14904 12.0095L4.60904 4.51953C4.91904 3.27953 6.26904 2.26953 7.60904 2.26953H11.509C12.179 2.26953 13.119 2.49953 13.549 2.92953L14.829 3.91953C15.319 4.29953 15.609 4.87953 15.609 5.49953Z" fill="#ff1f1f"></path>
+                          <path d="M18.7894 17.6084H19.8194C21.3694 17.6084 21.9994 17.0084 21.9994 15.5284V5.47844C21.9994 3.99844 21.3694 3.39844 19.8194 3.39844H18.7894C17.2394 3.39844 16.6094 3.99844 16.6094 5.47844V15.5384C16.6094 17.0084 17.2394 17.6084 18.7894 17.6084Z" fill="#ff1f1f"></path>
+                      </g>
+                  </svg>
+                  <p class="mb-0 ms-3">Negative</p>
+                  <strong class="d-inline-block ms-1 text-center text-light">6%</strong>
+                </div>
+          </div>
+
+            <!--รายละเอียดปีที่ออก เวลาของภาพยนตร์ และ เรทของภาพยนตร์ -->
+            <div class="row mt-2">
+              <strong class="col-md-7 d-inline-block mb-2 text-primary">
+                  2023
+                  PG-13
+                  2h 28m
+              </strong>
+            </div>
+
+            <!-- ชื่อ ภาพยนตร์ -->
+            <h3 class="mb-0">Marvel Spider-Man 2</h3>
+
+            <!--วันที่ออกฉาย-->
+            <div class="mb-1 text-muted">Release 20 Oct 2023 </div>
+
+            <!--คำอธิบายภาพยนตร์ หรือ เรื่องย่อ-->
+            <p class="card-text mb-auto" style="color: rgb(177, 177, 177);">With Spider-Man's identity now revealed, Peter asks Doctor Strange for help. When a spell goes wrong, dangerous foes from other worlds start to appear, forcing Peter to discover what it truly means to be Spider-Man.</p>
+            <hr>
+            <div>
+
+                <!-- ผู้กำกับ -->
+                <div style="display: flex; flex-direction: row; align-items: center;">
+                    <p class="me-3 mb-auto m-0">Director</p>
+                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="director-link">
+                        Arm Nitipat
+                    </a>
+                </div>
+                <hr>
+
+                <!-- คนเขียนบท -->
+                <div style="display: flex; flex-direction: row; align-items: center;">
+                    <p class="me-3 mb-auto m-0">Writers</p>
+                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="writers-link">
+                        Arm Nitipat
+                    </a>
+                </div>
+                <hr>
+
+                <!-- นักแสดง -->
+                <div style="display: flex; flex-direction: row; align-items: center;">
+                    <p class="me-3 mb-auto m-0">Stars</p>
+                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star1-link">
+                        Arm Nitipat
+                    </a>
+                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star2-link">
+                        Mark Sirawit
+                    </a>
+                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star3-link">
+                        Koekae Smartdog
+                    </a>
+                </div>
+                <hr>
+
+                <!--Story line-->
+                <div style="align-items: center;">
+                    <p class="me-3 mb-auto m-0" style="font-size: 32px; font-weight: bold;">Storyline</p>
+                    <p class="mt-1 mb-3" style="color: rgb(177, 177, 177);">
+                        Peter Parker's secret identity is revealed to the entire world.
+                        Desperate for help, Peter turns to Doctor Strange to make the world forget that he is Spider-Man.
+                        The spell goes horribly wrong and shatters the multiverse, bringing in monstrous villains that could destroy the world.
+                    </p>
+                </div>
+
+
+            </div>
+            
+            
+          </div>
+         
+        </div>
+      </div>
+      <div class="col-md-4 bg-dark text-light">
+        
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                <img src="https://preview.redd.it/i-made-a-poster-for-marvels-spider-man-2-i-cant-wait-to-v0-p04azg38979b1.jpg?width=640&crop=smart&auto=webp&s=0691e279a4719fa11ad834a0cd0b380385737c67" 
+                     class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                <img src="https://pbs.twimg.com/media/F1RnR-qWIAAYnRW.jpg:large" 
+                     class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                <img src="https://m.media-amazon.com/images/M/MV5BOTQ5NTZjZTgtODZkMy00YjY5LTkzNTAtMTYyMDg1NDljMTE1XkEyXkFqcGdeQXVyMTk2OTAzNTI@._V1_.jpg" 
+                     class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            </div>
+      </div>
+      <hr class="bg-dark">
+    </div>
+  
+    <div class="row g-5">
+      <div class="col-md-12">
+        <h3 class="pb-4 mb-4 border-bottom justify-content-center align-items-center ">
+          Top Cast
+        </h3>
+        <div class="row justify-content-center align-items-center">
+
+          <!-- รายชื่อนักแสดง -->
+          <div class="col-md-6 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <rect width="80%" height="80%" fill="#777"></rect>
+                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
+                
+                <image href="https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg" 
+                width="130" height="180" />
+            </svg>
+            <div style="margin-left: 10px;">
+                <h4 class="mt-2" style="font-weight: bold;">Tom Holland</h4>
+                <p style="font-size: 18px;">Peter Parker</p>
+            </div>
+        </div>
+          <!-- รายชื่อนักแสดง -->
+          <div class="col-md-6 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <rect width="80%" height="80%" fill="#777"></rect>
+                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
+                
+                <image href="https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Zendaya_-_2019_by_Glenn_Francis.jpg/640px-Zendaya_-_2019_by_Glenn_Francis.jpg" 
+                width="130" height="180" />
+            </svg>
+            <div style="margin-left: 10px;">
+                <h4 class="mt-2" style="font-weight: bold;">Zendaya</h4>
+                <p style="font-size: 18px;">MJ</p>
+            </div>
+          </div>
+
+          <!-- รายชื่อนักแสดง -->
+          <div class="col-md-6 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <rect width="80%" height="80%" fill="#777"></rect>
+                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
+                
+                <image href="https://flxt.tmsimg.com/assets/275459_v9_bb.jpg" 
+                width="130" height="180" />
+            </svg>
+            <div style="margin-left: 10px;">
+                <h4 class="mt-2" style="font-weight: bold;">Benedict Cumberbatch</h4>
+                <p style="font-size: 18px;">Doctor Strange</p>
+            </div>
+          </div>
+
+          <!-- รายชื่อนักแสดง -->
+          <div class="col-md-6 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <rect width="80%" height="80%" fill="#777"></rect>
+                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
+                
+                <image href="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Jacob_Batalon_%2828035642754%29_%28cropped%29.jpg/1200px-Jacob_Batalon_%2828035642754%29_%28cropped%29.jpg" 
+                width="130" height="180" />
+            </svg>
+            <div style="margin-left: 10px;">
+                <h4 class="mt-2" style="font-weight: bold;">Jacob Batalon</h4>
+                <p style="font-size: 18px;">Ned Leeds</p>
+            </div>
+          </div>
+          
+         </div>
+        </div>
+        
+
+        
+        
+  
+        <article class="blog-post">
+          <h2 class="blog-post-title">Another blog post</h2>
+          <p class="blog-post-meta">December 23, 2020 by <a href="#">Jacob</a></p>
+  
+          <p>This is some additional paragraph placeholder content. It has been written to fill the available space and show how a longer snippet of text affects the surrounding content. We'll repeat it often to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+          <blockquote>
+            <p>Longer quote goes here, maybe with some <strong>emphasized text</strong> in the middle of it.</p>
+          </blockquote>
+          <p>This is some additional paragraph placeholder content. It has been written to fill the available space and show how a longer snippet of text affects the surrounding content. We'll repeat it often to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+          <h3>Example table</h3>
+          <p>And don't forget about tables in these posts:</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Upvotes</th>
+                <th>Downvotes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alice</td>
+                <td>10</td>
+                <td>11</td>
+              </tr>
+              <tr>
+                <td>Bob</td>
+                <td>4</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>Charlie</td>
+                <td>7</td>
+                <td>9</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Totals</td>
+                <td>21</td>
+                <td>23</td>
+              </tr>
+            </tfoot>
+          </table>
+  
+          <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other highly repetitive body text used throughout.</p>
+        </article>
+  
+        <article class="blog-post">
+          <h2 class="blog-post-title">New feature</h2>
+          <p class="blog-post-meta">December 14, 2020 by <a href="#">Chris</a></p>
+  
+          <p>This is some additional paragraph placeholder content. It has been written to fill the available space and show how a longer snippet of text affects the surrounding content. We'll repeat it often to keep the demonstration flowing, so be on the lookout for this exact same string of text.</p>
+          <ul>
+            <li>First list item</li>
+            <li>Second list item with a longer description</li>
+            <li>Third list item to close it out</li>
+          </ul>
+          <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other highly repetitive body text used throughout.</p>
+        </article>
+  
+        <nav class="blog-pagination" aria-label="Pagination">
+          <a class="btn btn-outline-primary" href="#">Older</a>
+          <a class="btn btn-outline-secondary disabled" href="#" tabindex="-1" aria-disabled="true">Newer</a>
+        </nav>
+  
+      </div>
+  
+      <div class="col-md-4">
+        <div class="position-sticky" style="top: 2rem;">
+          <div class="p-4 mb-3 bg-dark rounded">
+            <h4 class="fst-italic">About</h4>
+            <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+          </div>
+  
+          <div class="p-4">
+            <h4 class="fst-italic">Archives</h4>
+            <ol class="list-unstyled mb-0">
+              <li><a href="#">March 2021</a></li>
+              <li><a href="#">February 2021</a></li>
+              <li><a href="#">January 2021</a></li>
+              <li><a href="#">December 2020</a></li>
+              <li><a href="#">November 2020</a></li>
+              <li><a href="#">October 2020</a></li>
+              <li><a href="#">September 2020</a></li>
+              <li><a href="#">August 2020</a></li>
+              <li><a href="#">July 2020</a></li>
+              <li><a href="#">June 2020</a></li>
+              <li><a href="#">May 2020</a></li>
+              <li><a href="#">April 2020</a></li>
+            </ol>
+          </div>
+  
+          <div class="p-4">
+            <h4 class="fst-italic">Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var video = document.getElementById("myVideo");
+      
+      video.addEventListener("ended", function() {
+        // เมื่อคลิปวิดีโอจบ
+        video.currentTime = 0; // นำเวลากลับไปที่เริ่มต้น
+        video.play(); // เล่นคลิปวิดีโอใหม่
+      });
+      </script>
+  </main>
+{%endblock%}

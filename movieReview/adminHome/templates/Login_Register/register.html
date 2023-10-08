@@ -13,7 +13,9 @@ body {
   margin-left: 0px;
   margin-right: 0px;
 }
-
+#defaultProfilePicture {
+        display: none;
+    }
 </style>
 <div>
 
@@ -51,7 +53,7 @@ body {
                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2 text-center bg-dark text-light">
                   Registration Info
                 </h3>
-              <form class="px-md-2" method="post">
+                <form class="px-md-2" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-outline mb-4">
                   <label class="form-label" for="id_username">Username</label>
@@ -128,6 +130,8 @@ body {
                           name="date_of_birth"
                           class="form-control"
                           type="date"
+                          min = "1940-10-07"
+                          max=" {{today}}"
                           placeholder="Date of birth"/>
                       </div>
                       <div class="form-outline mb-4 mt-3">
@@ -144,6 +148,10 @@ body {
                     </div>
                   </div>
                 </div>
+                <!-- <div class="form-outline mb-4">
+                  <label for="id_profile_image">Profile Image:</label>
+                  <input title="image" type="file" name="image" id="id_profile_image" accept="image/*" required>
+              </div> -->
                 <div class="position-relative mt-4">
                   <div
                     class="position-absolute top-100 start-50 translate-middle"
@@ -166,6 +174,9 @@ body {
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <script>
+
+    var today = new Date().toISOString().split("T")[0];
+    id_date_of_birth.max = today;
     // JavaScript code to format date as "วัน เดือน ปี"
     document.getElementById("bdate").addEventListener("change", function () {
       var selectedDate = new Date(this.value);
@@ -176,8 +187,13 @@ body {
       this.value = formattedDate;
     });
 
+    document.getElementById('id_profile_image').addEventListener('change', function(event) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('preview-image').src = e.target.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+    });
   </script>
   {% endblock %}
 </section>
-
-<!--Django sugoi-->

@@ -38,10 +38,9 @@
     background-color: beige; 
     padding-left: 5%;
 } */
-.top {
-    text-align: right;
-}
-    .nav-link:active {
-    background-color: blue;
-    color: white;
+/* image admin */
+.user-avatar {
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
 }

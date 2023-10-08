@@ -39,7 +39,8 @@ def update_user(request):
         new_firstname = request.POST.get('firstname')
         new_lastname = request.POST.get('lastname')
         new_email = request.POST.get('email')
-        
+        new_image = request.FILES.get('profile_image')
+
         # อัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
         user = request.user
         user.first_name = new_firstname
@@ -47,9 +48,14 @@ def update_user(request):
         user.email = new_email
         user.save()
         
+        # ถ้ามีรูปภาพเก่าในโมเดล, ลบมัน
+        if new_image:
+            if user.image:
+                user.image.delete(save=False)
+            user.image = new_image
+            user.save()
         messages.success(request, 'ข้อมูลของคุณถูกอัปเดตแล้ว')
         return redirect('settingprofile')  # ลิงก์ไปยังหน้าโปรไฟล์หลังจากอัปเดตข้อมูล
-
     return redirect('account')
 
 
@@ -69,9 +75,12 @@ def get_user_data(request, user_id):
 
 def signup_view(request):
     if request.method == 'POST':
-        form = SignupForm(request.POST)
+        form = SignupForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            if not user.image:
+                user.image = 'profile_images/istockphoto612x612.jpg' 
+                user.save()
             login(request, user)
             return redirect('home')  # Redirect to a 'home' view, for instance.
     else:
@@ -80,6 +89,7 @@ def signup_view(request):
 
 
 def login_view(request):
+    context = {}
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -87,7 +97,9 @@ def login_view(request):
         if user:
             login(request, user)
             return redirect('home')
-    return render(request, 'Login_Register/login.html')
+        else:
+            context['login_error'] = "This username and email could not be found."
+    return render(request, 'Login_Register/login.html', context)
 
 
 
@@ -124,6 +136,7 @@ def check_credentials(request):
             return redirect('credentials')
 
     return render(request, 'Login_Register/credentials.html')
+
 
 from django.contrib.auth.forms import SetPasswordForm
 def reset_password(request):
@@ -181,38 +194,40 @@ def account(request):
         template = loader.get_template('home.html')
         return HttpResponse(template.render())
 
-
-def update_profile(request):
-    if request.method == 'POST':
-        # รับข้อมูลจากแบบฟอร์มและอัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
-        # เช่น User.objects.filter(username=request.user.username).update(first_name=new_first_name, last_name=new_last_name, email=new_email)
-        # โดยให้ new_first_name, new_last_name, และ new_email เป็นค่าที่รับจาก request.POST
-        # ตัวอย่างเท่านี้จะขึ้นอยู่กับโครงสร้างของระบบฐานข้อมูลของคุณ
-
-        return redirect('/account')  # หลังจากอัปเดตข้อมูลเรียบร้อยแล้วให้ redirect ไปยังหน้า My account หรือหน้าที่คุณต้องการ
-
-    return render(request, 'settingprofile.html')  # หากเป็น GET request ให้แสดงแบบฟอร์มข้อมูลแก้ไขผู้ใช้
+#เตรียมลบ
+# def update_profile(request):
+#         # รับข้อมูลจากแบบฟอร์มและอัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
+#         # เช่น User.objects.filter(username=request.user.username).update(first_name=new_first_name, last_name=new_last_name, email=new_email)
+#         # โดยให้ new_first_name, new_last_name, และ new_email เป็นค่าที่รับจาก request.POST
+#         # ตัวอย่างเท่านี้จะขึ้นอยู่กับโครงสร้างของระบบฐานข้อมูลของคุณ
+#     if request.method == "POST":  #updata profile
+#         user = request.user
+#         profile_image = request.FILES.get('profile_image')
+#         if profile_image:
+#             user.image = profile_image
+#             user.save()
+#         return redirect('/account')  # หลังจากอัปเดตข้อมูลเรียบร้อยแล้วให้ redirect ไปยังหน้า My account หรือหน้าที่คุณต้องการ
+#     return render(request, 'settingprofile.html')  # หากเป็น GET request ให้แสดงแบบฟอร์มข้อมูลแก้ไขผู้ใช้
 
 
 @login_required
 def settingprofile(request):
-    if request.user.is_authenticated:
-        user = request.user  # Get the logged-in user
-        user_age = calculate_age(user.date_of_birth)
-        context = {
-            'username': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email,
-            'date_of_birth' : user.date_of_birth,
-            'user_age': user_age
-            if user 
-            else None  # Replace with your actual field name
-        } 
-        return render(request, 'Account/settingprofile.html', context)
-    else:
-        template = loader.get_template('home.html')
-        return HttpResponse(template.render())
+    user = request.user  # Get the logged-in user
+    user_age = calculate_age(user.date_of_birth)
+    context = {
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+        'date_of_birth' : user.date_of_birth,
+        'user_age': user_age,
+    }
+    # profile_image = request.FILES.get('profile_image')
+    # if profile_image:
+    #     user.image = profile_image
+    #     user.save()
+    #     # return redirect('/account')
+    return render(request, 'Account/settingprofile.html', context)
 
 
 @login_required
@@ -260,19 +275,7 @@ def calender(request):
     template = loader.get_template('calender.html')
     return HttpResponse(template.render())
 
-# @login_required
-# def protected_view(request):
-#     return HttpResponse("You are logged in!")
+def moviereview(request):
+    template = loader.get_template('moviereview.html')
+    return HttpResponse(template.render())
 
-# def my_view(request):
-#     username = request.POST["username"]
-#     password = request.POST["password"]
-#     user = authenticate(request, username=username, password=password)
-#     if user is not None:
-#         login(request, user)
-#         # Redirect to a success page.
-#         template = loader.get_template('/')
-#         return HttpResponse(template.render())
-#         ...
-#     else:
-#         # Return an 'invalid login' error message.

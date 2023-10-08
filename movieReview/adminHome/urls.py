@@ -1,16 +1,17 @@
-from django.urls import path
+from django.urls import path #,re_path
+from django.contrib import admin
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 #------------------------------------------------------------------------------------
 # from .views import send_my_email
-from django.urls import path #,re_path
 from django.contrib.auth import views as auth_views
 #------------------------------------------------------------------------------------
 
 urlpatterns = [
     path('',views.home, name='home'),
+    path('admin/', admin.site.urls, name='admin'),
     path('calender/',views.calender),
     path('login/',views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
@@ -21,6 +22,7 @@ urlpatterns = [
     path('changepassword/', views.changepassword, name='changepassword'),
     path('credentials/', views.check_credentials, name='credentials'),
     path('resetpassword/', views.reset_password, name='resetpassword'),
+    path('moviereview/', views.moviereview, name='moviereview'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
