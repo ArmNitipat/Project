@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 JAZZMIN_SETTINGS = {
+    "custom_css": "css/bootstrap-dark.css",
      'show_ui_builder':True,
      'site_title': 'My Admin Panel',  # ชื่อที่จะแสดงบนหัวของหน้าแอดมิน
      'site_header': 'My Admin Panel',
@@ -55,13 +56,35 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
-
-    "theme": "cerulean",
-    #"dark_mode_theme": "darkly",
-    #Small Text
-    "navbar_small_text": True,
-    #SideBar
-    "sidebar_nav_legacy_style": True,
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-success",
+    "accent": "accent-teal",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-info",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "cyborg",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
 }
 
 MIDDLEWARE = [
@@ -173,7 +196,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'adminHome/static/'#Location of static files
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'adminHome/static')]
+STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
 
 #media file
 MEDIA_URL = 'adminHome/templates/'

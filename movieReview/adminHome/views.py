@@ -50,7 +50,7 @@ def update_user(request):
         
         # ถ้ามีรูปภาพเก่าในโมเดล, ลบมัน
         if new_image:
-            if user.image:
+            if user.image and user.image.name != 'profile_images/istockphoto612x612.jpg':
                 user.image.delete(save=False)
             user.image = new_image
             user.save()
@@ -79,7 +79,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save(commit=False)
             if not user.image:
-                user.image = 'profile_images/istockphoto612x612.jpg' 
+                user.image = 'adminHome/static/image/istockphoto612x612.jpg' 
                 user.save()
             login(request, user)
             return redirect('home')  # Redirect to a 'home' view, for instance.
