@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.exceptions import ValidationError
+#from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -16,14 +16,10 @@ class myuser(models.Model):
   firstname = models.CharField(max_length=20)
   lastname = models.CharField(max_length=20)
   date_of_birth = models.DateField()
-  email = models.EmailField()
+  email = models.EmailField(unique = True)
 
   def __str__(self):
     return f"{self.firstname} {self.lastname}"
-  
-  # class User(models.Model):
-  #   # ... ส่วนอื่นๆ ของ model ของคุณ ...
-  #   date_of_birth = models.DateField(null=True, blank=True)
 
 
 class Bannerslide(models.Model):

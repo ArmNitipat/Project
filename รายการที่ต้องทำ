@@ -1,0 +1,96 @@
+1.1. ระบบการจัดการข้อมูลผู้ใช้งาน (success)
+1.2. ระบบการจัดการข้อมูลพนักงาน (success)
+1.3. ข้อมูลภาพยนตร์และ นักแสดง
+        -รายชื่อภาพยนตร์
+        -ค้นหาจากรายชื่อภาพยนตร์
+        -ค้นหาจากกลุ่มประเภทภาพยนตร์
+        -ค้นหาจากปี
+        -รายชื่อนักแสดง
+        -ค้นหาจากรายชื่อนักแสดง
+1.4. ข้อมูลการจัดการสิทธิการเข้าถึงของผู้ใช้งานแบบ Dynamic (success)
+1.5. ข้อมูลของรางวัล 
+        -หน้าของรางวัล
+        -เพิ่ม ลบ เเก้ไข ใน admin 
+
+ระบบรีวิวภาพยนตร์
+    -จำกัดการแสดงความคิดเห็นขั้นต่ำ 600 ตัวอักษร
+    -ผู้ใช้งานที่ต้องการจะแสดงความคิดเห็นจำเป็นต้องสมัครสมาชิกหรือเข้าสู่ระบบก่อน
+    -ให้คะแนน 1 ถึง 10
+    -การแจ้งว่าความคิดเห็นมีSpoil หรือไม่ 
+        -เลือก Spoil ความคิดเห็นนั้นจะไม่เห็นและแสดงข้อความว่าเป็น Spoil สามารถเห็นความคิดเห็นนั้นได้โดยกดปุ่มแสดง ข้อความในความคิดเห็นนั้นจะแสดง
+        -เลือกไม่ Spoil ข้อความในความคิดเห็นขึ้นตามปกติ
+        -แก้ไขความคิดเห็นได้ตลอด
+        -แก้ไขคะแนนรีวิวได้ตลอด
+        -จำกัดสิทธิ์การรีวิวภาพยนตร์ของผู้ใช้งานเพียง 1 ความคิดเห็น ต่อ 1 เรื่องภาพยนตร์
+    -กดถูกใจความคิดเห็น
+    -กดรายงานความคิดเห็น
+    -แสดงคะแนนรีวิวของภาพยนตร์
+    -แสดงความคิดเห็นที่มีคนกดถูกใจเยอะก่อนความคิดเห็นอื่น ถ้าคนกดถูกใจเท่ากันแสดงความคิดเห็นเก่าก่อน
+        -การรีวิวภาพยนตร์ที่กำลังเข้าฉาย จะได้รับเหรียญสะสมแต้ม
+        -นำเหรียญสะสมไปแลกของรางวัล
+        -ระบบคัดกรองความคิดเห็นไม่สุภาพ
+                -กรองข้อความภาþาอังกฤþโดยเปลี่ยนข้อความที่ไม่สุภาพนั้นให้แสดงเป็น “*”
+
+
+Project 1
+1.1. เสนอหัวข้อโครงงาน (success)
+
+1.2. ศึกษาระบบงานและวางแผนการทำงาน (success)
+
+1.3. วิเคราะห์และออกแบบระบบ
+        -จัดทำ System Flow Chart ทั้งระบบ
+        -จัดทำ Data Flow Diagram ทั้งระบบ
+        -ออกแบบ Mock up ทั้งระบบ (success)
+        -จัดทำ Entity Relationship Diagram ทั้งระบบ
+
+1.4. จัดทำระบบค้นหา (1.3 ระบบ !!ต้องทำค่าคงที่ให้ได้ก่อน)
+        -1.4.1. ค้นหาจากรายชื่อภาพยนตร์
+        -1.4.2. ค้นหาจากรายชื่อนักแสดง
+        -1.4.3. ค้นหาจากปี
+
+1.5. จัดทำระบบรีวิวภาพยนตร์ (เพิ่ม การใส่ข้อมูลต่างๆในส่วนของAdmin)
+        -1.5.1. การให้คะแนนภาพยนตร์
+        -1.5.2. การแสดงความคิดเห็น
+        -1.5.3. การถูกใจและการรายงานความคิดเห็น
+
+1.6. จัดทำเว็บไซต์ในส่วนของสมาชิก และ ปรับปรุงเว็บไซต์ (ระบบ 1.1 and 1.2) (success)
+        -1.6.1. ระบบข้อมูลค่าคงที่ ทั้งระบบ
+        -1.6.2. การจัดการสิทธิ์การเข้าถึง สมัครสมาชิกและลงชื่อเข้าใช้
+        
+1.7. จัดทำหน้าเว็บไซต์หลัก (หลังบ้าน)
+        -1.7.1. หน้าข้อมูลของภาพยนตร์ (success) แต่เหลือทำการดึงข้อมูลจากตาราง
+        -1.7.2. หน้าข้อมูลของนักแสดง (Progress)     จัดทำหน้าTempleteเพื่อแสดง และ ดึงข้อมูลจากฐานข้อมูล
+        
+1.8. จัดทำระบบหลังบ้าน (success) เหลือการเพิ่มข้อมูลของนักแสดง และ ภาพยนตร์
+        -1.8.1. การจัดการข้อมูลในระบบ 
+                -1.8.1.1. เพิ่มข้อมูล
+                -1.8.1.2. ลบข้อมูล
+                -1.8.1.3. แก้ไขข้อมูล
+        
+1.9. จัดทำเว็บไซต์หน้าบ้าน (success)
+        -1.9.1. จัดทำหน้าหลักและหน้าเว็ปไซต์บางส่วน
+
+settingprofile
+; document.getElementById('editButton').addEventListener('click', function() {
+;     // Enable the form fields for editing
+;     document.getElementById('firstname').readOnly = false;
+;     document.getElementById('lastname').readOnly = false;
+;     document.getElementById('id_email').readOnly = false;
+    
+;     // Show the save and cancel buttons, and hide the edit button
+;     document.getElementById('saveButton').style.display = 'block';
+;     document.getElementById('cancleB').style.display = 'block';
+;     this.style.display = 'none';  // Hide the edit button
+; });
+
+; document.getElementById('cancleB').addEventListener('click', function() {
+;     // Restore the original values and set the form fields back to read-only
+;     document.getElementById('firstname').readOnly = true;
+;     document.getElementById('lastname').readOnly = true;
+;     document.getElementById('id_email').readOnly = true;
+    
+;     // Hide the save and cancel buttons, and show the edit button
+;     document.getElementById('saveButton').style.display = 'none';
+;     this.style.display = 'none';  // Hide the cancel button
+;     document.getElementById('editButton').style.display = 'block';
+; });

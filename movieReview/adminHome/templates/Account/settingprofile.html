@@ -175,6 +175,7 @@
                       <button class="w-100 btn-lg text-light" style="background-color: rgb(65, 67, 181);"
                         type="submit">Change password</button>
                     </form>
+                    <div id="responseMessage"></div> 
                     <hr class="my-4">
                   </div>
                 </div>
@@ -182,6 +183,39 @@
                 </form>
             </div>
             </main>
+            {% if messages %}
+            {% for message in messages %}
+            <script>
+              alert("{{ message }}");
+
+              // ajax
+              document.getElementById('updateUserForm').addEventListener('submit', function(event) {
+              event.preventDefault();  // ป้องกันการ submit แบบปกติ
+
+              let formData = new FormData(this);  // สร้าง FormData object จากฟอร์ม
+
+              fetch("{% url 'settingprofile' %}", {
+                  method: 'POST',
+                  body: formData,
+                  headers: {
+                      'X-CSRFToken': '{{ csrf_token }}'  // ส่ง CSRF token ไปด้วย (ถ้าคุณใช้ Django)
+                  }
+              })
+              .then(response => response.json())  // แปลงข้อมูลที่ได้มาเป็น JSON
+              .then(data => {
+                  document.getElementById('responseMessage').textContent = data.message;
+              })
+              console.log(data)
+
+              .catch(error => {
+                  console.error('Error:', error);
+                  document.getElementById('responseMessage').textContent = "An error occurred!";
+              });
+          });
+          //
+            </script>
+            {% endfor %}
+            {% endif %}
           </div>
         </div>
         <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"

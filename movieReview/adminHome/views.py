@@ -78,8 +78,15 @@ def signup_view(request):
         form = SignupForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
+            send_mail(
+                'Movie Review การสมัครสมาชิก',
+                f'เรายินดีที่ คุณ {user.username} ได้มาเป็นสมาชิกกับเรา',
+                'your-email@gmail.com',
+                [user.email],  # Add recipient list here
+                fail_silently=False,
+            )
             if not user.image:
-                user.image = 'adminHome/static/image/istockphoto612x612.jpg' 
+                user.image = 'profile_images/istockphoto612x612.jpg' 
                 user.save()
             login(request, user)
             return redirect('home')  # Redirect to a 'home' view, for instance.
@@ -98,7 +105,7 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            context['login_error'] = "This username and email could not be found."
+            context['login_error'] = "This username and password could not be found."
     return render(request, 'Login_Register/login.html', context)
 
 
@@ -120,6 +127,20 @@ def resetpassword(request):
 
     return render(request, 'Login_Register/resetpassword.html')
 
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.contrib import messages
+import random
+#เตรียมลบ
+# def check_credentials(request):
+#     if request.method == "POST":
+#         username = request.POST.get('username')
+#         email = request.POST.get('email')
+#       # return redirect('resetpassword')
+
+#     return render(request, 'Login_Register/credentials.html')
+from django.core.exceptions import MultipleObjectsReturned
+
 def check_credentials(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -127,15 +148,68 @@ def check_credentials(request):
 
         try:
             user = User.objects.get(username=username, email=email)
-            # User found, redirect to the password reset page and store user_id in the session
+
+            # Generate OTP
+            otp = random.randint(100000, 999999)
+            request.session['otp'] = otp
+            
+            # Send OTP via email
+            send_mail(
+                'รหัส OTP สำหรับการรีเซ็ตรหัสผ่าน',
+                f'รหัส OTP ของคุณคือ: {otp}',
+                'your-email@gmail.com',
+                [email],
+                fail_silently=False,
+            )
             request.session['user_id_for_reset'] = user.id
-            # messages.success(request, 'User found, please reset your password!')
-            return redirect('resetpassword')
+            request.session['reset_email'] = email
+            return redirect('verify_otp')
+        
         except User.DoesNotExist:
-            messages.error(request, 'No user found with provided username and email.')
+            messages.error(request, 'ไม่พบชื่อผู้ใช้หรืออีเมล์ในระบบ')
+            return redirect('credentials')
+        
+        except MultipleObjectsReturned:
+            # This handles the rare case where two user objects have the same email and username
+            messages.error(request, 'พบปัญหาในระบบ, กรุณาติดต่อผู้ดูแล')
             return redirect('credentials')
 
     return render(request, 'Login_Register/credentials.html')
+
+
+def verify_otp(request):
+    if request.method == "POST":
+        entered_otp = request.POST.get('otp')
+        # ดึง OTP จาก session ที่เราเซ็ตไว้ตอนส่งรหัสไปยังผู้ใช้
+        actual_otp = request.session.get('otp')
+        
+        # ตรวจสอบว่า OTP ที่ผู้ใช้ป้อนเข้ามาตรงกับ OTP ใน session หรือไม่
+        if entered_otp == str(actual_otp):
+            # ถ้าตรง, OTP ถูกต้อง ทำกระบวนการอื่นๆต่อ
+            del request.session['reset_email']
+            return redirect('resetpassword')
+        else:
+            # ถ้าไม่ตรง, OTP ไม่ถูกต้อง
+            messages.error(request, 'Incorrect OTP')
+            return redirect('verify_otp')
+    return render(request, 'Login_Register/verify_otp.html')
+
+
+# from django.http import HttpResponse
+# from django.core.mail import send_mail
+
+# def send_email_view(request):
+#     try:
+#         send_mail(
+#             'Subject here',
+#             'Here is the message.',
+#             'from@example.com',
+#             ['to@example.com'],
+#             fail_silently=False,
+#         )
+#         return HttpResponse("Email sent successfully!")
+#     except Exception as e:
+#         return HttpResponse(f"Error: {str(e)}")
 
 
 from django.contrib.auth.forms import SetPasswordForm
@@ -148,6 +222,7 @@ def reset_password(request):
             form = SetPasswordForm(user, request.POST)
             if form.is_valid():
                 form.save()
+                del request.session['user_id_for_reset']
                 return redirect('login')
         else:
             form = SetPasswordForm(user)
@@ -210,10 +285,24 @@ def account(request):
 #     return render(request, 'settingprofile.html')  # หากเป็น GET request ให้แสดงแบบฟอร์มข้อมูลแก้ไขผู้ใช้
 
 
+# @login_required
+# def settingprofile(request):
+#     user = request.user  # Get the logged-in user
+#     user_age = calculate_age(user.date_of_birth)
+#     context = {
+#         'username': user.username,
+#         'first_name': user.first_name,
+#         'last_name': user.last_name,
+#         'email': user.email,
+#         'date_of_birth' : user.date_of_birth,
+#         'user_age': user_age,
+#     }
+#     return render(request, 'Account/settingprofile.html', context)
 @login_required
 def settingprofile(request):
     user = request.user  # Get the logged-in user
     user_age = calculate_age(user.date_of_birth)
+
     context = {
         'username': user.username,
         'first_name': user.first_name,
@@ -222,41 +311,73 @@ def settingprofile(request):
         'date_of_birth' : user.date_of_birth,
         'user_age': user_age,
     }
-    # profile_image = request.FILES.get('profile_image')
-    # if profile_image:
-    #     user.image = profile_image
-    #     user.save()
-    #     # return redirect('/account')
-    return render(request, 'Account/settingprofile.html', context)
 
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = {
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'date_of_birth' : user.date_of_birth.strftime('%d-%m-%Y'),
+            'user_age': user_age,
+        }
+        return JsonResponse(data)
+    else:
+        return render(request, 'Account/settingprofile.html', context)
+
+
+# @login_required
+# def changepassword(request):
+    # if request.user.is_authenticated:
+    #     if request.method == 'POST':
+    #         current_password = request.POST.get('current_password')
+    #         new_password = request.POST.get('new_password')
+            
+    #         # ตรวจสอบว่ารหัสผ่านปัจจุบันถูกต้อง
+    #         if request.user.check_password(current_password):
+    #             # ตั้งรหัสผ่านใหม่และบันทึก
+    #             request.user.set_password(new_password)
+    #             request.user.save()
+                
+    #             # อัปเดตเซสชันและแจ้งให้ผู้ใช้รู้ว่ารหัสผ่านถูกเปลี่ยนแล้ว
+    #             update_session_auth_hash(request, request.user)
+    #             # messages.success(request, 'รหัสผ่านถูกเปลี่ยนแล้ว')
+    #             return render(request, 'Account/account.html')
+    #         # else:
+    #             # messages.error(request, 'รหัสผ่านปัจจุบันไม่ถูกต้อง')
+    #     return render(request, 'Account/changepassword.html')
+    # else:
+    #     template = loader.get_template('home.html')
+    #     return HttpResponse(template.render())
 
 @login_required
 def changepassword(request):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            current_password = request.POST.get('current_password')
-            new_password = request.POST.get('new_password')
-            
-            # ตรวจสอบว่ารหัสผ่านปัจจุบันถูกต้อง
-            if request.user.check_password(current_password):
-                # ตั้งรหัสผ่านใหม่และบันทึก
-                request.user.set_password(new_password)
-                request.user.save()
-                
-                # อัปเดตเซสชันและแจ้งให้ผู้ใช้รู้ว่ารหัสผ่านถูกเปลี่ยนแล้ว
-                update_session_auth_hash(request, request.user)
-                messages.success(request, 'รหัสผ่านถูกเปลี่ยนแล้ว')
-            else:
-                messages.error(request, 'รหัสผ่านปัจจุบันไม่ถูกต้อง')
-        
-        return render(request, 'Account/changepassword.html')
-    else:
-        template = loader.get_template('home.html')
-        return HttpResponse(template.render())
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password1')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
 
+        user = request.user
+        if not user.check_password(old_password):
+            messages.error(request, 'รหัสผ่านเก่าไม่ถูกต้อง')
+            return redirect('changepassword')
+
+        if new_password1 != new_password2:
+            messages.error(request, 'รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน')
+            return redirect('changepassword')
+
+        user.set_password(new_password1)
+        user.save()
+        # Update session hash to keep the user logged in after password change
+        update_session_auth_hash(request, user)
+
+        messages.success(request, 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว')
+        return redirect('account')  # ปรับเปลี่ยนตามต้องการ
+    return render(request, 'Account/changepassword.html')# กำหนดเส้นทางของ template ที่คุณใช้
 
 
 from .models import Bannerslide
+# Home page
 def home(request):
     slides = Bannerslide.objects.filter(active=True).order_by('order')
 
@@ -279,3 +400,15 @@ def moviereview(request):
     template = loader.get_template('moviereview.html')
     return HttpResponse(template.render())
 
+def actor(request):
+    template = loader.get_template('actor.html')
+    return HttpResponse(template.render())
+
+from django.conf import settings
+from django.shortcuts import redirect
+
+# 404 page 
+def error_404_view(request, exception):
+    # we add the path to the 404.html file
+    # here. The name of our HTML file is 404.html
+    return render(request, '404.html')

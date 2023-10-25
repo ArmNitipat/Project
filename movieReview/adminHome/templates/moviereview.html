@@ -1,8 +1,10 @@
 {% extends "base1.html" %} {%block title %}
 <link rel="stylelogin" href="../static/css/login_register.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <title>MovieReview</title>
 {% endblock %} {%block content%}
 <style>
+
     body{
         background-color: black;
     }
@@ -37,7 +39,59 @@
       height: 60px;
     }
 
+
+    /* Star rating */
     
+
+    .rating-box{
+      position:relative;
+      padding: 25px 50px 35px;
+
+    }
+    
+    .rating-box .stars{
+      display: flex;
+      align-items: center;
+      gap:25px;
+    }
+
+    .stars i {
+      color: aliceblue;
+      font-size: 35px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .stars i.active{
+      color: #ff9c1a;
+    }
+    .card.text-dark {
+      background-color: #ffffffc8;
+      border-radius: 10px;
+    }
+
+    .card.rating-box {
+      background-color: #00000000;
+      border: none;
+    }
+
+    .card.rating-box .stars {
+      display: flex;
+      justify-content: center; /* จัดตรงกลางแนวนอน */
+      gap: 35px; /* ระยะห่างระหว่างดาว */
+    }
+
+    .card.rating-box .stars i {
+      flex-basis: calc(20% - 5px); /* 20% ความกว้างของแต่ละดาวและลบระยะห่างระหว่างดาวออกไป 5px */
+      text-align: center;
+      font-size: 24px; /* ขนาดของดาว */
+    }
+
+    @media (max-width: 768px) {
+      /* ในกรณีที่หน้าจอมีขนาดเล็กกว่าหรือเท่ากับ 768px */
+      .card.rating-box .stars {
+        flex-wrap: wrap; /* แสดงเป็นสองแถว */
+      }
+    }
 </style>
 <main class="container bg-light bg-dark text-light border border-light" style="width: 120%;">
 
@@ -320,7 +374,7 @@
         
         <!--Comment-->
         
-        <div class="container my-5 py-5">
+        <div class="container my-5 py-5 ">
           <br>
           <h3 class="pb-4 mb-1 justify-content-center text-center  align-items-center ">
             Comment Review
@@ -329,49 +383,56 @@
           <div class="mb-3 row d-flex justify-content-center">
             <div class="col-md-12 col-lg-10">
               <!-- Input Comment-->
-              <div class="card mb-2">
-                <div class="card-body p-4 text-dark">
+              <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;">
+                <div class="card-body p-4">
                   <div class="d-flex flex-start w-100">
-                    <div class="profile-container me-3">
-                    <img class="rounded-circle shadow-1-strong" src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65" height="65">
+                    <img class="rounded-circle shadow-1-strong me-3"
+                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65"
+                      height="65" />
                     <div class="w-100">
                       <h5>Add a comment</h5>
-                      </div><div class="contai
-                      ner">
-                        <span id="rateMe2" class="empty-stars justify-content-center align-items-center">
+                      <p>and give star for this movie</p>
+                      <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
                         
-                        </span>
+                        <div class=" stars">
+                          <i class="fa-solid fa-star" data-tooltip="1 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="2 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="3 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="4 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="5 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="6 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="7 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="8 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="9 star"></i>
+                          <i class="fa-solid fa-star" data-tooltip="10 star"></i>
+                        </div>
                       </div>
-                      <div class="form-outline">
-                        <textarea class="form-control" id="textAreaExample" rows="4"></textarea>
-                        <label class="form-label" for="textAreaExample">Message</label>
+                      
+                      <div class="form-floating mt-2">
+                        <textarea class="form-control" placeholder="Leave a comment here"  style="height: 100px"></textarea>
+                        <label for="floatingTextarea2">Comments</label>
                       </div>
                       <div class="d-flex justify-content-between mt-3">
-                        <button type="button" class="btn btn-success">Danger</button>
-                        <button type="button" class="btn btn-danger">
+                        <button type="button" class="btn btn-primary ms-auto">
                           Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
+              </div>      
+              
               <!--Show Comment-->
-              
-
-              
               <div class="card text-dark " style="background-color: #ffffffc8; border-radius: 10px; overflow-y: scroll; max-height: 800px;">
                 <div class="p-3">
                 <h4 class="mb-0">Recent comments</h4>
                   <p class="fw-light">Latest Comments section by users</p>
                 </div>
-                
                   <div class="card-body p-4">
                     <div class="d-flex flex-start">
                       <div class="profile-container me-3">
                         <div class="profile-container me-3">
-                      <img class="rounded-circle shadow-1-strong                     src="https://i.pinimg.com/736x/bb/1a/93/bb1a93c829c983750d0d03b42450e87e.jpg" alt="avatar" width="60px"
+                      <img class="rounded-circle shadow-1-strong "src="https://i.pinimg.com/736x/bb/1a/93/bb1a93c829c983750d0d03b42450e87e.jpg" alt="avatar" width="60px"
                         height="60px" />
                       </div>
                       </div>
@@ -600,29 +661,27 @@
         video.play(); // เล่นคลิปวิดีโอใหม่
       });
 
-      // ดึงรายการดาวทั้งหมด
-      const stars = document.querySelectorAll('.rate-popover');
+      const stars = document.querySelectorAll(".stars i");
+const tooltipText = document.createElement('div');
+tooltipText.classList.add('tooltip');
+document.body.appendChild(tooltipText);
 
-      // สร้างฟังก์ชันเพื่อจัดการอีเวนต์เมื่อคลิก
-      function handleStarClick(event) {
-          const clickedStar = event.target;
-          
-          // ตรวจสอบว่าดาวที่คลิกอยู่ที่ดัชนีใด
-          const starIndex = parseInt(clickedStar.getAttribute('data-index'));
-
-          // เปลี่ยนสีของดาวที่คลิกและดาวที่อยู่หลังคนล่าง
-          for (let i = 0; i <= starIndex; i++) {
-              stars[i].classList.add('selected');
-          }
-          for (let i = starIndex + 1; i < stars.length; i++) {
-              stars[i].classList.remove('selected');
-          }
+stars.forEach((star, index) => {
+  star.addEventListener("click", () => {
+    stars.forEach((s, idx) => {
+      if (idx <= index) {
+        s.classList.add("active");
+      } else {
+        s.classList.remove("active");
       }
-
-      // เพิ่มการจัดการอีเวนต์ให้กับแต่ละดาว
-      stars.forEach((star) => {
-          star.addEventListener('click', handleStarClick);
-      });
+    });
+    tooltipText.innerText = `${index + 1} star`; // แสดงข้อความจำนวนดาวที่คลิก
+  });
+  // เพิ่มเหตุการณ์เมื่อนำเมาส์ออกจากดาว
+  star.addEventListener('mouseleave', () => {
+    tooltipText.innerText = ''; // ลบข้อความเมื่อนำเมาส์ออกจากดาว
+  });
+});
       </script>
   </main>
 {%endblock%}

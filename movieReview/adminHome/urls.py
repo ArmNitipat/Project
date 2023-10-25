@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 # from .views import send_my_email
 from django.contrib.auth import views as auth_views
 #------------------------------------------------------------------------------------
+handler404 = 'adminHome.views.error_404_view'
 
 urlpatterns = [
     path('',views.home, name='home'),
@@ -23,6 +24,7 @@ urlpatterns = [
     path('credentials/', views.check_credentials, name='credentials'),
     path('resetpassword/', views.reset_password, name='resetpassword'),
     path('moviereview/', views.moviereview, name='moviereview'),
+    path('actor/', views.actor, name='actor'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
@@ -36,6 +38,8 @@ urlpatterns = [
     # path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     # path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    #  path('send_email/', views.send_email_view, name='send_email'),
+     path('verify_otp/', views.verify_otp, name='verify_otp'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -42,15 +42,20 @@ INSTALLED_APPS = [
 ]
 
 JAZZMIN_SETTINGS = {
-    "custom_css": "css/bootstrap-dark.css",
+    "custom_css": "css/admin.css",
      'show_ui_builder':True,
      'site_title': 'My Admin Panel',  # ชื่อที่จะแสดงบนหัวของหน้าแอดมิน
      'site_header': 'My Admin Panel',
      #"language_chooser": True,
      "related_modal_active": True,
      "order_with_respect_to": ["app_label", "name"],
+     #custom_top_menu
+    #  "custom_top_menu": [
+    # {"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["auth.view_user"]}],
+
      "custom_links": {
-        "auth": [{"name": "Make Messages", "url": "make_messages", "icon": "fas fa-comments", "permissions": ["auth.view_user"]}],
+        "auth": [{"name": "Make Messages", "url": "make_messages", "icon": "fas fa-comments", "permissions": ["auth.view_user"]},
+                 {"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["auth.view_user"]}],
     },
      # คุณสามารถปรับแต่งการประเภทสีและรูปแบบอื่น ๆ ได้ตามต้องการ
 }
@@ -214,3 +219,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'adminHome/templates/')
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = '6511850015@mut.ac.th'
 # EMAIL_HOST_PASSWORD = '*********'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # ตัวอย่าง: smtp.gmail.com
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'blueeye.or@gmail.com'
+EMAIL_HOST_PASSWORD = 'igia elkn jrvm bheh'
