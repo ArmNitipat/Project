@@ -5,7 +5,7 @@ body .img-circle {
 }
 /* Groups */
 #id_permissions_to, #id_permissions_from,  #id_groups_from, #id_groups_to, #id_user_permissions_from, #id_user_permissions_to {
-    background-color: #6c757d !important;
+    background-color: #454d55 !important;
     color: white; /* เปลี่ยนสีข้อความเป็นสีขาวเพื่อให้เห็นข้อความบนพื้นหลังสีดำ */
 }
 /* .tab-content input, textarea {

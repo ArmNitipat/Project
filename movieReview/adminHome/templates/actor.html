@@ -3,69 +3,442 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <title>MovieReview</title>
 {% endblock %} {%block content%}
+    <style>
+      body{
+        background-color: black;
+      }
+      /* CSS สำหรับหน้าจอขนาดใหญ่ */
+    .card img {
+        width: 300px;
+        height: 400px;
+    }
+
+    /* CSS สำหรับหน้าจอขนาดเล็ก */
+    @media (max-width: 768px) {
+        .card img {
+            width: 100%; /* ให้รูปภาพเต็มความกว้างของ Card */
+            height: auto; /* ปรับความสูงเท่ากับสัดส่วน */
+        }
+    }
+    .carousel-inner .carousel-item .row .col-md-3 img {
+      width: 170px; /* กำหนดความกว้างให้รูปภาพเต็มขนาดของ container */
+      height: 100px; /* อนุญาตให้ความสูงปรับตามสัดส่วนของรูปภาพ */
+    }
+    .carousel-item img {
+        margin: 0 auto; /* จัดตำแหน่งในแนวนอนกึ่งกลาง */
+        display: block; /* สร้างบล็อกที่แสดงในแนวนอน */
+        max-width: 100%; /* รูปภาพใหญ่ที่สุดของตัวเองในแนวนอน */
+        max-height: 100%; /* รูปภาพใหญ่ที่สุดของตัวเองในแนวตั้ง */
+        width: auto; /* ขนาดความกว้างอัตโนมัติ */
+    }
+     .carousel-inner .carousel-item {
+      display: flex;
+      justify-content: center;
+    }
     
-    
-    <main class="container">
-      <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    .carousel-inner .carousel-item img {
+      max-width: 100%;
+      margin: 0 auto;
+      justify-content: center;
+      display: flex;
+    } 
+    </style>
+  
+    <main class="container bg-dark text-white">
+      <div class="p-4 p-md-5 mb-4 text-white rounded " style="background-color: rgba(0, 0, 0, 0.604);">
         <div class="row">
             <div class="col-md-12 px-0">
+              <!--ชื่อนักแสดง-->
                 <h1 class="">Robert Downey Jr.</h1>
             </div>
         </div>
-        <div class="row">
+        <div class="row ms-2 mb-1">
             <div class="col-md-12 px-0" style="font-size: 14px; display: flex; flex-direction: row; align-items: center; color: rgba(255, 255, 255, 0.497);">
+                <!--ตำแหน่งนักแสดง-->
                 <p style="margin: 0 10px 0 0;">Actor</p>
                 <p style="margin: 0 10px 0 0;">Producer</p>
                 <p style="margin: 0 10px 0 0;">Writer</p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                
-            </div>
-        </div>
+        <div class="card mb-3 bg-dark text-light justify-content-center align-items-center" style="max-width: 75vw; border-radius: 10px;">
+          <div class="row d-flex flex-md-row">
+              <div class="col-md-3 mt-3 mb-3 ms-3 d-flex flex-md-column">
+                  <img src="https://www.onthisday.com/images/people/robert-downey-jr.jpg?w=360" style="width: 300px; height: 400px; object-fit: cover; border-radius: 10px;">
+              </div>
+              <div class="col-md-7 mt-3 d-flex flex-md-column">
+                  <div class="card-body">
+                      <!--ชื่อนักแสดง-->
+                      <h4 class="card-title">Robert Downey Jr.</h4>
+                      <hr>
+                      <!--ประวัตินักแสดง-->
+                      <p class="card-text mt-3">Robert Downey Jr. has evolved into one of the most respected actors in Hollywood. With an amazing list of credits to his name, he has managed to stay new and fresh even after over four decades in the business. Downey was born April 4, 1965 in Manhattan, New York, the son of writer, director and filmographer Robert Downey Sr. and actress Elsie Downey (née Elsie Ann Ford). Robert's father is of half Lithuanian Jewish, one quarter Hungarian Jewish, and one quarter Irish, descent, while Robert's mother...
+                          <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="writers-link">Read More</a>
+                      </p>
+                      <!--การอัปเดตข้อมูล-->
+                      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                      <hr>
+                      <!--วันเกิดของนักแสดง และ เมืองเกิดนักแสดง-->
+                      <p class="card-text mt-3">Born <small class="text-muted">April 4, 1965 Manhattan, New York City, New York, USA</small></p>
+                      <!--ส่วนสูงของนักแสดง-->
+                      <p class="card-text mt-1">Height <small class="text-muted">5′ 8″ (1.73 m)</small></p>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <!--Photo-->
+      <hr>
+      <div>
+        <div class="container mt-3 mb-3">
+          <h2 class="justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <g id="Interface / Line_Xl">
+                <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </g>
+          </svg>Photo :</h2>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators (แสดงแต่ละสไลด์) -->
+            <ul class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              <li data-target="#myCarousel" data-slide-to="1"></li>
+              <!-- เพิ่มเพิ่มเติมตามจำนวนสไลด์ที่คุณต้องการ -->
+            </ul>
         
+            <!-- Slides (รูปภาพที่แสดง) -->
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="row justify-content-center">
+                  <div class="col-md-3">
+                    <img src="https://s.hdnux.com/photos/42/76/74/9170736/4/1200x0.jpg" alt="Image 1">
+                  </div>
+                  <div class="col-md-3">
+                    <img src="data:image/jpeg;base64,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" alt="Image 2">
+                  </div>
+                  <div class="col-md-3">
+                    <img src="https://variety.com/wp-content/uploads/2023/07/Screen-Shot-2023-07-11-at-9.47.01-AM.png" alt="Image 3">
+                  </div>
+                  <div class="col-md-3">
+                    <img src="https://www.iwmbuzz.com/wp-content/uploads/2022/03/everything-you-need-to-know-about-robert-downey-jr-from-drug-addiction-to-hollywood-stardom-920x518.jpg" alt="Image 4">
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-3">
+                    <img src="https://imgnew.outlookindia.com/uploadimage/library/16_9/16_9_5/IMAGE_1649219742.webp" alt="Image 5">
+                  </div>
+                  <div class="col-md-3">
+                    <img src="https://c4.wallpaperflare.com/wallpaper/408/57/239/robert-downey-jr-actor-celebrity-highly-paid-wallpaper-preview.jpg" alt="Image 6">
+                  </div>
+                  <div class="col-md-3">
+                    <img src="https://ew.com/thmb/v0TCCEwZAS9ZfN7q2CERJowE0oY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/gettyimages-803079134-2000-e6a766580a394984a6c8e0cc6f1ea247.jpg" alt="Image 7">
+                  </div>
+                  <div class="col-md-3">
+                    <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/C35A/production/_119301005_dwneysgettyimages-81032845.jpg" alt="Image 8">
+                  </div>
+                </div>
+              </div>
+              <!-- เพิ่มเพิ่มเติมตามจำนวนสไลด์ที่คุณต้องการ -->
+            </div>
+        
+            <!-- Controls (ปุ่มควบคุม) -->
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
       </div>
-    
+
+
+
+      <!-- หนังที่คนจำนักแสดง -->
       <div class="row mb-2">
-        <div class="col-md-6">
-          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
-              <strong class="d-inline-block mb-2 text-primary">World</strong>
-              <h3 class="mb-0">Featured post</h3>
-              <div class="mb-1 text-muted">Nov 12</div>
-              <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="stretched-link">Continue reading</a>
-            </div>
-            <div class="col-auto d-none d-lg-block">
-              <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-    
+        <hr>
+        <h2 class="justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <g id="Interface / Line_Xl">
+              <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+          </g>
+        </svg>Know for :</h2>
+        <div class="row text-dark mt-2 mb-2" style="border-radius: 10px;">
+          <div class="col-md-6">
+            <div class="card mt-2" style="width: 80%;">
+              <div class="row">
+                <div class="col-md-4"> <!-- คอลัมน์สำหรับรูปภาพ -->
+                  <a href="">
+                    <img src="https://m.media-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_FMjpg_UX1000_.jpg" class="card-img-top" alt="..." style="height: 250px; width: 175px;">
+                  </a></div>
+                <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                  <div class="card-body d-flex justify-content-between flex-column">
+                    <div class="ms-2">
+                      <a href="" class="text-decoration-none" style="color: black;">
+                        <h3 class="card-title">Iron Man</h3>
+                      </a>
+                      <hr>
+                      <p class="card-text">Tony Stark</p><br>
+                      <a href="" class="text-decoration-none" style="color: black;"> 
+                        <p class="card-text">2008</p>
+                      </a> 
+                      <div class="d-flex align-items-center mt-3">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
+                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
+                        <h5 class="mt-2">7.9</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
-              <strong class="d-inline-block mb-2 text-success">Design</strong>
-              <h3 class="mb-0">Post title</h3>
-              <div class="mb-1 text-muted">Nov 11</div>
-              <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="stretched-link">Continue reading</a>
-            </div>
-            <div class="col-auto d-none d-lg-block">
-              <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-    
+
+          <div class="col-md-6">
+            <div class="card mt-2" style="width: 80%;">
+              <div class="row">
+                <div class="col-md-4"> <!-- คอลัมน์สำหรับรูปภาพ -->
+                  <a href="">
+                    <img src="https://m.media-amazon.com/images/M/MV5BMjE5MzcyNjk1M15BMl5BanBnXkFtZTcwMjQ4MjcxOQ@@._V1_.jpg" class="card-img-top" alt="..." style="height: 250px; width: 175px;">
+                  </a></div>
+                <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                  <div class="card-body d-flex justify-content-between flex-column">
+                    <div class="ms-2">
+                      <a href="" class="text-decoration-none" style="color: black;">
+                        <h3 class="card-title">Iron Man 3</h3>
+                      </a>
+                      <hr>
+                      <p class="card-text">Tony Stark</p><br>
+                      <a href="" class="text-decoration-none" style="color: black;"> 
+                        <p class="card-text">2013</p>
+                      </a> 
+                      <div class="d-flex align-items-center mt-3">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
+                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
+                        <h5 class="mt-2">7.1</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div class="col-md-6">
+            <div class="card mt-2" style="width: 80%;">
+              <div class="row">
+                <div class="col-md-4"> <!-- คอลัมน์สำหรับรูปภาพ -->
+                  <a href="">
+                    <img src="https://www.ubuy.co.th/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvODFhaTZ6eDZlWEwuX0FDX1NMMTMwNF8uanBn.jpg" class="card-img-top" alt="..." style="height: 250px; width: 175px;">
+                  </a></div>
+                <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                  <div class="card-body d-flex justify-content-between flex-column">
+                    <div class="ms-2">
+                      <a href="" class="text-decoration-none" style="color: black;">
+                        <h3 class="card-title">Avengers Endgame</h3>
+                      </a>
+                      <hr>
+                      <p class="card-text">Tony Stark</p><br>
+                      <a href="" class="text-decoration-none" style="color: black;"> 
+                        <p class="card-text">2019</p>
+                      </a> 
+                      <div class="d-flex align-items-center mt-3">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
+                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
+                        <h5 class="mt-2">8.4</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card mt-2" style="width: 80%;">
+              <div class="row">
+                <div class="col-md-4"> <!-- คอลัมน์สำหรับรูปภาพ -->
+                  <a href="">
+                    <img src="https://m.media-amazon.com/images/M/MV5BMTg0NjEwNjUxM15BMl5BanBnXkFtZTcwMzk0MjQ5Mg@@._V1_.jpg" class="card-img-top" alt="..." style="height: 250px; width: 175px;">
+                  </a></div>
+                <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                  <div class="card-body d-flex justify-content-between flex-column">
+                    <div class="ms-2">
+                      <a href="" class="text-decoration-none" style="color: black;">
+                        <h3 class="card-title">Sherlock Holmes</h3>
+                      </a>
+                      <hr>
+                      <p class="card-text">Sherlock Holmes</p><br>
+                      <a href="" class="text-decoration-none" style="color: black;"> 
+                        <p class="card-text">2009</p>
+                      </a> 
+                      <div class="d-flex align-items-center mt-3">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
+                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
+                        <h5 class="mt-2">7.6</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-    
+      <hr>
+      <br>
+
+
       <div class="row g-5">
         <div class="col-md-8">
-          <h3 class="pb-4 mb-4 fst-italic border-bottom">
-            From the Firehose
-          </h3>
-    
+          
+          <hr>
+      <div class="bg-dark mt-3" style="border-radius: 15px;">
+        <h2 class="mt-3 justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <g id="Interface / Line_Xl">
+              <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+          </g>
+        </svg>Personal detail :</h2>
+        <div class="row ">
+          <!--ชื่อที่ใช้เรียก-->
+          <div class="ms-5 col-md-11">
+            <hr>
+            <div class="d-flex align-items-center">
+              <div class="col-2">
+                <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Alternative names</h6>
+              </div>
+              <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
+                <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">Bob Downey</p>
+                <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">Robert Downey</p>
+                <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">Robert Downey Jr</p>
+              </div>
+            </div>
+          </div>
+          <!--ส่วนสูง-->
+          
+          <div class="ms-5 col-md-11">
+            <hr>
+            <div class="d-flex align-items-center">
+              <div class="col-2">
+                <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Height</h6>
+              </div>
+              <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
+                <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">5′ 8″ (1.73 m)</p>
+              </div>
+            </div>
+          </div>
+          
+          <!--วันเดือนปีเกิด-->
+          
+          <div class="ms-5 col-md-11">
+            <hr>
+            <div class="d-flex align-items-center">
+              <div class="col-2">
+                <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Born</h6>
+              </div>
+              <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
+                <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">April 4, 1965</p>
+                <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">Manhattan, New York City, New York, USA</p>
+              </div>
+            </div>
+          </div>
+
+          <!--สถานะ-->
+          
+          <div class="ms-5 col-md-11">
+            <hr>
+            <div class="d-flex align-items-center">
+              <div class="col-2">
+                <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Spouses</h6>
+              </div>
+              <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
+                <div style="display: flex; flex-direction: column;">
+                  <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Susan DowneyAugust</span> 27, 2005 - present (2 children)</p>
+                  <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Deborah Falconer</span> 29, 1992 - April 26, 2004 (divorced, 1 child)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--ลูก-->
+        <div class="ms-5 col-md-11">
+          <hr>
+          <div class="d-flex align-items-center">
+            <div class="col-2">
+              <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Children</h6>
+            </div>
+            <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
+              <div style="display: flex; flex-direction: column;">
+                <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Indio Falconer Downey</span> </p>
+                <p style="color: rgba(255, 255, 255, 0.64);">Avri Roel Downey</p>
+                <p style="color: rgba(255, 255, 255, 0.64);">Exton Elias Downey</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Parents-->
+        <div class="ms-5 col-md-11">
+          <hr>
+          <div class="d-flex align-items-center">
+            <div class="col-2">
+              <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Parents</h6>
+            </div>
+            <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
+              <div style="display: flex; flex-direction: column;">
+                <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Robert Downey Sr.</span> </p>
+                <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Elsie Downey</span> </p>
+                <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Elsie Downey</span> </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Relatives-->
+        <div class="ms-5 col-md-11">
+          <hr>
+          <div class="d-flex align-items-center">
+            <div class="col-2">
+              <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Relatives</h6>
+            </div>
+            <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
+              <div style="display: flex; flex-direction: column;">
+                <a style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Allyson Downey</span> (Sibling) </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!--Other works-->
+        <div class="ms-5 mb-4 col-md-11">
+          <hr>
+          <div class="d-flex align-items-center">
+            <div class="col-2">
+              <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Other works</h6>
+            </div>
+            <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
+              <div style="display: flex; flex-direction: column;">
+                <p style="color: rgba(255, 255, 255, 0.64);">Recorded "Every Breath You Take" with Sting, and "Chances Are" with Vonda Shepard, both for the "Ally McBeal - Songs of the Heart" soundtrack. </p>
+              </div>
+            </div>
+          </div>
+          <hr>
+        </div>
+      </div>
           <article class="blog-post">
             <h2 class="blog-post-title">Sample blog post</h2>
             <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
@@ -224,7 +597,10 @@
           </div>
         </div>
       </div>
-    
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      
     </main>
     
     <footer class="blog-footer">

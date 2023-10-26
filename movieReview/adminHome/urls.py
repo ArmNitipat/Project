@@ -39,7 +39,8 @@ urlpatterns = [
     # path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     #  path('send_email/', views.send_email_view, name='send_email'),
-     path('verify_otp/', views.verify_otp, name='verify_otp'),
+    path('verify_otp/', views.verify_otp, name='verify_otp'),
+    path('check_email/', views.check_email, name='check_email'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

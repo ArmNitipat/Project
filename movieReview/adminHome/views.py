@@ -73,9 +73,31 @@ def get_user_data(request, user_id):
         return JsonResponse({"error": "User not found"}, status=404)
 
 
+from django.http import JsonResponse
+from django.contrib.auth.models import User
+
+def check_email(request):
+    email = request.GET.get('email', None)
+    data = {
+        'is_taken': User.objects.filter(email=email).exists()
+    }
+    return JsonResponse(data)
+ 
+
 def signup_view(request):
     if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
         form = SignupForm(request.POST, request.FILES)
+
+        # if User.objects.filter(username=username).exists():
+        #     messages.warning(request, 'This user is already in use.')
+        #     return render(request, 'Login_Register/register.html', {'form': form})
+        
+        # if User.objects.filter(email=email).exists():
+        #     messages.error(request, 'This email is already in use.')
+        #     return render(request, 'Login_Register/register.html', {'form': form})
+        
         if form.is_valid():
             user = form.save(commit=False)
             send_mail(
@@ -260,7 +282,8 @@ def account(request):
             'last_name': user.last_name,
             'email': user.email,
             'date_of_birth' : user.date_of_birth,
-            'user_age': user_age
+            'user_age': user_age,
+            'coin' : user.coin
             if user 
             else None  # Replace with your actual field name
         } 

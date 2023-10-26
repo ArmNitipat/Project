@@ -16,7 +16,7 @@ class myuser(models.Model):
   firstname = models.CharField(max_length=20)
   lastname = models.CharField(max_length=20)
   date_of_birth = models.DateField()
-  email = models.EmailField(unique = True)
+  email = models.EmailField()
 
   def __str__(self):
     return f"{self.firstname} {self.lastname}"
@@ -46,4 +46,5 @@ class Bannerslide(models.Model):
 #     ip = models.GenericIPAddressField(unique=True)
 #     count = models.PositiveIntegerField(default=0)
 
+# class movie(models.Model):
 

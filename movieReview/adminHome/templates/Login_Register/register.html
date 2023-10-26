@@ -15,7 +15,11 @@ body {
 }
 #defaultProfilePicture {
         display: none;
-    }
+}
+.my-message-text {
+    color: red; /* หรือสีอื่น ๆ ที่คุณต้องการ */
+    font-size: 14px; /* หรือขนาดที่คุณต้องการ */
+}
 </style>
 <div>
 
@@ -28,7 +32,7 @@ body {
       background-position: center;
       height: 100%;
     "
-  >
+    >
     <!-- Overlay -->
     <div
       class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-50"
@@ -40,15 +44,7 @@ body {
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-lg-8 col-xl-6">
           <div class="card rounded-2 bg-danger">
-            <!-- <div class="card h-25">
-               <img
-                src="https://images.unsplash.com/photo-1574894078563-01e879b89809?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80"
-                style="
-                  border-top-left-radius: 0.3rem;
-                  border-top-right-radius: 0.3rem;
-                "
-              /> 
-            </div>  -->
+  
             <div class="card-body p-4 p-md-5 bg-dark text-light">
                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2 text-center bg-dark text-light">
                   Registration Info
@@ -64,11 +60,29 @@ body {
                     required
                     id="id_username"
                     class="form-control"
-                    placeholder="Username"/>
-                    {% if form.username.errors %}
-                    <div class="text-danger">
+                    placeholder="Username"
+                    oninput="hideErrorMessageusername()"/>
+                    {% if form.email.errors %}
+                      <div class="text-danger" id="error-message">
                         {{ form.username.errors|join:", " }}
-                    </div>
+                      </div>
+                    {% endif %}
+                </div>
+                <div class="form-outline mb-4 mt-3">
+                  <label class="form-label" for="id_email">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    maxlength="254"
+                    required
+                    id="id_email"
+                    class="form-control"
+                    placeholder="YourEmail@gmail.com"
+                    oninput="hideMessageemail()"/>
+                    {% if form.email.errors %}
+                      <div class="text-danger" id="error-messageemail" >
+                          {{ form.email.errors|join:", " }}
+                      </div>
                     {% endif %}
                 </div>
                 <div class="form-outline mb-4">
@@ -78,10 +92,10 @@ body {
                     name="password1"
                     maxlength="15"
                     required
-                    id="id_password2"
+                    id="id_password1"
                     class="form-control"
                     placeholder="Password"
-                    tocomplete="new-password"au
+                    tocomplete="new-password"
                   />
                 </div>
                 <div class="form-outline mb-4">
@@ -91,11 +105,13 @@ body {
                     name="password2"
                     maxlength="15"
                     required
-                    id="id_password1"
+                    id="id_password2"
                     class="form-control"
                     placeholder="Password"
-                    autocomplete="new-password"/>
-                </div>
+                    autocomplete="new-password"
+                    oninput="checkPassword()"/>
+                    <div id="error-password"></div>
+                  </div>
                 <div class="row">
                 <div class="form-outline mb-4">
                   <label class="form-label" for="id_firstname">Firstname</label>
@@ -133,17 +149,6 @@ body {
                           min = "1940-10-07"
                           max=" {{today}}"
                           placeholder="Date of birth"/>
-                      </div>
-                      <div class="form-outline mb-4 mt-3">
-                        <label class="form-label" for="id_email">Email</label>
-                        <input
-                          type="email"
-                          name="email"
-                          maxlength="254"
-                          required
-                          id="id_email"
-                          class="form-control"
-                          placeholder="YourEmail@gmail.com"/>
                       </div>
                     </div>
                   </div>
@@ -190,6 +195,43 @@ body {
     }
     reader.readAsDataURL(event.target.files[0]);
     });
-  </script>
+
+    function hideErrorMessageusername() {
+      const input = document.getElementById("id_username");
+      const errorMessage = document.getElementById("error-message");
+
+      if (input.value.trim() === "") {
+        errorMessage.style.display = "block"; // ซ่อนข้อความข้อผิดพลาดเมื่อไม่มีข้อมูล
+      } else {
+        errorMessage.style.display = "none"; // แสดงข้อความข้อผิดพลาดเมื่อมีข้อมูล
+      }
+    }
+    function hideMessageemail() {
+      const input = document.getElementById("id_email");
+      const errorMessageemail = document.getElementById("error-messageemail");
+
+      if (input.value.trim() === "") {
+        errorMessageemail.style.display = "block"; // ซ่อนข้อความข้อผิดพลาดเมื่อไม่มีข้อมูล
+      } else {
+        errorMessageemail.style.display = "none"; // แสดงข้อความข้อผิดพลาดเมื่อมีข้อมูล
+      }
+    }
+function checkPassword() {
+    const password1 = document.getElementById("id_password1").value;
+    const password2 = document.getElementById("id_password2").value;
+    const texterror = document.getElementById("error-password");
+
+    if (password1 !== password2) {
+        // ตั้งค่าข้อความข้อผิดพลาด
+        texterror.innerHTML = "Passwords do not match!";
+        texterror.style.display = "block";
+        texterror.style.color = "#dc3545";
+    } else {
+        // ซ่อนข้อความข้อผิดพลาด
+        texterror.style.display = "none";
+    }
+}
+ 
+</script>
   {% endblock %}
 </section>
