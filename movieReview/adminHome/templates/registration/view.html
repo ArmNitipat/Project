@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Admin</a>
+    &rsaquo; Dashboard
+</div>
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the Admin Dashboard</h1>
+    
+    <!-- ส่วนนี้คือตัวอย่างของเนื้อหาสำหรับ Dashboard คุณสามารถปรับแต่งตามต้องการ -->
+    <div class="dashboard-section">
+        <h2>Statistics</h2>
+        <p>Number of users: {{ user_count }}</p>
+        <p>Number of posts: {{ post_count }}</p>
+        <!-- คุณสามารถเพิ่มสถิติหรือข้อมูลอื่น ๆ ที่คุณต้องการแสดงที่นี่ -->
+    </div>
+
+    <!-- คุณสามารถเพิ่มเซ็กชันอื่น ๆ ได้ตามที่ต้องการ -->
+{% endblock %}

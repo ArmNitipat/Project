@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yoce^u!roid+a4&ucf**gd1#j8@*q5cbo0+pwk9%_+=s7f8tfz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True    
 
 ALLOWED_HOSTS = ['*']
 
@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'adminHome',
+    'star',
+    'movies',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,20 +44,24 @@ INSTALLED_APPS = [
 ]
 
 JAZZMIN_SETTINGS = {
+    # "show_ui_builder" : True,
+    # "topmenu_links":True,
+    "site_logo": "movie.png",
+    "order_with_respect_to": ["satr","satr"],
     "custom_css": "css/admin.css",
-     'show_ui_builder':True,
+    #  'show_ui_builder':True,
      'site_title': 'My Admin Panel',  # ชื่อที่จะแสดงบนหัวของหน้าแอดมิน
      'site_header': 'My Admin Panel',
      #"language_chooser": True,
      "related_modal_active": True,
-     "order_with_respect_to": ["app_label", "name"],
+    #  "order_with_respect_to": ["app_label", "name","satr", "movies",],
      #custom_top_menu
     #  "custom_top_menu": [
     # {"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["auth.view_user"]}],
 
      "custom_links": {
         "auth": [{"name": "Make Messages", "url": "make_messages", "icon": "fas fa-comments", "permissions": ["auth.view_user"]},
-                 {"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["auth.view_user"]}],
+                ]#  {"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["auth.view_user"]}],
     },
      # คุณสามารถปรับแต่งการประเภทสีและรูปแบบอื่น ๆ ได้ตามต้องการ
 }
@@ -102,7 +108,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',#jazzmin language_chooser
-]    
+]
 
 ROOT_URLCONF = 'movieReview.urls'
 
@@ -146,7 +152,7 @@ DATABASES = {
         'NAME': 'dbmovie',
         'USER': 'admin02',
         'PASSWORD': 'mypassword',
-        'HOST': '25.48.97.110',  # หรือ IP ที่ MySQL Server ทำงานอยู่
+        'HOST': 'localhost',  # หรือ IP ที่ MySQL Server ทำงานอยู่
         'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
     }
 }
@@ -212,17 +218,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'adminHome/templates/')
 #SMTP Server
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# สำหรับการใช้งานจริง:
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = '25.48.97.110'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = '6511850015@mut.ac.th'
-# EMAIL_HOST_PASSWORD = '*********'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # ตัวอย่าง: smtp.gmail.com
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'blueeye.or@gmail.com'
 EMAIL_HOST_PASSWORD = 'igia elkn jrvm bheh'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'

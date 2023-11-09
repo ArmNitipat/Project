@@ -8,19 +8,14 @@ body .img-circle {
     background-color: #454d55 !important;
     color: white; /* เปลี่ยนสีข้อความเป็นสีขาวเพื่อให้เห็นข้อความบนพื้นหลังสีดำ */
 }
-/* .tab-content input, textarea {
-    background-color: #343a40 !important;
-    color: white !important;
-    border: none !important;
-} */
 
 .select2-container--default .select2-selection--single .select2-selection__rendered{
     margin: auto !important;
 }
 
-/* brand-link navbar-success:hover{
-    background-color: #ffffff !important;
-} */
+.select2-selection__choice__display {
+    color: black;
+}
 
 #id_tags {
     display: block;
@@ -33,7 +28,7 @@ body .img-circle {
 }
 
 .alert-success a{
-color: #ffffff !important;
+    color: #ffffff !important;
 }
 
 #id_title {

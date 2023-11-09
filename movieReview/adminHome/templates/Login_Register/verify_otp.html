@@ -34,6 +34,53 @@
       border-color: transparent;
       /* ปิดขอบ */
     }
+    #verify-otp {
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    /*
+    input[type="submit"] {
+      background-color: rgb(219, 219, 248);
+      width: 70%;
+      height: 50%;
+      transition: background-color 0.3s; 
+      border-color: #000000;
+      border: 1px solid ; 
+      color: #000000;
+    }
+
+    input[type="submit"]:hover {
+      background-color: rgb(100, 100, 220); 
+      border-color: rgb(255, 255, 255); 
+      color: #fff;
+    }
+
+    input[type="submit"]:active {
+      background-color: rgb(54, 54, 199); 
+      border-color: rgb(0, 0, 0); 
+      color: #fff;
+
+    }*/
+    .btn-outline-success {
+      background-color: rgb(65, 67, 181);
+      /* สีพื้นหลังเริ่มต้น */
+      color: #fff;
+      /* สีตัวอักษรเริ่มต้น */
+      border-color: #000000;
+      /* สีขอบเริ่มต้น */
+    }
+
+    /* CSS เปลี่ยนสีเมื่อชี้ */
+    .btn-hover-color:hover {
+      background-color: #2fc727;
+      /* เปลี่ยนสีที่คุณต้องการเมื่อชี้ */
+      color: #ffffff;
+      /* เปลี่ยนสีตัวอักษร (ถ้าจำเป็น) */
+      border-color: transparent;
+      /* ปิดขอบ */
+    }
   </style>
   <section class="vh-100" style="background-color: #00000068; " >
     <div class="container py-md-5 h-100">
@@ -41,25 +88,89 @@
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
           <div class="card shadow-2-strong" style="border-radius: 1rem;">
             <div class="card-body p-5 ">
-  
-              <h3 class="text-center mb-5">VERIFY OTP</h3>
-              An OTP has been sent to your email, please check it.
+              <div class="row ">
                 <form method="post" action="{% url 'verify_otp' %}">
+                <div class="col-md-12 text-center">
+                  <h3 class="text-center mb-2" id="verify-otp">VERIFY OTP</h3>
+                  <hr>
+                  <p>An OTP has been sent to your email, please check it.</p>
+                  
+                </div>
+                <div class="col-md-12 mt-3">
+                  <p style="color: #00000074;">Enter OTP here</p>
+                  
                     {% csrf_token %}
-                    <input type="text" name="otp" placeholder="Enter OTP" required maxlength="6">
-                    <input type="submit" value="Enter" style="background-color: rgb(130, 130, 241);">
-                </form>
-                {% if messages %}
-                <div class="alert alert-danger mt-3">
-                  {% for message in messages %}
-                  <p>{{ message }}</p>
-                  {% endfor %}
+
+                    <input type="text" name="otp" placeholder="Enter OTP" required maxlength="6" style="display: none;" >
+
+                    <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> 
+                      <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1" /> 
+                      <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1" /> 
+                      <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1" /> 
+                      <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1" /> 
+                      <input class="m-2 text-center form-control rounded" type="text" id="fifth" maxlength="1" /> 
+                      <input class="m-2 text-center form-control rounded" type="text" id="sixth" maxlength="1" /> 
+                    </div>
+                    
+                    
+                  
+                    {% if messages %}
+                    <div class="alert alert-danger mt-3">
+                      {% for message in messages %}
+                      <p>{{ message }}</p>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                  </div>
                 </div>
-                {% endif %}
+                <div class="col-md-12 justify-content-center align-items-center text-center mt-4">
+                  <hr>
+                  <input type="submit" class="btn btn-outline-success btn-lg mb-1 btn-hover-color" value="Enter" style="width: 75%;" >
                 </div>
+              </form>
               </div>
+              </div>
+            
             </div>
           </div>
         </div>
+        <script>
+          document.addEventListener("DOMContentLoaded", function(event) {
+
+function OTPInput() {
+  const inputs = document.querySelectorAll('#otp > *[id]');
+  const otpInput = document.querySelector('input[name="otp"]');
+  
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('input', function() {
+      otpInput.value = '';
+      for (let j = 0; j < inputs.length; j++) {
+        otpInput.value += inputs[j].value;
+      }
+      
+      if (otpInput.value.length === 6) {
+        // ทำสิ่งที่คุณต้องการเมื่อครบ 6 ตัว
+        // เช่น ส่งค่าหรืออื่น ๆ
+      }
+      
+      if (i < inputs.length - 1 && inputs[i].value !== '') {
+        inputs[i + 1].focus();
+      }
+    });
+    
+    inputs[i].addEventListener('keydown', function(event) {
+      if (event.key === "Backspace" && inputs[i].value === '') {
+        if (i !== 0) {
+          inputs[i - 1].focus();
+        }
+      }
+    });
+  }
+}
+
+OTPInput();
+});
+        </script>
     </section>               
 {% endblock %}
+

@@ -1,0 +1,199 @@
+{% extends "base1.html" %} {%block title %}
+<link rel="stylelogin" href="../static/css/login_register.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<title>MovieReview</title>
+{% endblock %} {%block content%}
+<style>
+  body {
+    overflow: scroll;
+    background-color: rgba(28, 30, 33, 0.850);
+    /* background-image: url("https://images.pexels.com/photos/1983037/pexels-photo-1983037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1") ; */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  } 
+  
+  .starpro,.starnopro{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 500px;
+    display: flex;
+    justify-content: center;
+    
+    border: 2px solid rgba(0, 0, 0, 0.455); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; 
+    border-radius: 50%;
+  }
+  .custom-link{
+    text-decoration: none;
+    color: black;
+    
+  }
+  .custom-link:hover {
+    color: rgb(65, 67, 181);
+  }
+  .card-body{
+    background-color: rgba(255, 255, 255, 0.258);
+    border-radius: 15px;
+  }
+  .card-body:hover{
+    background-color: rgb(255, 255, 255);
+  }
+  .container{
+    background-color: rgba(0, 0, 0, 0.105);
+  }
+  svg path {
+    stroke: #000000; 
+  }
+  .imgmoviepro{
+    width: 150px;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: flex;
+    justify-content: center;
+    
+    border: 2px solid rgba(0, 0, 0, 0.455); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; 
+  }
+</style>
+<main class="container bg-light  text-dark border border-light" style="width: 120%;">
+  <div >
+    <h1 class="mb-3 mt-3 justify-content-center text-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        <g id="Interface / Line_Xl">
+          <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+      </g>
+    </svg>Search = "{{ search_query }}"<svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        <g id="Interface / Line_Xl">
+          <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+      </g>
+    </svg></h1>
+  </div>
+
+  <div class="accordion text-dark " id="accordionPanelsStayOpenExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+          Star
+        </button>
+      </h2>
+      <!--Star item-->
+      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+        <div class="accordion-body">
+          {% if stars_images %}
+            {% for result in stars_images %}
+            <a class="custom-link " href="{% url 'actor' result.star.id %}">
+              <div class="card mb-1">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="ms-4 star-entry image-frame">
+                      
+                        {% if result.main_image %}
+                            {% if result.main_image.image %}
+                                <img class="starpro" src="{{ result.main_image.image.url }}" alt="Main Image of {{ result.star.name }}">
+                            {% else %}
+                                <img class="starpro" src="{{ result.main_image.image_url }}" alt="Main Image of {{ result.star.name }}">
+                            {% endif %}
+                            {% else %}
+                            <img class="starnopro" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png">
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col-md-7">
+                      <h3>{{ result.star.name }}</h3>
+                      <p>Born : {{ result.star.born_date }} at {{ result.star.born_location }}<p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          {% else %}
+              <p>No stars found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie -->
+    <div class="accordion-item" >
+      <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+          Movie
+        </button>
+      </h2>
+
+      <!--Movie Item-->
+      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+        <div class="accordion-body">
+          {% if movies_images %}
+            {% for result in movies_images %}
+            <a class="custom-link" href="{% url 'moviereview' result.movie.id %}">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="ms-4 star-entry image-frame">
+                      
+                      {% if result.main_image %}
+                        {% if result.main_image.image %}
+                            <img class="imgmoviepro" src="{{ result.main_image.image.url }}" alt="Main Image of {{ result.movie.name }}">
+                        {% elif result.main_image.image_url %}
+                            <img class="imgmoviepro" src="{{ result.main_image.image_url }}" alt="Main Image of {{ result.movie.name }}">
+                        {% endif %}
+                      {% else %}
+                        <p>No main image available</p>
+                      {% endif %}
+                      </div>
+                    </div>
+                    <div class="col-md-7">
+                      <h3>{{ result.movie.name }}</h3>
+                      <p>Release : {{ result.movie.release_date }}<p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          {% else %}
+              <p>No movies found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</main>
+
+
+{% for star in stars %}
+    <div class="star-card">
+        <img src="{{ star.mainstar_image.url }}" alt="{{ star.name }}">
+        <h2>{{ star.name }}</h2>
+        <p>{{ star.job }}</p>
+        <!-- Add more details as needed -->
+    </div>
+{% endfor %}
+
+<script>
+  // เพิ่ม JavaScript ในนี้หากต้องการให้มีการจัดการข้อมูลการค้นหาเพิ่มเติม
+</script>
+
+{% endblock %}

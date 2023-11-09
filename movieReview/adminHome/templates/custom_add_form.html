@@ -1,0 +1,11 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block content %}
+    {% if add %}
+        {# Your custom content for the add form #}
+    {% else %}
+        {# The usual content for the change form #}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}

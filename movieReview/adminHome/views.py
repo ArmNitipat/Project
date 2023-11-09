@@ -1,11 +1,9 @@
-from imaplib import _Authenticator
+from django.db import transaction
 from pyexpat.errors import messages
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
-#from adminHome.models import myuser
-# from .forms import UserForm 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
@@ -13,13 +11,25 @@ from django.http import JsonResponse
 # from .forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as django_login
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
-from .forms import SignupForm
+
+from star.models import *
+from movies.models import *
+from .forms import CommentForm, SignupForm
 from datetime import date
 from django.contrib.auth import update_session_auth_hash
 # from django.shortcuts import render, redirect
 # from .forms import SignupForm
+
+from .models import *
+
+#---------------------------------------------
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from adminHome.models import Premium, Premium_list
+#---------------------------------------------
 
 # def signup_view(request):
 #     if request.method == 'POST':
@@ -32,6 +42,59 @@ from django.contrib.auth import update_session_auth_hash
 #         form = SignupForm()
 #     return render(request, 'your_template_name.html', {'form': form})
 
+# from django.db.models import Q
+from django.shortcuts import render
+
+def search(request):
+    search_query = request.GET.get('q', '')  # รับค่าจากคิวรีพารามิเตอร์ 'q'
+    stars = []  # เริ่มต้นด้วยลิสต์ว่างสำหรับ stars
+    movies =[]
+    stars_images = [] # เริ่มต้นด้วยลิสต์ว่างสำหรับ star image 
+    movies_images = []
+    context = {}
+    if search_query:  # ถ้ามีการค้นหาที่ส่งมา
+        stars = Star.objects.filter(name__icontains=search_query)  # ค้นหาดาราที่มีชื่อตรงกับคำค้น !!(name_icontains = search ) ==== (sql) WHERE headline ILIKE '%ชื่อ%'; 
+
+        for star in stars:
+            # Get the main image for each star
+            main_image = star.local_star_images.filter(mainstar=True, is_visible=True).first()
+            if not main_image:
+                main_image = star.url_star_images.filter(mainstar=True, is_visible=True).first()
+            
+            stars_images.append({
+                'star': star,
+                'main_image': main_image,
+            })
+
+        movies = Movie.objects.filter(name__icontains=search_query) 
+        for movie in movies:
+            # Get the main local image for each movie
+            main_local_image = movie.local_images_movie.filter(mainmovie=True, is_visible=True).first()
+            
+            # Get the main URL image for each movie
+            main_url_image = movie.url_movie_images.filter(mainmovie=True, is_visible=True).first()
+
+            # Determine which main image to use
+            main_image = main_local_image or main_url_image
+
+            movies_images.append({
+                'movie': movie,
+                'main_image': main_image,
+            })
+
+        print(stars)
+        context={
+            'search_query':search_query,
+            'star':stars,
+            'stars_images': stars_images,
+            'movie':movies,
+            'movies_images':movies_images,
+
+        }# context จะถูกส่งไปยัง template ทุกครั้ง แต่จะมี stars เฉพาะเมื่อมีการค้นหา
+    return render(request, 'search.html', context)
+
+
+
 @login_required
 def update_user(request):
     if request.method == 'POST':
@@ -40,8 +103,13 @@ def update_user(request):
         new_lastname = request.POST.get('lastname')
         new_email = request.POST.get('email')
         new_image = request.FILES.get('profile_image')
+        user = request.user
 
         # อัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
+        if new_email != user.email and User.objects.filter(email=new_email).exclude(pk=user.pk).exists():
+            messages.error(request, 'There is already a user using this email.')
+            return redirect('settingprofile')
+        
         user = request.user
         user.first_name = new_firstname
         user.last_name = new_lastname
@@ -82,21 +150,13 @@ def check_email(request):
         'is_taken': User.objects.filter(email=email).exists()
     }
     return JsonResponse(data)
- 
+
 
 def signup_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+        # username = request.POST.get('username')
+        # email = request.POST.get('email')
         form = SignupForm(request.POST, request.FILES)
-
-        # if User.objects.filter(username=username).exists():
-        #     messages.warning(request, 'This user is already in use.')
-        #     return render(request, 'Login_Register/register.html', {'form': form})
-        
-        # if User.objects.filter(email=email).exists():
-        #     messages.error(request, 'This email is already in use.')
-        #     return render(request, 'Login_Register/register.html', {'form': form})
         
         if form.is_valid():
             user = form.save(commit=False)
@@ -116,7 +176,7 @@ def signup_view(request):
         form = SignupForm()
     return render(request, 'Login_Register/register.html', {'form': form}) #form จะถูกหรือไม่ view จะส่งกลับ HttpResponse ในทุกสถานการณ์.
 
-
+#Login
 def login_view(request):
     context = {}
     if request.method == 'POST':
@@ -129,8 +189,6 @@ def login_view(request):
         else:
             context['login_error'] = "This username and password could not be found."
     return render(request, 'Login_Register/login.html', context)
-
-
 
 
 def resetpassword(request):
@@ -188,7 +246,7 @@ def check_credentials(request):
             return redirect('verify_otp')
         
         except User.DoesNotExist:
-            messages.error(request, 'ไม่พบชื่อผู้ใช้หรืออีเมล์ในระบบ')
+            messages.error(request, 'Username or Email is incorrect.')
             return redirect('credentials')
         
         except MultipleObjectsReturned:
@@ -256,7 +314,7 @@ def reset_password(request):
         return redirect('credentials')
 
 
-
+# logout
 def logout_view(request):
     logout(request)
     return redirect('login')
@@ -321,6 +379,8 @@ def account(request):
 #         'user_age': user_age,
 #     }
 #     return render(request, 'Account/settingprofile.html', context)
+
+
 @login_required
 def settingprofile(request):
     user = request.user  # Get the logged-in user
@@ -395,7 +455,7 @@ def changepassword(request):
         update_session_auth_hash(request, user)
 
         messages.success(request, 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว')
-        return redirect('account')  # ปรับเปลี่ยนตามต้องการ
+        return redirect('account')
     return render(request, 'Account/changepassword.html')# กำหนดเส้นทางของ template ที่คุณใช้
 
 
@@ -415,17 +475,262 @@ def home(request):
         return render(request, 'home.html', {'slides': slides})
 
 
+
+#Calender - ปฏิทิน
 def calender(request):
     template = loader.get_template('calender.html')
     return HttpResponse(template.render())
 
-def moviereview(request):
-    template = loader.get_template('moviereview.html')
-    return HttpResponse(template.render())
 
-def actor(request):
-    template = loader.get_template('actor.html')
-    return HttpResponse(template.render())
+#coin shop - ร้านค้าเหรียญ
+def coinshop(request):
+    premiums = Premium.objects.all()
+    user = request.user
+
+    if request.method == 'GET':
+        return render(request, 'coinshop.html', {'premiums': premiums})
+
+    if request.method == 'POST' and request.user.is_authenticated:
+        premium_id = request.POST.get('premium_id')
+
+        try:
+            premium_item = Premium.objects.get(pk=premium_id)
+        except Premium.DoesNotExist:
+            messages.error(request, "The selected product does not exist.")
+            return redirect('coinshop')
+    with transaction.atomic():  #Transaction Handling
+        if premium_item.expires < date.today():
+            messages.error(request, "Sorry. this product offer has expired.")
+            return redirect('coinshop')
+
+        elif premium_item.num <= 0:
+            messages.error(request, "Sorry. this product is out of stock.")
+            return redirect('coinshop')
+
+        if request.user.coin >= premium_item.price:
+            request.user.coin -= premium_item.price
+            request.user.save()
+
+            premium_item.num -= 1
+            premium_item.save()
+
+            # Record the purchase
+            Premium_list.objects.create(user=request.user, premium=premium_item)
+            subject = 'ขอบคุณที่ทำการซื้อสินค้าที่เรา'
+            message = f'สวัสดีคุณ {user.username},\n\n'\
+                    f'ขอบคุณที่ทำการซื้อสินค้า\n'\
+                    'รายการสินค้า\n'\
+                    f'"{premium_item.name}" ในราคา {premium_item.price} coins.\n'\
+                    'หากมีข้อสงสัยหรือปัญหาเกี่ยวกับสินค้า กรุณาติดต่อเราได้ที่ Blueeye.or@gmail.com\n\n'\
+                    'ด้วยความนับถือ,\n'\
+                    'ทีมงาน MovieReview'
+            from_email = 'your-email@gmail.com'
+            recipient_list = [user.email]
+            send_mail(subject, message, from_email, recipient_list)
+            messages.success(request, "Purchase successful!")
+        else:
+            messages.error(request, "Not enough coins!")
+
+    context = {
+        'premiums': premiums
+    }
+    if request.user.is_authenticated:
+        context.update({
+            'username': request.user.username,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email,
+            'coin': request.user.coin,
+        })
+        
+    return render(request, 'coinshop.html', context)
+
+# def send_email(user, premiums):
+#     subject = 'ขอบคุณที่ทำการซื้อสินค้าที่เรา'
+#     message = f'สวัสดีคุณ {user.username},\n\n'\
+#               f'ขอบคุณที่ทำการซื้อสินค้า "{premium_item.name}" ในราคา {premium_item.price} coins.\n'\
+#               'หากมีข้อสงสัยหรือปัญหาเกี่ยวกับสินค้า กรุณาติดต่อเราได้ที่ Blueeye.or@gmail.com\n\n'\
+#               'ด้วยความนับถือ,\n'\
+#               'ทีมงาน MovieReview'
+#     from_email = 'your-email@gmail.com'
+#     recipient_list = [user.email]
+#     try:
+#         send_mail(subject, message, from_email, recipient_list)
+#     except Exception as e:
+#         # Log the error for debugging purposes
+#         print(f"Error sending email: {e}")
+
+# def coinshop(request):
+#     premiums = Premium.objects.all()
+
+#     if request.user.is_authenticated:
+#         user = request.user
+
+#         if 'buy_premium_id' in request.POST:
+#             premium_id = request.POST.get('buy_premium_id')
+
+#             try:
+#                 cal = Premium.objects.get(pk=premium_id)
+#             except Premium.DoesNotExist:
+#                 messages.error(request, "The selected product does not exist.")
+#                 return redirect('coinshop')
+
+#             if user.coin >= cal.price:
+#                 user.coin -= cal.price
+#                 user.save()
+
+                    # cal.num -= 1
+                    # cal.save()
+
+                    # # Record the purchase
+                    # Premium_list.objects.create(user=user, premium=cal)
+                    # send_email(user, cal)
+                    # messages.success(request, "Purchase successful!")
+#             else:
+#                 messages.error(request, "Not enough coins!")
+
+#         context = {
+#             'username': user.username,
+#             'first_name': user.first_name,
+#             'last_name': user.last_name,
+#             'email': user.email,
+#             'date_of_birth' : user.date_of_birth,
+#             'coin' : user.coin,
+#             'premiums': premiums
+#         }
+        
+#         return render(request, 'coinshop.html', context)
+
+#     else:
+#         return render(request, 'coinshop.html', {'premiums': premiums})
+
+# def send_email(user, premium):
+#     subject = 'ขอบคุณที่ทำการซื้อสินค้าที่เรา'
+#     message = f'สวัสดีคุณ {user.username},\n\n'\
+#               f'ขอบคุณที่ทำการซื้อสินค้า "{premium.name}" ในราคา {premium.price} coins.\n'\
+#               'หากมีข้อสงสัยหรือปัญหาเกี่ยวกับสินค้า กรุณาติดต่อเราได้ที่ Blueeye.or@gmail.com\n\n'\
+#               'ด้วยความนับถือ,\n'\
+#               'ทีมงาน MovieReview'
+#     from_email = 'your-email@gmail.com'
+#     recipient_list = [user.email]
+#     send_mail(subject, message, from_email, recipient_list)
+
+
+def moviereview(request, id):
+    movie = get_object_or_404(Movie, pk=id)
+    form = CommentForm(request.POST)  # Instantiate the form for POST; None will make it unbound for GET
+    user = request.user
+    top_stars = MovieDetail.objects.filter(movie=movie, is_top=True)
+
+    if request.user.is_authenticated :  # Check if the user is authenticated
+        commented = Comment.objects.filter(movie=movie, user=user).first()
+        other_comments = Comment.objects.filter(movie=movie).exclude(user=user)
+    else:
+        commented = None
+        other_comments = Comment.objects.filter(movie=movie).exclude() 
+    
+    if request.method == 'POST' and form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.movie = movie
+        comment.save()
+        return redirect('moviereview') #movie_id = movie_id
+ 
+    if request.method == 'GET':
+        video = get_object_or_404(Video, movie=movie)
+        # Images
+        # ดึงรูปภาพจาก LocalImage และ URLImage ที่เป็น mainstar สำหรับ star นี้
+        mainmovie_image = None
+        local_mainmovie_image = LocalImage.objects.filter(is_visible=True, mainmovie=True, movie=movie)
+        url_mainmovie_image = URLImage.objects.filter(is_visible=True, mainmovie=True, movie=movie)
+
+        if local_mainmovie_image.exists():
+            mainmovie_image = local_mainmovie_image.first()
+        elif url_mainmovie_image.exists():
+            mainmovie_image = url_mainmovie_image.first()
+
+        # Image
+        local_images = LocalImage.objects.filter(is_visible=True, movie=movie, mainmovie=0)
+        url_images = URLImage.objects.filter(is_visible=True, movie=movie, mainmovie=0)
+        non_mainmovie_images = list(local_images) + list(url_images)
+
+        context = {
+            'movie': movie,
+            'user': user,
+            'topcast':top_stars,
+            'mainmovie_image': mainmovie_image,
+            'movie_image': non_mainmovie_images,
+            'video': video,
+            'form': form,  # Include form in GET context
+            'commented':commented,
+            'other_comments':other_comments,
+        }
+        return render(request, 'moviereview.html', context)
+    return render(request, 'moviereview.html')
+
+def actor(request, id):
+    # search_query = request.GET.get('search', None)
+    # star = Star.objects.filter(name__icontains=search_query) # ฟังชัน icontains สตริง โดยไม่คำนึงถึงตัวพิมพ์เล็กและตัวพิมพ์ใหญ่
+    star = get_object_or_404(Star, pk=id)
+    startype = [job.name for job in star.job.all()]
+    height  = '{:.1f}'.format(star.height * 3.28084)
+    official_list = star.official_sites_set.all()
+    alternative_names = AlternativeNames.objects.filter(star=star)
+    relatives = Relatives.objects.filter(star=star)
+    other_works = OtherWorks.objects.filter(star=star)
+    # Born
+    born_date = star.born_date
+    born_location = star.born_location
+    # Died
+    died_date = star.died_date
+    died_location = star.died_location
+    # Spouse
+    spouse = Spouses.objects.filter(star=star)
+    # spouse_to_others = star.spouse_star.all()
+    # Children
+    children_of_star = Children.objects.filter(star=star)
+    children = [child.child_name for child in children_of_star if child.child_name is not None]
+    # Parent
+    parent_relations = Children.objects.filter(child_name=star)
+    parent_names = [relation.star.name for relation in parent_relations]
+
+    # ดึงรูปภาพจาก LocalImage และ URLImage ที่เป็น mainstar สำหรับ star นี้
+    mainstar_image = None
+    local_mainstar_image = LocalImage.objects.filter(is_visible=True, mainstar=True, star=star)
+    url_mainstar_image = URLImage.objects.filter(is_visible=True, mainstar=True, star=star)
+
+    if local_mainstar_image.exists():
+        mainstar_image = local_mainstar_image.first()
+    elif url_mainstar_image.exists():
+        mainstar_image = url_mainstar_image.first()
+    # Image
+    local_images = LocalImage.objects.filter(is_visible=True, star=star, mainstar=0)
+    url_images = URLImage.objects.filter(is_visible=True, star=star, mainstar=0)
+
+    # You may want to combine them into one list if they are treated similarly in the template
+    non_mainstar_images = list(local_images) + list(url_images)
+    
+    context = {
+        'star': star,
+        'jobs_list': startype,
+        'height':height,
+        'official_list':official_list,
+        'mainstar_image':mainstar_image,
+        'alternative_names':alternative_names,
+        'relatives':relatives,
+        'other_works':other_works,
+        'born_date':born_date,
+        'born_location':born_location,
+        'died_date':died_date,
+        'died_location':died_location,
+        'spouse':spouse,
+        # 'spouse_to_others':spouse_to_others,
+        'children':children,
+        'parent':parent_names,
+        'non_mainstar_images':non_mainstar_images,
+    }
+    return render(request, 'actor.html',context)
+
 
 from django.conf import settings
 from django.shortcuts import redirect
@@ -435,3 +740,19 @@ def error_404_view(request, exception):
     # we add the path to the 404.html file
     # here. The name of our HTML file is 404.html
     return render(request, '404.html')
+
+from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
+
+
+@staff_member_required
+def admin_view(request):
+    
+    context = {
+    }
+    
+    return render(request, 'admin/dashboard.html', context)
+
+
+#admin custom view
+# my_custom_view

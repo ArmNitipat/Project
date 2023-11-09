@@ -12,6 +12,7 @@ handler404 = 'adminHome.views.error_404_view'
 
 urlpatterns = [
     path('',views.home, name='home'),
+    path('search/', views.search, name='search'),#งง
     path('admin/', admin.site.urls, name='admin'),
     path('calender/',views.calender),
     path('login/',views.login_view, name='login'),
@@ -23,8 +24,9 @@ urlpatterns = [
     path('changepassword/', views.changepassword, name='changepassword'),
     path('credentials/', views.check_credentials, name='credentials'),
     path('resetpassword/', views.reset_password, name='resetpassword'),
-    path('moviereview/', views.moviereview, name='moviereview'),
-    path('actor/', views.actor, name='actor'),
+    path('moviereview/<int:id>/', views.moviereview, name='moviereview'),
+    path('actor/<int:id>/', views.actor, name='actor'),
+    path('coinshop/', views.coinshop, name='coinshop'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
@@ -38,11 +40,15 @@ urlpatterns = [
     # path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     # path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
-    #  path('send_email/', views.send_email_view, name='send_email'),
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('check_email/', views.check_email, name='check_email'),
-]
+    path('404/', views.error_404_view, name='error_404'),
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    # path('my_custom_view/', views.my_custom_view, name='my_custom_view')
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------
+]    
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
+# # path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),

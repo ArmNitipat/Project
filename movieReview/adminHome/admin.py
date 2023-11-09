@@ -1,11 +1,5 @@
 from django.contrib import admin
-from adminHome.models import myuser,Bannerslide
-# Register your models here.
-
-class Member(admin.ModelAdmin):
-  list_display = ('username', 'password', 'firstname', 'lastname', 'date_of_birth','email')
-
-admin.site.register(myuser,Member)
+from adminHome.models import Bannerslide, Comment, Report
 
 
 class BannerslideAdmin(admin.ModelAdmin):
@@ -16,9 +10,55 @@ class BannerslideAdmin(admin.ModelAdmin):
 admin.site.register(Bannerslide, BannerslideAdmin)
 
 
-# from django.contrib.auth.admin import UserAdmin
+from django.contrib import admin
+from .models import Premium, Premium_list
 
-# # ปรับแต่ง UserAdmin ให้แสดง date_of_birth
-# class CustomUserAdmin(UserAdmin):
-#     list_display = ('username', 'email', 'date_of_birth', 'first_name', 'last_name', 'is_staff')
+class PremiumAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('General Information', {
+            'fields': ('name', 'title', 'price', 'num')
+        }),
+        ('Image Information', {
+            'fields': ('imag','expires' )
+        }),
+    )
 
+admin.site.register(Premium, PremiumAdmin)
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'data', 'like', 'score', 'spoiler', 'update_date']
+
+
+@admin.register(Report)
+class ReportAdmin(admin.ModelAdmin):
+    readonly_fields = ('created_at',)
+    list_display = ['id', 'comment_data', 'comment_user', 'created_at', 'reason']
+
+    def comment_data(self, obj):
+        return obj.comment.data
+    comment_data.short_description = 'Comment Data'
+    
+    def comment_user(self, obj):
+        return obj.comment.user
+    comment_user.short_description = 'User'
+
+    def comment_score(self, obj):
+        return obj.comment.score
+    comment_score.short_description = 'Score'
+
+    def comment_like(self, obj):
+        return obj.comment.like
+    comment_like.short_description = 'Like'
+
+    def comment_spoiler(self, obj):
+        return obj.comment.spoiler
+    comment_spoiler.short_description = 'Spoiler'
+
+    actions = ['delete_comments']
+
+    @admin.action(description='Delete selected comments')
+    def delete_comments(self, request, queryset):
+        for report in queryset:
+            report.comment.delete()

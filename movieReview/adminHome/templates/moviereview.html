@@ -33,7 +33,7 @@
     height: 30px; /* ความสูงของเส้นแบ่ง */
     margin: 0 10px; /* ระยะห่างของเส้นแบ่งจากข้อความ */
     }
-    
+
     .profile-container{
       width: 60px;
       height: 60px;
@@ -41,14 +41,14 @@
 
 
     /* Star rating */
-    
+
 
     .rating-box{
       position:relative;
       padding: 25px 50px 35px;
 
     }
-    
+
     .rating-box .stars{
       display: flex;
       align-items: center;
@@ -92,28 +92,44 @@
         flex-wrap: wrap; /* แสดงเป็นสองแถว */
       }
     }
+    .profilecomment{
+      object-fit: cover;
+      object-position: center;
+    }
+    .submitbtn{
+      height: 50%;
+      width: 50%;
+    }
+    .checkarea{
+      width: 100%;
+    }
 </style>
 <main class="container bg-light bg-dark text-light border border-light" style="width: 120%;">
 
- 
+
 
       <div class="p-4 p-md-5  text-white rounded" style="background-color: rgba(35, 35, 35, 0.879);">
         <!--รูปภาพของภาพยนตร์-->
         <div class="row">
             <div class="col-md-3" style="align-items: center; justify-content: center;">
                 <div class="card" style="display: flex; height: 432px; overflow: hidden; position: relative; background: none; border: none;">
-                    <img src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/60eca3ac155247e21850c7d075d01ebf0f3f5dbf19ccd2a1.jpg" 
-                         style="width: 100%; height: 100%; object-fit: cover;">
+                  {% if mainmovie_image %}
+                    {% if mainmovie_image.image %}
+                      <img src="{{ mainmovie_image.image.url }}" alt="{{ movie.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% elif mainmovie_image.image_url %}
+                      <img src="{{ mainmovie_image.image_url }}" alt="{{ movie.name }}"style="width: 100%; height: 100%; object-fit: cover;">
+                    {% endif %}
+                  {% endif %}
                 </div>
             </div>
         <!--คลิปของภาพยนตร์-->
         <div class="col-md-7 bg-dark">
             <div class="card" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 432px; background: transparent; border-radius: 15px; overflow: hidden;">
                 <div class="row text-dark" style="width: 100%; height: 432px;">
-                  <iframe id="myVideo" width="80%" height="432px" src="https://www.youtube.com/embed/bgqGdIoa52s?autoplay=1&mute=1&rel=0" 
-                          title="YouTube video player" 
-                          frameborder="0" 
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  <iframe id="myVideo" width="80%" height="432px" src="{{ video.video_url }}&autoplay=1&mute=1&rel=0"
+                          title="{{ movie.title }}"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           allowfullscreen>
                   </iframe>
                 </div>
@@ -138,34 +154,28 @@
             <!--Tagของภาพยนตร์-->
             <div class="card bg-dark ">
                 <h4 style="justify-content: center; align-items: center; " class="text-center"> Movie Tag</h4>
-
-                
+              {% for tags in movie.tags.all %}
                 <div class="mt-1 mb-1 border-secondary card bg-transparent text-light" style="display: flex; justify-content: center; align-items: center; border-radius: 10px;">
-                    <h6 class="m-0">Action</h6>
+                    <h6 class="m-0">{{ tags }}</h6>
                 </div>
-                <div class="mt-1 mb-1 border-secondary card bg-transparent text-light" style="display: flex; justify-content: center; align-items: center; border-radius: 10px;">
-                    <h6 class="m-0">Sci-fi</h6>
-                </div>
-                <div class="mt-1 mb-1 border-secondary card bg-transparent text-light" style="display: flex; justify-content: center; align-items: center; border-radius: 10px;">
-                    <h6 class="m-0">Hrror</h6>
-                </div>
-            </div>
+              {% endfor %}
+              </div>
         </div>
 
       </div>
     </div>
-  
-    
+
+
     <div class="row mb-2 mt-1 ">
-      
+
       <div class="col-md-8 bg-dark">
         <div class=" row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
           <div class="text-light bg-dark col p-4 d-flex flex-column position-static">
 
             <div class="row">
               <div class="col-md-7"></div>
-              
-              
+
+
                 <div class="col-md-5 d-flex align-items-center mt-2">
                   <!-- Positive Comment -->
                   <svg width="20px" height="20px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#0ef69d">
@@ -185,7 +195,7 @@
                     </g>
                   </svg>
                   <p class="mb-0 ms-3">Positive</p>
-                  <strong class="d-inline-block ms-1 text-center text-light">94%</strong>  
+                  <strong class="d-inline-block ms-1 text-center text-light">94%</strong>
                   <div class="divider"></div>
                   <!-- Negative Comment -->
                   <svg class="mt-2 ms-2" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -204,20 +214,20 @@
             <!--รายละเอียดปีที่ออก เวลาของภาพยนตร์ และ เรทของภาพยนตร์ -->
             <div class="row mt-2">
               <strong class="col-md-7 d-inline-block mb-2 text-primary">
-                  2023
-                  PG-13
-                  2h 28m
+                  {{ movie.release_date.year }}
+                  {{ movie.rate }}
+                  {{ movie.time}}
               </strong>
             </div>
 
             <!-- ชื่อ ภาพยนตร์ -->
-            <h3 class="mb-0">Marvel Spider-Man 2</h3>
+            <h3 class="mb-0">{{movie}}</h3>
 
             <!--วันที่ออกฉาย-->
-            <div class="mb-1 text-muted">Release 20 Oct 2023 </div>
+            <div class="mb-1 text-muted">Release {{ movie.release_date }}</div>
 
             <!--คำอธิบายภาพยนตร์ หรือ เรื่องย่อ-->
-            <p class="card-text mb-auto" style="color: rgb(177, 177, 177);">With Spider-Man's identity now revealed, Peter asks Doctor Strange for help. When a spell goes wrong, dangerous foes from other worlds start to appear, forcing Peter to discover what it truly means to be Spider-Man.</p>
+            <p class="card-text mb-auto" style="color: rgb(177, 177, 177);">{{ movie.story }}</p>
             <hr>
             <div>
 
@@ -266,28 +276,25 @@
 
 
             </div>
-            
-            
+
+
           </div>
-         
+
         </div>
       </div>
       <div class="col-md-4 bg-dark text-light">
-        
+
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                <img src="https://preview.redd.it/i-made-a-poster-for-marvels-spider-man-2-i-cant-wait-to-v0-p04azg38979b1.jpg?width=640&crop=smart&auto=webp&s=0691e279a4719fa11ad834a0cd0b380385737c67" 
-                     class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                <img src="https://i.pinimg.com/1200x/1b/0c/f1/1b0cf171f736a3e702b0afe776346fb5.jpg" 
-                     class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                <img src="https://m.media-amazon.com/images/M/MV5BOTQ5NTZjZTgtODZkMy00YjY5LTkzNTAtMTYyMDg1NDljMTE1XkEyXkFqcGdeQXVyMTk2OTAzNTI@._V1_.jpg" 
-                     class="d-block w-100" alt="...">
-                </div>
+              {% for image in movie_image %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if image.image %}  <!-- Assuming this is a LocalImage object with an 'image' field. -->
+                  <img src="{{ image.image.url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
+                {% elif image.image_url %}  <!-- Assuming this is a URLImage object with an 'image_url' field. -->
+                  <img src="{{ image.image_url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
+                {% endif %}
+              </div>
+            {% endfor %}
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -301,7 +308,7 @@
       </div>
       <hr class="bg-dark">
     </div>
-  
+
     <div class="row g-5">
       <div class="col-md-12 justify-content-center align-items-center ">
         <h3 class="pb-4 mb-1 justify-content-center align-items-center ">
@@ -311,69 +318,23 @@
         <div class="row justify-content-center align-items-center">
 
           <!-- รายชื่อนักแสดง -->
+          {% for detail in topcast %}
           <div class="col-md-5 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
             <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
                 <rect width="80%" height="80%" fill="#777"></rect>
                 <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
                 
-                <image href="https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg" 
-                width="130" height="180" />
+                <image href="https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg"
+                width="130" height="180" style="object-fit: cover;" />
             </svg>
             <div style="margin-left: 10px;">
-                <h4 class="mt-2" style="font-weight: bold;">Tom Holland</h4>
-                <p style="font-size: 18px;">Peter Parker</p>
+                <h4 class="mt-2" style="font-weight: bold;">{{ detail.star.name }}</h4>
+                <p style="font-size: 18px;">{{ detail.character_name }}</p>
             </div>
         </div>
-          <!-- รายชื่อนักแสดง -->
-          <div class="col-md-5 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
-            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
-                <rect width="80%" height="80%" fill="#777"></rect>
-                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
-                
-                <image href="https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Zendaya_-_2019_by_Glenn_Francis.jpg/640px-Zendaya_-_2019_by_Glenn_Francis.jpg" 
-                width="130" height="180" />
-            </svg>
-            <div style="margin-left: 10px;">
-                <h4 class="mt-2" style="font-weight: bold;">Zendaya</h4>
-                <p style="font-size: 18px;">MJ</p>
-            </div>
-          </div></div>
-          <div class="row justify-content-center align-items-center">
-          <!-- รายชื่อนักแสดง -->
-          <div class="col-md-5 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
-            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
-                <rect width="80%" height="80%" fill="#777"></rect>
-                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
-                
-                <image href="https://flxt.tmsimg.com/assets/275459_v9_bb.jpg" 
-                width="130" height="180" />
-            </svg>
-            <div style="margin-left: 10px;">
-                <h4 class="mt-2" style="font-weight: bold;">Benedict Cumberbatch</h4>
-                <p style="font-size: 18px;">Doctor Strange</p>
-            </div>
-          </div>
-
-          <!-- รายชื่อนักแสดง -->
-          <div class="col-md-5 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
-            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
-                <rect width="80%" height="80%" fill="#777"></rect>
-                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
-                
-                <image href="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Jacob_Batalon_%2828035642754%29_%28cropped%29.jpg/1200px-Jacob_Batalon_%2828035642754%29_%28cropped%29.jpg" 
-                width="130" height="180" />
-            </svg>
-            <div style="margin-left: 10px;">
-                <h4 class="mt-2" style="font-weight: bold;">Jacob Batalon</h4>
-                <p style="font-size: 18px;">Ned Leeds</p>
-            </div>
-          </div>
-          
-         </div>
-        </div>
-        
+        {% endfor %}
         <!--Comment-->
-        
+
         <div class="container my-5 py-5 ">
           <br>
           <h3 class="pb-4 mb-1 justify-content-center text-center  align-items-center ">
@@ -382,279 +343,138 @@
           <hr>
           <div class="mb-3 row d-flex justify-content-center">
             <div class="col-md-12 col-lg-10">
+
               <!-- Input Comment-->
-              <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;">
+              {% if user.username %}
+              {% if commented %}
+              {% else %}
+              <form method="post" action="{% url 'moviereview' %}" id="form-check-input">
+              {% csrf_token %}
+              <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
                 <div class="card-body p-4">
                   <div class="d-flex flex-start w-100">
-                    <img class="rounded-circle shadow-1-strong me-3"
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65"
+                    <img class="rounded-circle shadow-1-strong me-3 profilecomment"
+                      src="{{ user.image.url }}" alt="avatar" width="65"
                       height="65" />
                     <div class="w-100">
-                      <h5>Add a comment</h5>
-                      <p>and give star for this movie</p>
+                       <h5>{{ user.username }}</h5>
+                      <p>Give star for this movie</p>
                       <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
-                        
                         <div class=" stars">
-                          <i class="fa-solid fa-star" data-tooltip="1 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="2 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="3 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="4 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="5 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="6 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="7 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="8 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="9 star"></i>
-                          <i class="fa-solid fa-star" data-tooltip="10 star"></i>
+                          {% for i in '0123456789' %}
+                            <i class="fa-solid fa-star" data-tooltip="{{i}} star" id="star{{i}}" name="score"></i>
+                          {% endfor %}
+                          </div>
+                          <input type="hidden" id="rating" name="score" value="">
                         </div>
-                      </div>
-                      
-                      <div class="form-floating mt-2">
-                        <textarea class="form-control" placeholder="Leave a comment here"  style="height: 100px"></textarea>
-                        <label for="floatingTextarea2">Comments</label>
-                      </div>
-                      <div class="d-flex justify-content-between mt-3">
-                        <button type="button" class="btn btn-primary ms-auto">
+
+                        <div class="form-floating mt-2">
+                          <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea" name="data" minlength="6" maxlength="1000"></textarea>
+                          <label for="Textarea">Add Comments</label>
+                        </div>
+                      <div class=" d-flex justify-content-between mt-3">
+                        <div class=".form-check-inline checkarea" >
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="nospoiler" value="0">
+                            <label class="form-check-label" for="nospoiler">
+                              NO SPOILER
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="spoiler" value="1">
+                            <label class="form-check-label" for="spoiler">
+                              SPOILER ALERT!!
+                            </label>
+                          </div>
+                          <div class=".form-control">
+                            <div id="textinfo" class="mb-3 mt-3 " style="color: red;"></div> <!-- ส่วนแสดงข้อความเงื่อนไข -->
+                          </div>
+                        </div>
+                        
+                        
+
+                        <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
                           Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
                         </button>
                       </div>
                     </div>
+                    </form>
                   </div>
                 </div>
-              </div>      
-              
+              </div>
+              {% endif %}
+              {% else %}
+              {% endif %}
+
               <!--Show Comment-->
-              <div class="card text-dark " style="background-color: #ffffffc8; border-radius: 10px; overflow-y: scroll; max-height: 800px;">
+              
+              <div class="card text-light " style="background-color: RGB(51,51,51); border-radius: 10px; overflow-y: scroll; max-height: 800px; color: white;">
                 <div class="p-3">
                 <h4 class="mb-0">Recent comments</h4>
                   <p class="fw-light">Latest Comments section by users</p>
                 </div>
+
+                {% if commented %}
+                <div class="card-body p-4">
+                  <div class="d-flex flex-start">
+                    <div class="profile-container me-3">
+                      <img class="rounded-circle shadow-1-strong profilecomment" src="{{ commented.user.image.url }}" alt="avatar" width="60" height="60" />
+                    </div>
+                    <div>
+                      <h6 class="fw-bold mb-1">{{ commented.user.username }}</h6>
+                      <div class="d-flex align-items-center mb-3">
+                        <p class="mb-0">
+                          {{ commented.update_date }}
+                          <span class="badge bg-primary">Pending</span>
+                        </p>
+                        <!-- Uncomment the below links if you want to provide editing functionality -->
+                         <a href="" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
+                         <a href="" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
+                         <a href="" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                      </div>
+                      <p class="mb-0">
+                        {{ commented.data }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              {% if other_comments %}
+                {% for comment in other_comments %}
                   <div class="card-body p-4">
                     <div class="d-flex flex-start">
                       <div class="profile-container me-3">
-                        <div class="profile-container me-3">
-                      <img class="rounded-circle shadow-1-strong "src="https://i.pinimg.com/736x/bb/1a/93/bb1a93c829c983750d0d03b42450e87e.jpg" alt="avatar" width="60px"
-                        height="60px" />
-                      </div>
+                        <img class="rounded-circle shadow-1-strong profilecomment" src="{{ comment.user.image.url }}" alt="avatar" width="60" height="60" />
                       </div>
                       <div>
-                        <h6 class="fw-bold mb-1">Betty Walker</h6>
+                        <h6 class="fw-bold mb-1">{{ comment.user.username }}</h6>
                         <div class="d-flex align-items-center mb-3">
                           <p class="mb-0">
-                            March 30, 2021
+                            {{ comment.update_date }}
                             <span class="badge bg-primary">Pending</span>
                           </p>
-                          <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                          <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                          <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                          <!-- Uncomment the below links if you want to provide editing functionality -->
+                           <a href="" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                         </div>
                         <p class="mb-0">
-                          It uses a dictionary of over 200 Latin words, combined with a handful of
-                          model sentence structures, to generate Lorem Ipsum which looks
-                          reasonable. The generated Lorem Ipsum is therefore always free from
-                          repetition, injected humour, or non-characteristic words etc.
+                          {{ comment.data }}
                         </p>
                       </div>
                     </div>
                   </div>
-                 
-
-
-                  <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    
-                    <div class="profile-container me-3">
-                    <img class="rounded-circle shadow-1-strong"
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
-                      height="60" />
-                    </div>
-                      <div>
-                      <h6 class="fw-bold mb-1">Maggie Marsh</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                          March 07, 2021
-                          <span class="badge bg-primary">Pending</span>
-                        </p>
-                        <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                      </div>
-                      <p class="mb-0">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry. Lorem Ipsum has been the industry's standard dummy text ever
-                        since the 1500s, when an unknown printer took a galley of type and
-                        scrambled it.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-      
-                <hr class="my-0" />
-      
-                <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    <div class="profile-container me-3">
-                    <img class="rounded-circle shadow-1-strong"
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(26).webp" alt="avatar" width="60"
-                      height="60" />
-                    </div>
-                      <div>
-                      <h6 class="fw-bold mb-1">Lara Stewart</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                          March 15, 2021
-                          <span class="badge bg-success">Approved</span>
-                        </p>
-                        <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                        <a href="#!" class="text-success"><i class="fas fa-redo-alt ms-2"></i></a>
-                        <a href="#!" class="link-danger"><i class="fas fa-heart ms-2"></i></a>
-                      </div>
-                      <p class="mb-0">
-                        Contrary to popular belief, Lorem Ipsum is not simply random text. It
-                        has roots in a piece of classical Latin literature from 45 BC, making it
-                        over 2000 years old. Richard McClintock, a Latin professor at
-                        Hampden-Sydney College in Virginia, looked up one of the more obscure
-                        Latin words, consectetur, from a Lorem Ipsum passage, and going through
-                        the cites.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-      
-                <hr class="my-0" style="height: 1px;" />
-      
-                <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    <div class="profile-container me-3">
-                    <img class="rounded-circle shadow-1-strong"
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(33).webp" alt="avatar" width="60"
-                      height="60" />
-                    </div>
-                      <div>
-                      <h6 class="fw-bold mb-1">Alexa Bennett</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                          March 24, 2021
-                          <span class="badge bg-danger">Rejected</span>
-                        </p>
-                        <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                      </div>
-                      <p class="mb-0">
-                        There are many variations of passages of Lorem Ipsum available, but the
-                        majority have suffered alteration in some form, by injected humour, or
-                        randomised words which don't look even slightly believable. If you are
-                        going to use a passage of Lorem Ipsum, you need to be sure.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-      
-                <hr class="my-0" />
-                
-                <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    <div class="profile-container me-3">
-                    <img class="rounded-circle shadow-1-strong"
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(24).webp" alt="avatar" width="60"
-                      height="60" />
-                    </div>
-                      <div>
-                      <h6 class="fw-bold mb-1">Betty Walker</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                          March 30, 2021
-                          <span class="badge bg-primary">Pending</span>
-                        </p>
-                        <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                      </div>
-                      <p class="mb-0">
-                        It uses a dictionary of over 200 Latin words, combined with a handful of
-                        model sentence structures, to generate Lorem Ipsum which looks
-                        reasonable. The generated Lorem Ipsum is therefore always free from
-                        repetition, injected humour, or non-characteristic words etc.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    <div class="profile-container me-3">
-                    <img class="rounded-circle shadow-1-strong"
-                      src="https://www.dooddot.com/wp-content/uploads/2021/12/269728776_10158386224157344_1143153718788509370_n.jpeg" alt="avatar" width="60"
-                      height="60" />
-                    </div>
-                      <div>
-                      <h6 class="fw-bold mb-1">Betty Walker</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                          March 30, 2021
-                          <span class="badge bg-primary">Pending</span>
-                        </p>
-                        <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                      </div>
-                      <p class="mb-0">
-                        It uses a dictionary of over 200 Latin words, combined with a handful of
-                        model sentence structures, to generate Lorem Ipsum which looks
-                        reasonable. The generated Lorem Ipsum is therefore always free from
-                        repetition, injected humour, or non-characteristic words etc.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                
-
-                <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    <div class="profile-container me-3">
-                    <img class="rounded-circle shadow-1-strong"
-                      src="https://snworksceo.imgix.net/cav/f177b95f-71b5-44f3-bea3-28c768c4349a.sized-1000x1000.png?w=1000" alt="avatar" width="60"
-                      height="60" />
-                    </div>
-                      <div>
-                      <h6 class="fw-bold mb-1">Betty Walker</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                          March 30, 2021
-                          <span class="badge bg-primary">Pending</span>
-                        </p>
-                        <a href="#!" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                        <a href="#!" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                      </div>
-                      <p class="mb-0">
-                        It uses a dictionary of over 200 Latin words, combined with a handful of
-                        model sentence structures, to generate Lorem Ipsum which looks
-                        reasonable. The generated Lorem Ipsum is therefore always free from
-                        repetition, injected humour, or non-characteristic words etc.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                
+                {% endfor %}
+              {% endif %}
+                <!-- ---------------------------------------------- -->
               </div>
-              
-              
-
 
             </div>
           </div>
         </div>
-        
-        
-  
-        
     </div>
     <script src="js/addons/rating.js"></script>
     <script>
       var video = document.getElementById("myVideo");
-      
+      // !!!!!!video
       video.addEventListener("ended", function() {
         // เมื่อคลิปวิดีโอจบ
         video.currentTime = 0; // นำเวลากลับไปที่เริ่มต้น
@@ -662,26 +482,77 @@
       });
 
       const stars = document.querySelectorAll(".stars i");
-const tooltipText = document.createElement('div');
-tooltipText.classList.add('tooltip');
-document.body.appendChild(tooltipText);
+      const tooltipText = document.createElement('div');
+      tooltipText.classList.add('tooltip');
+      document.body.appendChild(tooltipText);
+      const ratingInput = document.getElementById('rating');
+      const Sendsubmit = document.getElementById('Send'); 
+      const textinfo = document.getElementById('textinfo');
+      // !!!!!! star    
+      stars.forEach((star, index) => {
+        star.addEventListener("click", () => {
+          stars.forEach((s, idx) => {
+            if (idx <= index) {
+              s.classList.add("active");
+            } else {
+              s.classList.remove("active");
+            }
+          });
+          const rating = index + 1;
+          tooltipText.innerText = `${rating} star`; // แสดงข้อความจำนวนดาวที่คลิก
+          ratingInput.value = rating; // ตั้งค่าคะแนนในฟิลด์ "rating"
+        });
 
-stars.forEach((star, index) => {
-  star.addEventListener("click", () => {
-    stars.forEach((s, idx) => {
-      if (idx <= index) {
-        s.classList.add("active");
-      } else {
-        s.classList.remove("active");
+        // เพิ่มเหตุการณ์เมื่อนำเมาส์ออกจากดาว
+        star.addEventListener('mouseleave', () => {
+          tooltipText.innerText = ''; // ลบข้อความเมื่อนำเมาส์ออกจากดาว
+        });
+      });
+
+      // if (rating.value == ""){
+      //   textinfo.innerText = '*5555';
+      //   Sendsubmit.disabled = true;
+      // }
+
+      const SendButton = document.getElementById('Send');
+      const textareaInput = document.getElementById('Textarea');
+      const spoilerInputs = document.querySelectorAll('input[name="flexRadioDefault"]');
+      const errorInfo = document.getElementById('Erororinfo');
+
+      updateSendButtonStatus(); 
+
+      SendButton.addEventListener('click', function(event) {
+        if (!ratingInput.value || textareaInput.value.trim().length < 6 || !isSpoilerSelected(spoilerInputs)) {
+          event.preventDefault(); 
+          errorInfo.innerText = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+        } else {
+          errorInfo.innerText = ''; 
+        }
+      });
+
+      function updateSendButtonStatus() {
+        if (!ratingInput.value || textareaInput.value.trim().length < 6 || !isSpoilerSelected(spoilerInputs)) {
+          SendButton.disabled = true;
+        } else {
+          SendButton.disabled = false;
+        }
       }
-    });
-    tooltipText.innerText = `${index + 1} star`; // แสดงข้อความจำนวนดาวที่คลิก
-  });
-  // เพิ่มเหตุการณ์เมื่อนำเมาส์ออกจากดาว
-  star.addEventListener('mouseleave', () => {
-    tooltipText.innerText = ''; // ลบข้อความเมื่อนำเมาส์ออกจากดาว
-  });
-});
+
+      function isSpoilerSelected(inputs) {
+        for (const input of inputs) {
+          if (input.checked) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      ratingInput.addEventListener('input', updateSendButtonStatus);
+      textareaInput.addEventListener('input', updateSendButtonStatus);
+      for (const input of spoilerInputs) {
+        input.addEventListener('change', updateSendButtonStatus);
+      }
+
       </script>
   </main>
 {%endblock%}
