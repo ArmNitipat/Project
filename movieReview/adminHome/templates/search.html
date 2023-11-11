@@ -87,6 +87,8 @@
   </div>
 
   <div class="accordion text-dark " id="accordionPanelsStayOpenExample">
+    
+    <!-- Star -->
     <div class="accordion-item">
       <h2 class="accordion-header" id="panelsStayOpen-headingOne">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
@@ -107,12 +109,12 @@
                       
                         {% if result.main_image %}
                             {% if result.main_image.image %}
-                                <img class="starpro" src="{{ result.main_image.image.url }}" alt="Main Image of {{ result.star.name }}">
+                              <img class="starpro" src="{{ result.main_image.image.url }}" alt="Main Image of {{ result.star.name }}">
                             {% else %}
-                                <img class="starpro" src="{{ result.main_image.image_url }}" alt="Main Image of {{ result.star.name }}">
+                              <img class="starpro" src="{{ result.main_image.image_url }}" alt="Main Image of {{ result.star.name }}">
                             {% endif %}
                             {% else %}
-                            <img class="starnopro" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png">
+                              <img class="starnopro" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png">
                         {% endif %}
                       </div>
                     </div>
@@ -131,17 +133,17 @@
         </div>
       </div>
     </div>
-
+  </div>
+  <div class="accordion text-dark " id="accordionPanelsStayOpenExample">
     <!-- Movie -->
-    <div class="accordion-item" >
-      <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
           Movie
         </button>
       </h2>
-
       <!--Movie Item-->
-      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
         <div class="accordion-body">
           {% if movies_images %}
             {% for result in movies_images %}
@@ -161,6 +163,7 @@
                       {% else %}
                         <p>No main image available</p>
                       {% endif %}
+                      
                       </div>
                     </div>
                     <div class="col-md-7">
@@ -193,7 +196,7 @@
 {% endfor %}
 
 <script>
-  // เพิ่ม JavaScript ในนี้หากต้องการให้มีการจัดการข้อมูลการค้นหาเพิ่มเติม
+  // เพิ่ม JavaScript เพิ่มเติม
 </script>
 
 {% endblock %}

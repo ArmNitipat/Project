@@ -1,7 +1,6 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +63,7 @@
             </ul>
 
             <form class="d-flex" action="{% url 'search' %}" method="get">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" value="{{ search_query }}" name="q">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" value="{{ search_query }}" name="q" maxlength="50">
               <button class="btn btn-outline-success me-2" type="submit">Search</button>
             </form>
 

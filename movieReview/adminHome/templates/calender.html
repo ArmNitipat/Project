@@ -1,4 +1,13 @@
 {% extends "base1.html" %} {%block title %}
 <link rel="stylesheet" href="../static/css/login_register.css" />
 <title>Calender</title>
-{% endblock %} {%block content%} {% endblock %}
+{% endblock %} {%block content%} 
+{% for i in name_list %}
+<li>
+    <strong>{{ i }}</strong>
+    <p>Actor: {{ actor_list.forloop.counter0 }} - {{ actor_list.forloop.counter }} {{ actor_list|length }} - {{ actor_list.forloop.last }} {{ actor_list|first }} {{ actor_list.forloop.parentloop.counter }} {{ actor_list.forloop.parentloop.counter0 }}</p>
+    <p>Tag: {{ tag_list.forloop.counter0 }}</p>
+    <img src="{{ image_list.forloop.counter0 }}" alt="Movie Poster">
+</li>
+{% endfor %}
+{% endblock %}

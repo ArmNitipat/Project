@@ -82,7 +82,7 @@ class Premium_list(models.Model):
 class Comment(models.Model):
     data = models.TextField()
     score = models.IntegerField(default=1,validators=[MaxValueValidator(10),MinValueValidator(1)])
-    spoiler = models.BooleanField(default=False)
+    spoiler = models.BooleanField()
     like = models.IntegerField(default=0,auto_created=0)
     update_date = models.DateTimeField(auto_now=True,verbose_name="Date")
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)

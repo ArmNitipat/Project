@@ -3,7 +3,7 @@ from django.contrib import admin
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-
+from .views import calendar
 #------------------------------------------------------------------------------------
 # from .views import send_my_email
 from django.contrib.auth import views as auth_views
@@ -27,6 +27,8 @@ urlpatterns = [
     path('moviereview/<int:id>/', views.moviereview, name='moviereview'),
     path('actor/<int:id>/', views.actor, name='actor'),
     path('coinshop/', views.coinshop, name='coinshop'),
+    path('calendar/', calendar, name='calendar'),
+
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
@@ -42,7 +44,6 @@ urlpatterns = [
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('check_email/', views.check_email, name='check_email'),
-    path('404/', views.error_404_view, name='error_404'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('my_custom_view/', views.my_custom_view, name='my_custom_view')
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -52,3 +53,5 @@ if settings.DEBUG:
 
 
 # # path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+
+# handler404 == 'adminHome.views.handler404'

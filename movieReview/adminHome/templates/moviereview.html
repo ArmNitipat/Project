@@ -43,17 +43,13 @@
     /* Star rating */
 
 
-    .rating-box{
+    /* .rating-box{
       position:relative;
       padding: 25px 50px 35px;
 
     }
 
-    .rating-box .stars{
-      display: flex;
-      align-items: center;
-      gap:25px;
-    }
+
 
     .stars i {
       color: aliceblue;
@@ -77,9 +73,21 @@
     .card.rating-box .stars {
       display: flex;
       justify-content: center; /* จัดตรงกลางแนวนอน */
-      gap: 35px; /* ระยะห่างระหว่างดาว */
-    }
+      /*gap: 35px;  ระยะห่างระหว่างดาว 
+    }*/
 
+/* Optional: CSS for active (highlighted) stars */
+    .stars i.active {
+      color: gold;
+    }
+    .stars{
+      color: rgb(255, 255, 255);
+    }
+    .rating-box .stars{
+      display: flex;
+      align-items: center;
+      gap:25px;
+    }
     .card.rating-box .stars i {
       flex-basis: calc(20% - 5px); /* 20% ความกว้างของแต่ละดาวและลบระยะห่างระหว่างดาวออกไป 5px */
       text-align: center;
@@ -91,7 +99,7 @@
       .card.rating-box .stars {
         flex-wrap: wrap; /* แสดงเป็นสองแถว */
       }
-    }
+    } */
     .profilecomment{
       object-fit: cover;
       object-position: center;
@@ -105,8 +113,6 @@
     }
 </style>
 <main class="container bg-light bg-dark text-light border border-light" style="width: 120%;">
-
-
 
       <div class="p-4 p-md-5  text-white rounded" style="background-color: rgba(35, 35, 35, 0.879);">
         <!--รูปภาพของภาพยนตร์-->
@@ -126,12 +132,15 @@
         <div class="col-md-7 bg-dark">
             <div class="card" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 432px; background: transparent; border-radius: 15px; overflow: hidden;">
                 <div class="row text-dark" style="width: 100%; height: 432px;">
+                  {% if video %}
                   <iframe id="myVideo" width="80%" height="432px" src="{{ video.video_url }}&autoplay=1&mute=1&rel=0"
                           title="{{ movie.title }}"
                           frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           allowfullscreen>
                   </iframe>
+                  {% else %}
+                  {% endif %}
                 </div>
             </div>
         </div>
@@ -265,14 +274,14 @@
                 <hr>
 
                 <!--Story line-->
-                <div style="align-items: center;">
+                <!-- <div style="align-items: center;">
                     <p class="me-3 mb-auto m-0" style="font-size: 32px; font-weight: bold;">Storyline</p>
                     <p class="mt-1 mb-3" style="color: rgb(177, 177, 177);">
                         Peter Parker's secret identity is revealed to the entire world.
                         Desperate for help, Peter turns to Doctor Strange to make the world forget that he is Spider-Man.
                         The spell goes horribly wrong and shatters the multiverse, bringing in monstrous villains that could destroy the world.
                     </p>
-                </div>
+                </div> -->
 
 
             </div>
@@ -286,7 +295,7 @@
 
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-              {% for image in movie_image %}
+              {% for image in mainstar %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 {% if image.image %}  <!-- Assuming this is a LocalImage object with an 'image' field. -->
                   <img src="{{ image.image.url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
@@ -296,6 +305,7 @@
               </div>
             {% endfor %}
             </div>
+            {% if movie_image %}
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -304,7 +314,9 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
-            </div>
+            {% else %}
+            {% endif %}
+          </div>
       </div>
       <hr class="bg-dark">
     </div>
@@ -319,19 +331,21 @@
 
           <!-- รายชื่อนักแสดง -->
           {% for detail in topcast %}
-          <div class="col-md-5 ms-4 mt-4 text-center " style="display: flex; align-items: center;">
-            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
-                <rect width="80%" height="80%" fill="#777"></rect>
-                <text x="60%" y="80%" fill="#777" dy=".3em">140x140</text>
-                
-                <image href="https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg"
-                width="130" height="180" style="object-fit: cover;" />
-            </svg>
+          <div class="col-md-5 ms-4 mt-4 text-center" style="display: flex; align-items: center;">
+            {% if topcast.main_image %}
+              {% if topcast.main_image.image %}
+                <img src="{{ topcast.main_image.image.url }}" alt="Main Image of {{ topcast.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
+              {% elif topcast.main_image.image_url %}
+                <img src="{{ topcast.main_image.image_url }}" alt="Main Image of {{ topcast.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
+              {% endif %}
+            {% else %}
+              <p>No main image available</p>
+            {% endif %}
             <div style="margin-left: 10px;">
-                <h4 class="mt-2" style="font-weight: bold;">{{ detail.star.name }}</h4>
-                <p style="font-size: 18px;">{{ detail.character_name }}</p>
+              <h4 class="mt-2" style="font-weight: bold;">{{ detail.star.name }}</h4>
+              <p style="font-size: 18px;">{{ detail.character_name }}</p>
             </div>
-        </div>
+          </div>
         {% endfor %}
         <!--Comment-->
 
@@ -342,30 +356,94 @@
           </h3>
           <hr>
           <div class="mb-3 row d-flex justify-content-center">
+            <!-- edit from -->
             <div class="col-md-12 col-lg-10">
+              {% if user.username %}
+              {% if commented %}
+                <form method="post" action="{% url 'moviereview' movie.id %}" id="reviewForm" style="display: none;">
+                  {% csrf_token %}
+                  <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
+                    <div class="card-body p-4">
+                      <div class="d-flex flex-start w-100">
+                        <img class="rounded-circle shadow-1-strong me-3 profilecomment"
+                          src="{{ user.image.url }}" alt="avatar" width="65"
+                          height="65" style="object-fit: cover;" />
+                          <div class="w-100">
+                            <h5>{{ user.username }}</h5>
+                            <p>Give star for this movie</p>
+                            
+                            <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
+                              <div class="stars">
+                                {% for i in '0123456789' %}
+                                  <!-- Use data-index to store the star's index -->
+                                  <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
+                                {% endfor %}
+                              </div>
+                              <input type="hidden" id="rating" name="score" value="{{ review.score }}" minlength="1" maxlength="10">
+                            </div>
+                            <!-- Comments form  -->
+                            <div class="form-floating mt-2">
+                              <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea" name="data" minlength="6" maxlength="1000">{{ review.data }}</textarea>
+                              <label for="Textarea">Add Comments</label>
+                            </div>
+                            <!-- Rating and Spoiler fields -->
+                          <div class=" d-flex justify-content-between mt-3">
+                            <div class=".form-check-inline checkarea" >
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="spoiler" id="nospoiler" value="0" {% if review.spoiler %}checked{% endif %}>
+                                <label class="form-check-label" for="nospoiler">
+                                  NO SPOILER
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="spoiler" id="spoiler" value="1" {% if review.spoiler %}checked{% endif %}>
+                                <label class="form-check-label" for="spoiler">
+                                  SPOILER ALERT!!
+                                </label>
+                              </div>
+                              <div class=".form-control">
+                                <div id="textinfo" class="mb-3 mt-3 " style="color: red;"></div> <!-- ส่วนแสดงข้อความเงื่อนไข -->
+                              </div>
+                            </div> 
+                    <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
+                      Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
+                    </button>
+                  </div>
+                </div>
+                </form>
+              </div>
+            </div>
+            {% endif %} 
+            {% endif %}
+          </div>
+           
 
               <!-- Input Comment-->
               {% if user.username %}
               {% if commented %}
               {% else %}
-              <form method="post" action="{% url 'moviereview' %}" id="form-check-input">
+              <form method="post" action="{% url 'moviereview' movie.id %}" id="form-check-input">
               {% csrf_token %}
               <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
                 <div class="card-body p-4">
                   <div class="d-flex flex-start w-100">
                     <img class="rounded-circle shadow-1-strong me-3 profilecomment"
                       src="{{ user.image.url }}" alt="avatar" width="65"
-                      height="65" />
+                      height="65" style="object-fit: cover;" />
                     <div class="w-100">
                        <h5>{{ user.username }}</h5>
                       <p>Give star for this movie</p>
-                      <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
-                        <div class=" stars">
-                          {% for i in '0123456789' %}
-                            <i class="fa-solid fa-star" data-tooltip="{{i}} star" id="star{{i}}" name="score"></i>
-                          {% endfor %}
+
+                        <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
+                          <div class="stars">
+                            {% for i in '0123456789' %}
+                              <!-- Use data-index to store the star's index -->
+                              <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
+                            {% endfor %}
                           </div>
-                          <input type="hidden" id="rating" name="score" value="">
+                          <input type="hidden" id="rating" name="score" value="" minlength="1" maxlength="10">
                         </div>
 
                         <div class="form-floating mt-2">
@@ -375,13 +453,13 @@
                       <div class=" d-flex justify-content-between mt-3">
                         <div class=".form-check-inline checkarea" >
                           <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="nospoiler" value="0">
+                            <input class="form-check-input" type="radio" name="spoiler" id="nospoiler" value="0">
                             <label class="form-check-label" for="nospoiler">
                               NO SPOILER
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="spoiler" value="1">
+                            <input class="form-check-input" type="radio" name="spoiler" id="spoiler" value="1">
                             <label class="form-check-label" for="spoiler">
                               SPOILER ALERT!!
                             </label>
@@ -391,11 +469,10 @@
                           </div>
                         </div>
                         
-                        
-
                         <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
                           Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
                         </button>
+
                       </div>
                     </div>
                     </form>
@@ -413,7 +490,7 @@
                 <h4 class="mb-0">Recent comments</h4>
                   <p class="fw-light">Latest Comments section by users</p>
                 </div>
-
+                
                 {% if commented %}
                 <div class="card-body p-4">
                   <div class="d-flex flex-start">
@@ -427,20 +504,24 @@
                           {{ commented.update_date }}
                           <span class="badge bg-primary">Pending</span>
                         </p>
-                        <!-- Uncomment the below links if you want to provide editing functionality -->
-                         <a href="" class="link-muted"><i class="fas fa-pencil-alt ms-2"></i></a>
-                         <a href="" class="link-muted"><i class="fas fa-redo-alt ms-2"></i></a>
-                         <a href="" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                        <!-- Editing functionality -->
+                        <a href="javascript:void(0);" class="link-muted" onclick="EditForm()">
+                          <i class="fas fa-pencil-alt ms-2"></i>
+                        </a>
                       </div>
-                      <p class="mb-0">
-                        {{ commented.data }}
-                      </p>
+                      <div>
+                        <div class="collapse">
+                        </div>
+                        <p class="mb-0">
+                          {{ commented.data }}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              {% endif %}
-              {% if other_comments %}
-                {% for comment in other_comments %}
+                {% endif %}
+                {% if other_comments %}
+                  {% for comment in other_comments %}
                   <div class="card-body p-4">
                     <div class="d-flex flex-start">
                       <div class="profile-container me-3">
@@ -454,16 +535,26 @@
                             <span class="badge bg-primary">Pending</span>
                           </p>
                           <!-- Uncomment the below links if you want to provide editing functionality -->
-                           <a href="" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                          <a href="" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
                         </div>
+                        {% if comment.spoiler %}
+                        <span class="badge bg-warning text-dark">Warning: Spoilers</span>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" type="button" onclick="Spoiler('commentSpoiler-{{ comment.id }}')">Show Comment</button>
+                        <div id="commentSpoiler-{{ comment.id }}" class="collapse">
+                          <p class="mb-0">
+                            {{ comment.data }}
+                          </p>
+                        </div>
+                        {% else %}
                         <p class="mb-0">
                           {{ comment.data }}
                         </p>
+                        {% endif %}
                       </div>
                     </div>
                   </div>
-                {% endfor %}
-              {% endif %}
+                  {% endfor %}
+                {% endif %}
                 <!-- ---------------------------------------------- -->
               </div>
 
@@ -471,62 +562,89 @@
           </div>
         </div>
     </div>
-    <script src="js/addons/rating.js"></script>
-    <script>
-      var video = document.getElementById("myVideo");
-      // !!!!!!video
-      video.addEventListener("ended", function() {
-        // เมื่อคลิปวิดีโอจบ
-        video.currentTime = 0; // นำเวลากลับไปที่เริ่มต้น
-        video.play(); // เล่นคลิปวิดีโอใหม่
-      });
 
-      const stars = document.querySelectorAll(".stars i");
+
+    <script>
+    function EditForm() {
+        // Example: populate the textarea and rating
+        document.getElementById('Textarea').value = "{{ review.comment }}";
+        document.getElementById('rating').value = "{{ review.rating }}";
+
+
+        var form = document.getElementById('reviewForm');
+        if (form) {
+            form.style.display = 'block'; // This will make the form visible
+        }
+        // Set the star rating visually if using stars
+          var rating = parseInt("{{ review.rating }}");
+          for (var i = 0; i < rating; i++) {
+              document.getElementById('star' + i).classList.add('checked');
+          }
+
+          // Handle the spoiler radio buttons
+          if ("{{ review.spoiler }}" == "1") {
+              document.getElementById('spoiler').checked = true;
+          } else {
+              document.getElementById('nospoiler').checked = true;
+          }
+    }
+
+    console.log(getElementById("2"))
+    // Spoiler
+    function Spoiler(elementId) {
+        var spoilerContent = document.getElementById(elementId);
+        if (spoilerContent) {
+            spoilerContent.classList.toggle('show');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const stars = document.querySelectorAll('.stars i');
       const tooltipText = document.createElement('div');
       tooltipText.classList.add('tooltip');
-      document.body.appendChild(tooltipText);
+    document.body.appendChild(tooltipText);
       const ratingInput = document.getElementById('rating');
-      const Sendsubmit = document.getElementById('Send'); 
+      const SendButton = document.getElementById('Send');
+      const textareaInput = document.getElementById('Textarea');
+      const spoilerInputs = document.querySelectorAll('input[name="spoiler"]');
+      const errorInfo = document.getElementById('Erororinfo');
       const textinfo = document.getElementById('textinfo');
-      // !!!!!! star    
+
+      // Rating
       stars.forEach((star, index) => {
-        star.addEventListener("click", () => {
-          stars.forEach((s, idx) => {
-            if (idx <= index) {
-              s.classList.add("active");
-            } else {
-              s.classList.remove("active");
-            }
-          });
-          const rating = index + 1;
-          tooltipText.innerText = `${rating} star`; // แสดงข้อความจำนวนดาวที่คลิก
-          ratingInput.value = rating; // ตั้งค่าคะแนนในฟิลด์ "rating"
+        star.addEventListener('click', () => {
+          ratingInput.value = index + 1;  // Set the rating
+          highlightStars(index);
         });
 
-        // เพิ่มเหตุการณ์เมื่อนำเมาส์ออกจากดาว
+        star.addEventListener('mouseenter', () => {
+          highlightStars(index);
+        });
+
         star.addEventListener('mouseleave', () => {
-          tooltipText.innerText = ''; // ลบข้อความเมื่อนำเมาส์ออกจากดาว
+          highlightStars(ratingInput.value - 1);  // Reset to the current rating
         });
       });
 
-      // if (rating.value == ""){
-      //   textinfo.innerText = '*5555';
-      //   Sendsubmit.disabled = true;
-      // }
+      function highlightStars(index) {
+        stars.forEach((star, idx) => {
+          if (idx <= index) {
+            star.classList.add('active');
+          } else {
+            star.classList.remove('active');
+          }
+        });
+      }
 
-      const SendButton = document.getElementById('Send');
-      const textareaInput = document.getElementById('Textarea');
-      const spoilerInputs = document.querySelectorAll('input[name="flexRadioDefault"]');
-      const errorInfo = document.getElementById('Erororinfo');
-
-      updateSendButtonStatus(); 
+      // Send button
+      updateSendButtonStatus();
 
       SendButton.addEventListener('click', function(event) {
         if (!ratingInput.value || textareaInput.value.trim().length < 6 || !isSpoilerSelected(spoilerInputs)) {
-          event.preventDefault(); 
+          event.preventDefault();
           errorInfo.innerText = 'กรุณากรอกข้อมูลให้ครบถ้วน';
         } else {
-          errorInfo.innerText = ''; 
+          errorInfo.innerText = '';
         }
       });
 
@@ -552,7 +670,8 @@
       for (const input of spoilerInputs) {
         input.addEventListener('change', updateSendButtonStatus);
       }
+    });
 
-      </script>
+    </script>
   </main>
 {%endblock%}

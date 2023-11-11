@@ -7,6 +7,10 @@ from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
+
+from django.shortcuts import render
+from django.views.decorators.cache import never_cache
+
 # Create your views here.
 # from .forms import PasswordChangeForm
 from django.contrib.auth.models import User
@@ -44,17 +48,36 @@ from adminHome.models import Premium, Premium_list
 
 # from django.db.models import Q
 from django.shortcuts import render
+from django.template import RequestContext
 
+# 404 page
+def handler404(request, *args, **argv):
+    response = render('404.html', {},
+    context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+# search.html 
 def search(request):
     search_query = request.GET.get('q', '')  # รับค่าจากคิวรีพารามิเตอร์ 'q'
+    # search_query = search.replace(" ", "") # ฟังก์ชั่นฟวย
     stars = []  # เริ่มต้นด้วยลิสต์ว่างสำหรับ stars
     movies =[]
     stars_images = [] # เริ่มต้นด้วยลิสต์ว่างสำหรับ star image 
     movies_images = []
     context = {}
+    try:
+        search_year = int(search_query)
+        year_lookup = True
+    except ValueError:
+        year_lookup = False
     if search_query:  # ถ้ามีการค้นหาที่ส่งมา
-        stars = Star.objects.filter(name__icontains=search_query)  # ค้นหาดาราที่มีชื่อตรงกับคำค้น !!(name_icontains = search ) ==== (sql) WHERE headline ILIKE '%ชื่อ%'; 
 
+        if year_lookup:
+            stars = Star.objects.filter(born_date__year=search_year)
+        else:
+            stars = Star.objects.filter(name__icontains=search_query)  # ค้นหาดาราที่มีชื่อตรงกับคำค้น !!(name_icontains = search ) ==== (sql) WHERE headline ILIKE '%ชื่อ%'; 
+        
         for star in stars:
             # Get the main image for each star
             main_image = star.local_star_images.filter(mainstar=True, is_visible=True).first()
@@ -66,12 +89,17 @@ def search(request):
                 'main_image': main_image,
             })
 
-        movies = Movie.objects.filter(name__icontains=search_query) 
+        if year_lookup:
+            movies = Movie.objects.filter(release_date__year=search_year)
+        else:
+            # หาก search_query ไม่ใช่ปี ให้ค้นหาตามชื่อ
+            movies = Movie.objects.filter(name__icontains=search_query)
+        
         for movie in movies:
-            # Get the main local image for each movie
+            # ภาพหลักหรับหนังแต่ละเรื่อง
             main_local_image = movie.local_images_movie.filter(mainmovie=True, is_visible=True).first()
             
-            # Get the main URL image for each movie
+            # ภาพ URL หลักหรับหนังแต่ละเรื่อง
             main_url_image = movie.url_movie_images.filter(mainmovie=True, is_visible=True).first()
 
             # Determine which main image to use
@@ -92,7 +120,6 @@ def search(request):
 
         }# context จะถูกส่งไปยัง template ทุกครั้ง แต่จะมี stars เฉพาะเมื่อมีการค้นหา
     return render(request, 'search.html', context)
-
 
 
 @login_required
@@ -477,9 +504,30 @@ def home(request):
 
 
 #Calender - ปฏิทิน
+@never_cache
 def calender(request):
-    template = loader.get_template('calender.html')
-    return HttpResponse(template.render())
+    # ดึงข้อมูลจาก calendar.py
+    calendar_data = get_calendar_data()
+
+    # ส่งข้อมูลไปยัง template
+    context = {
+        'name_list': calendar_data.get('name_list', []),
+        'actor_list': calendar_data.get('actor_list', []),
+        'image_list': calendar_data.get('image_list', []),
+        'tag_list': calendar_data.get('tag_list', []),
+    }
+    return render(request, 'calender.html', context)
+
+
+def calendar(request):
+    context = {
+        'name_list': name_list,
+        'actor_list': actor_list,
+        'image_list': image_list,
+        'tag_list': tag_list,
+    }
+    return render(request, 'calender.html', context)
+
 
 
 #coin shop - ร้านค้าเหรียญ
@@ -498,6 +546,7 @@ def coinshop(request):
         except Premium.DoesNotExist:
             messages.error(request, "The selected product does not exist.")
             return redirect('coinshop')
+        
     with transaction.atomic():  #Transaction Handling
         if premium_item.expires < date.today():
             messages.error(request, "Sorry. this product offer has expired.")
@@ -545,81 +594,15 @@ def coinshop(request):
         
     return render(request, 'coinshop.html', context)
 
-# def send_email(user, premiums):
-#     subject = 'ขอบคุณที่ทำการซื้อสินค้าที่เรา'
-#     message = f'สวัสดีคุณ {user.username},\n\n'\
-#               f'ขอบคุณที่ทำการซื้อสินค้า "{premium_item.name}" ในราคา {premium_item.price} coins.\n'\
-#               'หากมีข้อสงสัยหรือปัญหาเกี่ยวกับสินค้า กรุณาติดต่อเราได้ที่ Blueeye.or@gmail.com\n\n'\
-#               'ด้วยความนับถือ,\n'\
-#               'ทีมงาน MovieReview'
-#     from_email = 'your-email@gmail.com'
-#     recipient_list = [user.email]
-#     try:
-#         send_mail(subject, message, from_email, recipient_list)
-#     except Exception as e:
-#         # Log the error for debugging purposes
-#         print(f"Error sending email: {e}")
-
-# def coinshop(request):
-#     premiums = Premium.objects.all()
-
-#     if request.user.is_authenticated:
-#         user = request.user
-
-#         if 'buy_premium_id' in request.POST:
-#             premium_id = request.POST.get('buy_premium_id')
-
-#             try:
-#                 cal = Premium.objects.get(pk=premium_id)
-#             except Premium.DoesNotExist:
-#                 messages.error(request, "The selected product does not exist.")
-#                 return redirect('coinshop')
-
-#             if user.coin >= cal.price:
-#                 user.coin -= cal.price
-#                 user.save()
-
-                    # cal.num -= 1
-                    # cal.save()
-
-                    # # Record the purchase
-                    # Premium_list.objects.create(user=user, premium=cal)
-                    # send_email(user, cal)
-                    # messages.success(request, "Purchase successful!")
-#             else:
-#                 messages.error(request, "Not enough coins!")
-
-#         context = {
-#             'username': user.username,
-#             'first_name': user.first_name,
-#             'last_name': user.last_name,
-#             'email': user.email,
-#             'date_of_birth' : user.date_of_birth,
-#             'coin' : user.coin,
-#             'premiums': premiums
-#         }
-        
-#         return render(request, 'coinshop.html', context)
-
-#     else:
-#         return render(request, 'coinshop.html', {'premiums': premiums})
-
-# def send_email(user, premium):
-#     subject = 'ขอบคุณที่ทำการซื้อสินค้าที่เรา'
-#     message = f'สวัสดีคุณ {user.username},\n\n'\
-#               f'ขอบคุณที่ทำการซื้อสินค้า "{premium.name}" ในราคา {premium.price} coins.\n'\
-#               'หากมีข้อสงสัยหรือปัญหาเกี่ยวกับสินค้า กรุณาติดต่อเราได้ที่ Blueeye.or@gmail.com\n\n'\
-#               'ด้วยความนับถือ,\n'\
-#               'ทีมงาน MovieReview'
-#     from_email = 'your-email@gmail.com'
-#     recipient_list = [user.email]
-#     send_mail(subject, message, from_email, recipient_list)
-
 
 def moviereview(request, id):
+    print(request, id)
     movie = get_object_or_404(Movie, pk=id)
     form = CommentForm(request.POST)  # Instantiate the form for POST; None will make it unbound for GET
     user = request.user
+    actors = Star.objects.all()
+    # =review = get_object_or_404(Comment, movie_id=movie, user=user)
+
     top_stars = MovieDetail.objects.filter(movie=movie, is_top=True)
 
     if request.user.is_authenticated :  # Check if the user is authenticated
@@ -629,15 +612,27 @@ def moviereview(request, id):
         commented = None
         other_comments = Comment.objects.filter(movie=movie).exclude() 
     
-    if request.method == 'POST' and form.is_valid():
-        comment = form.save(commit=False)
-        comment.user = request.user
-        comment.movie = movie
-        comment.save()
-        return redirect('moviereview') #movie_id = movie_id
- 
+    comment_id = request.POST.get('comment_id')
+    print(comment_id)
+
+    if request.method == 'POST':
+        if commented:  # ตรวจสอบว่าผู้ใช้แสดงความคิดเห็นแล้วหรือไม่
+            form = CommentForm(request.POST, instance=commented)  # ใช้ CommentForm ผูกกับความคิดเห็นที่
+        else:
+            form = CommentForm(request.POST)     #ไม่มีความคิดเห็นที่มีอยู่ สร้างความคิดเห็นใหม่ 
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.movie = movie
+            comment.save()
+            return redirect('moviereview', id=id)
+
     if request.method == 'GET':
-        video = get_object_or_404(Video, movie=movie)
+        try:
+            video = get_object_or_404(Video, movie=movie)
+        except:
+            video = None
         # Images
         # ดึงรูปภาพจาก LocalImage และ URLImage ที่เป็น mainstar สำหรับ star นี้
         mainmovie_image = None
@@ -654,10 +649,25 @@ def moviereview(request, id):
         url_images = URLImage.objects.filter(is_visible=True, movie=movie, mainmovie=0)
         non_mainmovie_images = list(local_images) + list(url_images)
 
+        stars_with_images = []
+
+        all_stars = Star.objects.all()
+
+        for star in all_stars:
+            # Get the first 'mainstar' local image
+            local_image = LocalImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
+
+            # Get the first 'mainstar' URL image
+            url_image = URLImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
+
+            # Add the star and their image to the list
+            stars_with_images.append((star, local_image or url_image))
         context = {
             'movie': movie,
             'user': user,
+            # 'review':review,
             'topcast':top_stars,
+            'mainstar':stars_with_images,
             'mainmovie_image': mainmovie_image,
             'movie_image': non_mainmovie_images,
             'video': video,
@@ -667,6 +677,7 @@ def moviereview(request, id):
         }
         return render(request, 'moviereview.html', context)
     return render(request, 'moviereview.html')
+
 
 def actor(request, id):
     # search_query = request.GET.get('search', None)

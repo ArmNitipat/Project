@@ -108,6 +108,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',#jazzmin language_chooser
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',# installed whitenoise-6.6.0
 ]
 
 ROOT_URLCONF = 'movieReview.urls'
@@ -214,6 +215,14 @@ STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
 #media file
 MEDIA_URL = 'adminHome/templates/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'adminHome/templates/')
+
+# ต้นเเบบ
+# MEDIA_URL = '/media/'
+# STATIC_URL = '/static/'
+# MEDIA_ROOT = BASE_DIR / "media"
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'static'))]
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 #SMTP Server
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
