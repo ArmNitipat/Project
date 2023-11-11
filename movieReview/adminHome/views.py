@@ -487,19 +487,33 @@ def changepassword(request):
 
 
 from .models import Bannerslide
+
 # Home page
 def home(request):
     slides = Bannerslide.objects.filter(active=True).order_by('order')
+    movies = Movie.objects.all()
+    
+    movie_main_images = []
 
-    if request.user.is_authenticated:
-        template = loader.get_template('home.html')
-        context = {
+    for movie in movies:
+        # ตรวจสอบและกำหนด main_image ในนี่
+        main_local_image = LocalImage.objects.filter(movie=movie, mainmovie=True).first()
+        if main_local_image:
+            movie.main_image = main_local_image
+        else:
+            main_url_image = URLImage.objects.filter(movie=movie, mainmovie=True).first()
+            movie.main_image = main_url_image
+    # if request.user.is_authenticated:
+    print(movie_main_images)
+    context = {
                     'username': request.user.username,
-                    'slides': slides
-                   }
-        return render(request, 'home.html', context)
-    else:
-        return render(request, 'home.html', {'slides': slides})
+                    'slides': slides,
+                    'movies':movies,
+                    'mainmovie_image':movie_main_images,
+              }
+    return render(request, 'home.html', context)
+    # else:
+        # return render(request, 'home.html', {'slides': slides})
 
 
 
@@ -546,7 +560,8 @@ def coinshop(request):
         except Premium.DoesNotExist:
             messages.error(request, "The selected product does not exist.")
             return redirect('coinshop')
-        
+    else:
+        return redirect('login')    
     with transaction.atomic():  #Transaction Handling
         if premium_item.expires < date.today():
             messages.error(request, "Sorry. this product offer has expired.")
@@ -600,9 +615,10 @@ def moviereview(request, id):
     movie = get_object_or_404(Movie, pk=id)
     form = CommentForm(request.POST)  # Instantiate the form for POST; None will make it unbound for GET
     user = request.user
-    actors = Star.objects.all()
+    directors = movie.director.all()
+    writers = movie.writer.all()
     # =review = get_object_or_404(Comment, movie_id=movie, user=user)
-
+    print(writers)
     top_stars = MovieDetail.objects.filter(movie=movie, is_top=True)
 
     if request.user.is_authenticated :  # Check if the user is authenticated
@@ -633,8 +649,8 @@ def moviereview(request, id):
             video = get_object_or_404(Video, movie=movie)
         except:
             video = None
-        # Images
-        # ดึงรูปภาพจาก LocalImage และ URLImage ที่เป็น mainstar สำหรับ star นี้
+
+        # Images main movie
         mainmovie_image = None
         local_mainmovie_image = LocalImage.objects.filter(is_visible=True, mainmovie=True, movie=movie)
         url_mainmovie_image = URLImage.objects.filter(is_visible=True, mainmovie=True, movie=movie)
@@ -644,30 +660,32 @@ def moviereview(request, id):
         elif url_mainmovie_image.exists():
             mainmovie_image = url_mainmovie_image.first()
 
-        # Image
+        # Image movie
         local_images = LocalImage.objects.filter(is_visible=True, movie=movie, mainmovie=0)
         url_images = URLImage.objects.filter(is_visible=True, movie=movie, mainmovie=0)
         non_mainmovie_images = list(local_images) + list(url_images)
 
-        stars_with_images = []
+        # ดึงรูปภาพจาก LocalImage และ URLImage ที่เป็น mainstar สำหรับ star นี้
+        # stars_with_images = []
 
-        all_stars = Star.objects.all()
+        # all_stars = Star.objects.all()
 
-        for star in all_stars:
-            # Get the first 'mainstar' local image
-            local_image = LocalImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
+        # for star in all_stars:
+        #     # Get the first 'mainstar' local image
+        #     local_image = LocalImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
 
-            # Get the first 'mainstar' URL image
-            url_image = URLImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
+        #     # Get the first 'mainstar' URL image
+        #     url_image = URLImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
 
-            # Add the star and their image to the list
-            stars_with_images.append((star, local_image or url_image))
+        #     # Add the star and their image to the list
+        #     stars_with_images.append((star, local_image or url_image))
         context = {
             'movie': movie,
             'user': user,
-            # 'review':review,
+            'directors':directors,
+            'writers':writers,
             'topcast':top_stars,
-            'mainstar':stars_with_images,
+            'mainstar':mainmovie_image,
             'mainmovie_image': mainmovie_image,
             'movie_image': non_mainmovie_images,
             'video': video,

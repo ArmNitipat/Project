@@ -242,19 +242,23 @@
 
                 <!-- ผู้กำกับ -->
                 <div style="display: flex; flex-direction: row; align-items: center;">
-                    <p class="me-3 mb-auto m-0">Director</p>
-                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="director-link">
-                        Arm Nitipat
-                    </a>
+                  <p class="me-3 mb-auto m-0">Director</p>
+                  {% for director in directors %}
+                      <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'moviereview' director.id %}">
+                          {{ director.name }}
+                      </a>
+                  {% endfor %}
                 </div>
                 <hr>
 
                 <!-- คนเขียนบท -->
                 <div style="display: flex; flex-direction: row; align-items: center;">
-                    <p class="me-3 mb-auto m-0">Writers</p>
-                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="writers-link">
-                        Arm Nitipat
-                    </a>
+                  <p class="me-3 mb-auto m-0">Writer</p>
+                  {% for writer in writers %}
+                      <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'moviereview' writer.id %}">
+                          {{ writer.name }}
+                      </a>
+                  {% endfor %}
                 </div>
                 <hr>
 
@@ -295,7 +299,7 @@
 
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-              {% for image in mainstar %}
+              {% for image in image_url %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 {% if image.image %}  <!-- Assuming this is a LocalImage object with an 'image' field. -->
                   <img src="{{ image.image.url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
@@ -305,7 +309,7 @@
               </div>
             {% endfor %}
             </div>
-            {% if movie_image %}
+            {% if image_url %}
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -316,7 +320,7 @@
             </button>
             {% else %}
             {% endif %}
-          </div>
+            </div>
       </div>
       <hr class="bg-dark">
     </div>
@@ -330,13 +334,18 @@
         <div class="row justify-content-center align-items-center">
 
           <!-- รายชื่อนักแสดง -->
-          {% for detail in topcast %}
+
+
+
+          
+
+          <!-- {% for detail in topcast %} -->
           <div class="col-md-5 ms-4 mt-4 text-center" style="display: flex; align-items: center;">
-            {% if topcast.main_image %}
-              {% if topcast.main_image.image %}
-                <img src="{{ topcast.main_image.image.url }}" alt="Main Image of {{ topcast.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
-              {% elif topcast.main_image.image_url %}
-                <img src="{{ topcast.main_image.image_url }}" alt="Main Image of {{ topcast.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
+            {% if detail.main_image %}
+              {% if detail.main_image.image %}
+                <img src="{{ detail.main_image.image.url }}" id="2" alt="Main Image of {{ detail.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
+              {% elif result.main_image.image_url %}
+                <img src="{{ detail.main_image.image_url }}" alt="Main Image of {{ detail.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
               {% endif %}
             {% else %}
               <p>No main image available</p>
@@ -346,8 +355,14 @@
               <p style="font-size: 18px;">{{ detail.character_name }}</p>
             </div>
           </div>
-        {% endfor %}
+        <!-- {% endfor %} -->
         <!--Comment-->
+
+
+
+
+
+
 
         <div class="container my-5 py-5 ">
           <br>
@@ -589,7 +604,7 @@
           }
     }
 
-    console.log(getElementById("2"))
+
     // Spoiler
     function Spoiler(elementId) {
         var spoilerContent = document.getElementById(elementId);

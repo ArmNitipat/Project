@@ -5,6 +5,12 @@ app = Flask(__name__)
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+from django.http import HttpResponse
+from django.template import loader
+from django.views.decorators.cache import never_cache
+from django.shortcuts import render
+from .calendar import get_calendar_data
+
 
 def get_calendar_data():
     source = requests.get('https://www.boxofficemojo.com/calendar/').text
@@ -53,3 +59,16 @@ def get_calendar_data():
         'image_list': image_list,
         'tag_list': tag_list,
     }
+@never_cache
+def calender(request):
+    # ดึงข้อมูลจาก calendar.py
+    calendar_data = get_calendar_data()
+
+    # ส่งข้อมูลไปยัง template
+    context = {
+        'name_list': calendar_data.get('name_list', []),
+        'actor_list': calendar_data.get('actor_list', []),
+        'image_list': calendar_data.get('image_list', []),
+        'tag_list': calendar_data.get('tag_list', []),
+    }
+    return render(request, 'calender.html', context)
