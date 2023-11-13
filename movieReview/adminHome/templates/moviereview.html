@@ -265,7 +265,7 @@
                 <!-- นักแสดง -->
                 <div style="display: flex; flex-direction: row; align-items: center;">
                     <p class="me-3 mb-auto m-0">Stars</p>
-                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star1-link">
+                    <!-- <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star1-link">
                         Arm Nitipat
                     </a>
                     <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star2-link">
@@ -273,7 +273,12 @@
                     </a>
                     <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star3-link">
                         Koekae Smartdog
+                    </a> -->
+                    {% for detail in topcast %}
+                      <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'actor' detail.star.id %}">
+                        {{ detail.star.name }}
                     </a>
+                    {% endfor %}
                 </div>
                 <hr>
 
@@ -299,7 +304,7 @@
 
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-              {% for image in image_url %}
+              {% for image in movie_image %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 {% if image.image %}  <!-- Assuming this is a LocalImage object with an 'image' field. -->
                   <img src="{{ image.image.url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
@@ -309,7 +314,7 @@
               </div>
             {% endfor %}
             </div>
-            {% if image_url %}
+            {% if movie_image %}
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -655,7 +660,7 @@
       updateSendButtonStatus();
 
       SendButton.addEventListener('click', function(event) {
-        if (!ratingInput.value || textareaInput.value.trim().length < 6 || !isSpoilerSelected(spoilerInputs)) {
+        if (!ratingInput.value || textareaInput.value.trim().length < 1 || !isSpoilerSelected(spoilerInputs)) {
           event.preventDefault();
           errorInfo.innerText = 'กรุณากรอกข้อมูลให้ครบถ้วน';
         } else {

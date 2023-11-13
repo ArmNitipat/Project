@@ -153,7 +153,7 @@ DATABASES = {
         'NAME': 'dbmovie',
         'USER': 'admin02',
         'PASSWORD': 'mypassword',
-        'HOST': 'localhost',  # หรือ IP ที่ MySQL Server ทำงานอยู่
+        'HOST': '25.48.97.110',  # หรือ IP ที่ MySQL Server ทำงานอยู่
         'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
     }
 }
