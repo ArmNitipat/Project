@@ -1,0 +1,50 @@
+:root {
+  /* Light theme colors */
+  --background-color: #fff;
+  --text-color: #333;
+  --primary-color: #007bff;
+  --secondary-color: #323232;
+  --card-background-color: #fff;
+  /* ... other light theme colors ... */
+}
+
+.dark-theme {
+  /* Dark theme colors  #212529*/
+  --background-color: #000;
+  --text-color: #fff;
+  --primary-color: #0d6efd;
+  --secondary-color: #fff;
+  --card-background-color: #323232;
+  /* ... other dark theme colors ... */
+}
+/* transition: background-color 0.3s, color 0.3s; Smooth transition for theme change */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  
+}
+.carousel-item, .album{
+  background-color: var(--secondary-color);
+}
+/* ส่วน หนังที่ show ในหน้า home */
+/* ------------------------------------------------------------------------- */
+.div {
+  background-color: var(--background-color); 
+}
+
+.col-md-3 .card-title,
+.col-md-3 .card-body span{
+  color: rgb(0, 0, 0);
+}
+.dark-theme .col-md-3 .card-title,
+.dark-theme .col-md-3 .card-body span{
+  color: rgb(255, 255, 255);
+}
+/* ------------------------------------------------------------------------- */
+
+/* ส่วนร้านขายของ */
+.card {
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for theme change */
+}

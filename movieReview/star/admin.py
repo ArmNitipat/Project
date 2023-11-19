@@ -87,6 +87,7 @@ class StarAdmin(admin.ModelAdmin):
 class ChildrenAdmin(admin.ModelAdmin):
     search_fields = ['child_name__name', 'star__name']
     list_display = ['star', 'child_name']
+    
 # Register your models here
 admin.site.register(Star, StarAdmin)
 admin.site.register(Official_sites)

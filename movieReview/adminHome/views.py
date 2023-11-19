@@ -50,6 +50,10 @@ from adminHome.models import Premium, Premium_list
 from django.shortcuts import render
 from django.template import RequestContext
 
+def test(request):
+    template = loader.get_template('test.html')
+    return HttpResponse(template.render())
+
 # 404 page
 def handler404(request, *args, **argv):
     response = render('404.html', {},
@@ -610,16 +614,18 @@ def coinshop(request):
     return render(request, 'coinshop.html', context)
 
 
+from django.db.models import Avg
 def moviereview(request, id):
     print(request, id)
     movie = get_object_or_404(Movie, pk=id)
     form = CommentForm(request.POST)  # Instantiate the form for POST; None will make it unbound for GET
-    user = request.user
+    user = request.user # User
     directors = movie.director.all()
     writers = movie.writer.all()
     # =review = get_object_or_404(Comment, movie_id=movie, user=user)
     print(writers)
     top_stars = MovieDetail.objects.filter(movie=movie, is_top=True)
+    
 
     if request.user.is_authenticated :  # Check if the user is authenticated
         commented = Comment.objects.filter(movie=movie, user=user).first()
@@ -630,6 +636,17 @@ def moviereview(request, id):
     
     comment_id = request.POST.get('comment_id')
     print(comment_id)
+    # Aggregate the total score for the movie
+    avg_score_result = Comment.objects.filter(movie=movie).aggregate(average_score=Avg('score'))
+    avg_score = avg_score_result.get('average_score',0)
+
+    if avg_score is not None:
+        avg_score = round(avg_score, 1)
+    else:
+        avg_score = 0
+    # If there are no comments yet, average_score will be None
+    # if average_score is None:
+    #     average_score = 0
 
     if request.method == 'POST':
         if commented:  # ตรวจสอบว่าผู้ใช้แสดงความคิดเห็นแล้วหรือไม่
@@ -682,6 +699,7 @@ def moviereview(request, id):
         context = {
             'movie': movie,
             'user': user,
+            'scoreAvg':avg_score,
             'directors':directors,
             'writers':writers,
             'topcast':top_stars,

@@ -47,6 +47,7 @@ urlpatterns = [
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('my_custom_view/', views.my_custom_view, name='my_custom_view')
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    path('test/', views.test, name="test"),
 ]    
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

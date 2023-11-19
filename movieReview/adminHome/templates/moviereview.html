@@ -42,15 +42,11 @@
 
     /* Star rating */
 
-
     /* .rating-box{
       position:relative;
       padding: 25px 50px 35px;
 
     }
-
-
-
     .stars i {
       color: aliceblue;
       font-size: 35px;
@@ -151,13 +147,17 @@
 
             <!--คะแนนจากเว็บต่างๆ-->
             <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
+              <img src="" style="width: 100px; height: 60px;">
+              <h5>{{ scoreAvg }}/10</h5>
+          </div>
+            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
                 <img src="https://cdn-icons-png.flaticon.com/512/5977/5977585.png" style="width: 100px; height: 60px;">
                 <h5>8.1/10</h5>
             </div>
-            <div class="card mt-3" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
+            <!-- <div class="card mt-3" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
                 <img class="mt-1" src="https://cdn.cookielaw.org/logos/17e5cb00-ad90-47f5-a58d-77597d9d2c16/7e979733-6841-4fce-9182-515fac69187f/30d6331f-cc9b-43d7-a9d5-c035c834a1f9/rottentomatoes_logo_40.png" style="width: 100px; height: 40px;">
                 <h5>8.1/10</h5>
-            </div>
+            </div> -->
             <hr>
 
             <!--Tagของภาพยนตร์-->
@@ -521,14 +521,15 @@
                       <h6 class="fw-bold mb-1">{{ commented.user.username }}</h6>
                       <div class="d-flex align-items-center mb-3">
                         <p class="mb-0">
-                          {{ commented.update_date }}
-                          <span class="badge bg-primary">Pending</span>
+                          {{ commented.update_date|date:"d,m,Y, H:i a" }}
+                          <!--   -->
                         </p>
                         <!-- Editing functionality -->
                         <a href="javascript:void(0);" class="link-muted" onclick="EditForm()">
                           <i class="fas fa-pencil-alt ms-2"></i>
                         </a>
                       </div>
+                        <i class="fas fa-star" style="color: rgb(255, 255, 0);"></i> {{ commented.score }}/10
                       <div>
                         <div class="collapse">
                         </div>
@@ -551,11 +552,13 @@
                         <h6 class="fw-bold mb-1">{{ comment.user.username }}</h6>
                         <div class="d-flex align-items-center mb-3">
                           <p class="mb-0">
-                            {{ comment.update_date }}
-                            <span class="badge bg-primary">Pending</span>
+                            {{ comment.update_date|date:"d,m,Y, H:i a" }}
                           </p>
                           <!-- Uncomment the below links if you want to provide editing functionality -->
                           <a href="" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
+                        </div>
+                        <div>
+                          <i class="fas fa-star" style="color: rgb(255, 255, 0);"></i> {{ comment.score }}/10
                         </div>
                         {% if comment.spoiler %}
                         <span class="badge bg-warning text-dark">Warning: Spoilers</span>
