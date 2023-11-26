@@ -22,9 +22,18 @@
 
     }
 
-    @media (min-width:576px){
+    @media (min-width:700px){
       .card{
         width: 100%;
+      }
+      
+
+    }
+
+    @media (max-width: 700px) {
+      .cardpro.space {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
       }
     }
     .card{
@@ -42,8 +51,21 @@
     .starpro{
       width: 300px;
       height: 400px;
-
+      margin: 0;
+      align-items: center;
+      justify-content: center;
     }
+    .cardpro.space {
+      margin-left: 1rem !important;
+      margin-right: 1rem !important;
+    }
+    /* div{
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      font: inherit;
+      vertical-align: baseline;
+    } */
     .profile-w{
       display: flex;
       align-items: center;
@@ -91,45 +113,44 @@
         z-index: 1050;
     }
 
-
     </style>
   
-    <main class="container bg-dark text-white">
-      <div class="p-4 p-md-5 mb-4 text-white rounded " style="background-color: rgba(0, 0, 0, 0.604);">
+    <main class="container text-white" style="background-color: #9999994b;">
+      <div class="p-4 p-md-5 mb-4 text-white rounded "> <!--style="background-color: rgba(0, 0, 0, 0.604);" -->
         <div class="row">
             <div class="col-md-12 px-0">
               <!--ชื่อนักแสดง-->
-                <h1 class="">{{ star.name }}</h1>
+                <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 48px;">{{ star.name }}</h1>
               </div>
         </div>
         <div class="row ms-2 mb-1">
             <div class="col-md-12 px-0" style="font-size: 14px; display: flex; flex-direction: row; align-items: center; color: rgba(255, 255, 255, 0.497);">
                 <!--ตำแหน่งนักแสดง-->
                 {% for job_name in jobs_list %}
-                <p style="margin: 0 10px 0 0;">
+                <p style="margin: 0 10px 0 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px;" >
                     {{ job_name }}
                 </p>
                 {% endfor %}
             </div>
         </div>
-        <div class="card mb-3 bg-dark text-light " style="max-width: 75vw; border-radius: 10px;">
+        <div class="card mb-auto " style="max-width: 75vw; border-radius: 10px;">
           <div class="row d-flex flex-md-row">
-              <div class="col-md-3 mt-3 mb-3 ms-3 d-flex flex-md-column profile-w">
+              <div class="cardpro space col-md-3  mt-3 mb-3 d-flex flex-md-column profile-w">
                   <!-- <img src="" style="width: 300px; height: 400px; object-fit: cover; border-radius: 10px;"> -->
                   <!-- แสดง LocalImage -->
                   <!-- Check if the image is from LocalImage or URLImage -->
                   {% if mainstar_image %}
                     {% if mainstar_image.image %}
-                        <img class="starpro" src="{{ mainstar_image.image.url }}" alt="{{ star.name }}" style="object-fit: cover; border-radius: 8px;">
+                        <img class="starpro" src="{{ mainstar_image.image.url }}" alt="{{ star.name }}" style="object-fit: cover; border-radius: 8px; width: auto; height: auto;">
                     {% elif mainstar_image.image_url %}
-                        <img class="starpro" src="{{ mainstar_image.image_url }}" alt="{{ star.name }}" style="object-fit: cover; border-radius: 8px;">
+                        <img class="starpro" src="{{ mainstar_image.image_url }}" alt="{{ star.name }}" style="object-fit: cover; border-radius: 8px; height: -100;">
                     {% endif %}
                   {% endif %}
               </div>
-              <div class="col-md-8 mt-3 d-flex flex-md-column">
+              <div class="col-md-8 mt d-flex flex-md-column">
                   <div class="card-body">
                       <!--ชื่อนักแสดง-->
-                      <h4 class="card-title">{{ star.name }}</h4>
+                      <!-- <h4 class="card-title">{{ star.name }}</h4> -->
                       <hr>
                       <!--ประวัตินักแสดง-->
                       <p class="card-text mt-3"> {{ star.history }}
@@ -139,21 +160,20 @@
                       <p class="card-text"><small class="text-muted">{{ star.update_time }}</small></p>
                       <hr>
                       <!--วันเกิดของนักแสดง และ เมืองเกิดนักแสดง-->
-                      <p class="card-text mt-3">Born <small class="text-muted">{{ star.born_date }}, {{ star.born_location }}</small></p>
+                      <!-- <p class="card-text mt-3">Born <small class="text-muted">{{ star.born_date }}, {{ star.born_location }}</small></p> -->
                       <!--ส่วนสูงของนักแสดง-->
                       <!-- {% load custom_filters %} -->
-                      <p class="card-text mt-1">Height <small class="text-muted"> {{ height }}″ ({{ star.height }}m)
-                      </small></p>
+                      <!-- <p class="card-text mt-1">Height <small class="text-muted"> {{ height }}″ ({{ star.height }}m) -->
+                      <!-- </small></p> -->
                       <!--Official Site-->
-                      <p class="card-text mt-1 ">
-                        <span>Official site</span>
-                        <div class="social-links d-flex"> 
-                          {% for site in official_list %}
-                            <p>
-                                <!-- {{ site.name_site }}: <a href="{{ site.Official_sites }}" target="_blank">{{ site.Official_sites }}</a> -->
-                                <a href="{{ site.Official_sites }}" class="text-decoration-none" style="color: rgb(114, 117, 253);" target="_blank">{{ site.name_site }} <svg style="height: 20px; width: 20px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V14M11 13L20 4M20 4V9M20 4H15" stroke="#7654f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a>
-                            </p>
-                          {% endfor %}
+                      <!-- <p class="card-text mt-1 "> -->
+                        <!-- <span>Official site</span> -->
+                        <!-- <div class="social-links d-flex">  -->
+                          <!-- {% for site in official_list %} -->
+                            <!-- <p> -->
+                                <!-- <a href="{{ site.Official_sites }}" class="text-decoration-none" style="color: rgb(114, 117, 253);" target="_blank">{{ site.name_site }} <svg style="height: 20px; width: 20px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 4h4C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V14M11 13L20 4M20 4V9M20 4H15" stroke="#7654f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a> -->
+                            <!-- </p> -->
+                          <!-- {% endfor %} -->
                         </div>
                       </p>
                   </div>
@@ -171,7 +191,7 @@
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier">
           <g id="Interface / Line_Xl">
-            <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path id="Vector" d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
           </g>
         </g>
       </svg>Photo :</h2>
@@ -182,7 +202,7 @@
           {% for image in non_mainstar_images %}
               {% if forloop.counter0|divisibleby:4 %}
                   <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                      <div class="card-wrapper" style="display: flex;">
+                      <div class="card-wrapper" style="display: flex; background-color: #212121;">
               {% endif %}
               <div class="card" style="width: 18rem;">
                   <div class="image-wrapper">
@@ -197,13 +217,13 @@
       </div>
       
       <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                  <div class="modal-body">
-                      <img style="height: 100%; width: 100%;" id="modalImage" src="" class="img-fluid" alt="...">
-                  </div>
-              </div>
+        <div class="modal-dialog modal-dialog-centered" id="customModalDialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <img style="height: 80vh; width: 100%; object-fit: contain;" id="modalImage" src="" class="img-fluid" alt="...">
+            </div>
           </div>
+        </div>
       </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -240,26 +260,19 @@
             </li>
           </ul>
           <!--Tab Personaldetail_MovieActor_-->
-          <div class="tab-content bg-dark" id="myTabContent">
-            <div class="tab-pane fade show active" id="Personal_Detail" role="tabpanel" aria-labelledby="Personal_Detail-tab">
-              <div class=" mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
-                <h2 class="mt-3 justify-content-center text-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                  <g id="SVGRepo_iconCarrier">
-                    <g id="Interface / Line_Xl">
-                      <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </g>
-                  </g>
-                </svg>Personal detail<svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                  <g id="SVGRepo_iconCarrier">
-                    <g id="Interface / Line_Xl">
-                      <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </g>
-                  </g>
-                </svg></h2>
+          <div class="tab-content" id="myTabContent">
+            <div class="card tab-pane fade show active" id="Personal_Detail" role="tabpanel" aria-labelledby="Personal_Detail-tab">
+              <div class=" mt-3" style=" border-radius: 15px;">
+                <h2 class="mt-3 justify-content-center text-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                    <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                  </svg> 
+                  Personal detail 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                    <path d="M12 21V3" stroke="#00ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                  </svg>
+                  
+                </h2>
                 <div class="row ">
                   <!--ชื่อที่ใช้เรียก-->
                   <div class="ms-5 col-md-11">
@@ -267,11 +280,11 @@
                     <div class="d-flex align-items-center">
                       
                       <div class="col-2">
-                        <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Alternative names</h6>
+                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Alternative names</h4>
                       </div>
                       <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
                         {% for name in alternative_names %}
-                        <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">{{ name }}</p>
+                        <p class="ms-3">{{ name }}</p>
                         {% endfor %}
                       </div>
                     </div>
@@ -282,10 +295,10 @@
                     <hr>
                     <div class="d-flex align-items-center">
                       <div class="col-2">
-                        <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Height</h6>
+                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Height</h4>
                       </div>
                       <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
-                        <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);"> {{ height }}″ ({{ star.height }} m)</p>
+                        <p class="ms-3"> {{ height }}″ ({{ star.height }} m)</p>
                       </div>
                     </div>
                   </div>
@@ -296,11 +309,11 @@
                     <hr>
                     <div class="d-flex align-items-center">
                       <div class="col-2">
-                        <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Born</h6>
+                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Born</h4>
                       </div>
                       <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
-                        <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">{{ star.born_date }}</p>
-                        <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">{{ star.born_location }}</p>
+                        <p class="ms-3">{{ star.born_date }}</p>
+                        <p class="ms-3">{{ star.born_location }}</p>
                       </div>
                     </div>
                   </div>
@@ -311,7 +324,7 @@
                     <hr>
                     <div class="d-flex align-items-center">
                       <div class="col-2">
-                        <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Spouses</h6>
+                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Spouses</h4>
                       </div>
                       <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                         <div style="display: flex; flex-direction: column;">
@@ -327,19 +340,19 @@
                       </div>
                     </div>
                   </div>
-                </div>
+
         
                 <!--ลูก-->
                 <div class="ms-5 col-md-11">
                   <hr>
                   <div class="d-flex align-items-center">
                     <div class="col-2">
-                      <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Children</h6>
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Children</h4>
                     </div>
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                       <div style="display: flex; flex-direction: column;">
                         {% for children in children %}
-                        <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">{{ children }}</span> </p>
+                        <p><span style="color: rgb(114, 117, 253);">{{ children }}</span> </p>
                         {% endfor %}
                         <!-- <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Indio Falconer Downey</span> </p> -->
                         <!-- <p style="color: rgba(255, 255, 255, 0.64);">Avri Roel Downey</p>
@@ -354,7 +367,7 @@
                   <hr>
                   <div class="d-flex align-items-center">
                     <div class="col-2">
-                      <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Parents</h6>
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Parents</h4>
                     </div>
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                       <div style="display: flex; flex-direction: column;">
@@ -374,16 +387,16 @@
                   <hr>
                   <div class="d-flex align-items-center">
                     <div class="col-2">
-                      <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Relatives</h6>
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Relatives</h4>
                     </div>
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                       <div style="display: flex; flex-direction: column;">
                         {% if relatives %}
                           {% for relative in relatives %}
-                          <a style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">{{ relative.relative_name }}</span> (Sibling) </a>
+                          <a><span style="color: rgb(114, 117, 253);">{{ relative.relative_name }}</span> (Sibling) </a>
                           {% endfor %}
                           {% else %}
-                          <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">-</p>
+                          <p class="ms-3">-</p>
                         {% endif %}
                       </div>
                     </div>
@@ -395,15 +408,15 @@
                   <hr>
                   <div class="d-flex align-items-center">
                     <div class="col-2">
-                      <h6 class="me-3 mb-auto m-0" style="font-weight: bold;">Other works</h6>
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Other works</h4>
                     </div>
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                     {% if other_works %}
                       {% for other_works in other_works %}
-                        <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">{{ other_works.work_description }}</p>
+                        <p class="ms-3">{{ other_works.work_description }}</p>
                       {% endfor %}
                       {% else %}
-                        <p class="ms-3" style="color: rgba(255, 255, 255, 0.64);">-</p>
+                        <p class="ms-3">-</p>
                     {% endif %}
                     </div>
                   </div>
@@ -411,32 +424,25 @@
                 </div>
               </div>
             </div>
+            </div>
 
 
             <!--Actor-->
 
 
             <div class="tab-pane fade" id="Movie_Actor" role="tabpanel" aria-labelledby="Movie_Actor-tab">
-              <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
+              <div class="mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
                 <div class="row mb-2">
         
-                  <h2 class="mt-3 justify-content-center text-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g id="Interface / Line_Xl">
-                        <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </g>
-                    </g>
-                  </svg>Actor<svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g id="Interface / Line_Xl">
-                        <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </g>
-                    </g>
-                  </svg></h2>
+                  <h2 class="mt-3 justify-content-center text-center align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                    </svg>
+                    Actor
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                    </svg>
+                  </h2>
                 
                   <div class="row text-dark mt-2 mb-2" style="border-radius: 10px;">
                     <hr>
@@ -573,23 +579,15 @@
             <div class="tab-pane fade text-dark" id="Producer" role="tabpanel" aria-labelledby="Producer-tab">
               <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
                 <div class="row mb-2">
-                  <h2 class="text-light mt-3 justify-content-center text-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g id="Interface / Line_Xl">
-                        <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </g>
-                    </g>
-                  </svg>Producer<svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g id="Interface / Line_Xl">
-                        <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </g>
-                    </g>
-                  </svg></h2>
+                  <h2 class="text-light mt-3 justify-content-center text-center align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                    </svg>
+                    Producer
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                    </svg>
+                  </h2>
                   <div class="col-md-6">
                     <div class="card mt-2" style="width: 90%;">
                       <div class="row">
@@ -715,23 +713,15 @@
             <div class="tab-pane fade" id="Writer" role="tabpanel" aria-labelledby="Writer-tab">
               <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
                 <div class="row mb-2">
-                  <h2 class="text-light mt-3 justify-content-center text-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g id="Interface / Line_Xl">
-                        <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </g>
-                    </g>
-                  </svg>Writer<svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g id="Interface / Line_Xl">
-                        <path id="Vector" d="M12 21V3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </g>
-                    </g>
-                  </svg></h2>
+                  <h2 class="text-light mt-3 justify-content-center text-center align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                    </svg>
+                    Writer
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                    </svg>
+                  </h2>
                   <div class="col-md-6">
                     <div class="card mt-2" style="width: 90%;">
                       <div class="row text-dark">
@@ -781,13 +771,23 @@
         var imageUrl = $(image).data('image-url');
         modal.find('#modalImage').attr('src', imageUrl);
     });
-      </script>
-    </main>
-    
-    
-    
-{%endblock%}
 
-    
-        
-      
+    $(document).ready(function () {
+    // เมื่อ Modal แสดง
+    $('#imageModal').on('show.bs.modal', function (e) {
+      // ดึงขนาดของรูปภาพ
+      var imageWidth = $('#modalImage').prop('naturalWidth');
+      var imageHeight = $('#modalImage').prop('naturalHeight');
+
+      // ปรับขนาดของ Modal
+      $('#customModalDialog').css({
+        'max-width': imageWidth + 'px',
+        'width': 'auto',
+        'max-height': imageHeight + 'px',
+        'height': 'auto'
+      });
+    });
+  });
+      </script>
+</main>
+{%endblock%}

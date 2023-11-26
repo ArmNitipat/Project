@@ -6,6 +6,11 @@
   --secondary-color: #323232;
   --card-background-color: #fff;
   /* ... other light theme colors ... */
+  --background-color-light: #fff; /* White background */
+  --text-color-light: #000; /* Black text */
+  --card-background-color-light: #fff; /* Light gray for cards */
+  --svg-stroke-color-light: #000000; /* White for light theme */
+  --svg-fill-color-light: #000000; /* Red for light theme */
 }
 
 .dark-theme {
@@ -16,12 +21,32 @@
   --secondary-color: #fff;
   --card-background-color: #323232;
   /* ... other dark theme colors ... */
+  --background-color-dark: #000; /* Dark gray background */
+  --text-color-dark: #fff; /* White text */
+  --card-background-color-dark: #1c1e21; /* Darker gray for cards */
+  --svg-stroke-color-dark: #ffffff; /* Black for dark theme */
+  --svg-fill-color-dark: #ffffff; /* White for dark theme */
 }
 /* transition: background-color 0.3s, color 0.3s; Smooth transition for theme change */
 body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  
+  background-color: var(--background-color-light);
+  color: var(--text-color-light);
+}
+
+.dark-theme body {
+  background-color: var(--background-color-dark);
+  color: var(--text-color-dark);
+}
+
+.card, .bg-image, .card-body , .col-md-3 {
+  background-color: var(--card-background-color-light);
+  transition: background-color 0.3s; /* Smooth transition for theme change */
+  color: rgb(0, 0, 0);
+}
+
+.dark-theme .card, .dark-theme .bg-image, .dark-theme .card-body, .col-md-3 {
+  background-color: var(--card-background-color-dark);
+  color: rgb(228, 230, 235);
 }
 .carousel-item, .album{
   background-color: var(--secondary-color);
@@ -32,19 +57,40 @@ body {
   background-color: var(--background-color); 
 }
 
+
 .col-md-3 .card-title,
 .col-md-3 .card-body span{
   color: rgb(0, 0, 0);
 }
-.dark-theme .col-md-3 .card-title,
-.dark-theme .col-md-3 .card-body span{
-  color: rgb(255, 255, 255);
+.dark-theme .card-title,
+.dark-theme  .card-body span{
+  color: rgb(228, 230, 235);
+}
+.col-md-3 {
+  background-color: var(--background-color-dark);
+  color: var(--text-color-light);
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for theme change */
+}
+
+.dark-theme .col-md-3 {
+  background-color: var(--background-color-light);
+  color: var(--text-color-dark);
 }
 /* ------------------------------------------------------------------------- */
 
 /* ส่วนร้านขายของ */
-.card {
-  background-color: var(--card-background-color);
-  color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition for theme change */
+/* ------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------------------- */
+
+/* ส่วนของ actor */
+/* ------------------------------------------------------------------------- */
+/* svg path {
+  stroke: var(--svg-stroke-color-light);
+  fill: var(--svg-fill-color-light);
 }
+.dark-theme svg path {
+  stroke: var(--svg-stroke-color-dark);
+  fill: var(--svg-fill-color-dark);
+} */
+  /* ------------------------------------------------------------------------- */

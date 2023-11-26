@@ -18,7 +18,7 @@
       />
     </div>
     <div class="card bg-white">
-      <div class="card-body p-4 p-lg-5 text-black">
+      <div class="card-body p-4 p-lg-5" style="color: #333;">
 
           <form method="post" action="/login/" id="formcontan">
             {% csrf_token %}
@@ -33,9 +33,9 @@
           </h5>
 
           <div class="form-outline mb-4">
-            <label class="form-label" for="id_username" style="margin-left: 0px"
-              >Username</label
-            >
+            <label class="form-label" for="id_username" style="margin-left: 0px;"
+              >Username
+            </label>
             <input 
             type="text" 
             name="username" 

@@ -50,6 +50,7 @@
   .positive{
     color: rgb(29, 191, 56);
   }
+  
 </style>
 <div style="background-color: #000000;">
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="display: block;margin-left: auto; margin-right: auto;width: 100vh;">
@@ -104,15 +105,16 @@
   <hr style="width: 100%; margin: 0 auto;">
   <div class="container">
   </div>
-    <div class="album py-5  text-dark overlay" style="background-color: #000000;">
+
+    <div class="album py-5 overlay" style="background-color: #000;">
       <div class="container">
         <div class="row">
           
           {% for movie in movies %}
-          <div class="col-md-3">
-            <a class="img-wrapper" href="{% url 'moviereview' movie.id %}">
-              <div class="card mb-4 box-shadow">
-                <a class="img-wrapper" href="{% url 'moviereview' movie.id %}">
+          <div class="col-md-3" style="background-color: #000;">
+            <a class="" href="{% url 'moviereview' movie.id %}">
+              <div class="card mb-4">
+                <a class="" href="{% url 'moviereview' movie.id %}">
                   {% if movie.main_image %}
                     {% if movie.main_image.image %} 
                     <img  class="card-img-top" src="{{ movie.main_image.image.url }}" alt="รูปภาพหลักของ {{ movie.name }}">
