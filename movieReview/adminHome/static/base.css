@@ -2,7 +2,7 @@
   /* Light theme colors */
   --background-color: #fff;
   --text-color: #333;
-  --primary-color: #007bff;
+  --primary-color: hsl(211, 100%, 50%);
   --secondary-color: #323232;
   --card-background-color: #fff;
   /* ... other light theme colors ... */
@@ -15,7 +15,7 @@
 
 .dark-theme {
   /* Dark theme colors  #212529*/
-  --background-color: #000;
+  --background-color: #f8dada;
   --text-color: #fff;
   --primary-color: #0d6efd;
   --secondary-color: #fff;
@@ -37,16 +37,21 @@ body {
   background-color: var(--background-color-dark);
   color: var(--text-color-dark);
 }
-
-.card, .bg-image, .card-body , .col-md-3 {
+.card {
+  color: rgb(228, 230, 235);
+}
+.dark-theme .card{
+  color: rgb(228, 230, 235);
+}
+.bg-image, .card-body , .col-md-3 {
   background-color: var(--card-background-color-light);
-  transition: background-color 0.3s; /* Smooth transition for theme change */
   color: rgb(0, 0, 0);
+  transition: background-color 0.3s; /* Smooth transition for theme change */
 }
 
-.dark-theme .card, .dark-theme .bg-image, .dark-theme .card-body, .col-md-3 {
+.dark-theme .bg-image, .dark-theme .card-body, .col-md-3 {
   background-color: var(--card-background-color-dark);
-  color: rgb(228, 230, 235);
+  color: rgb(255, 255, 255);
 }
 .carousel-item, .album{
   background-color: var(--secondary-color);
@@ -56,7 +61,6 @@ body {
 .div {
   background-color: var(--background-color); 
 }
-
 
 .col-md-3 .card-title,
 .col-md-3 .card-body span{
@@ -85,12 +89,12 @@ body {
 
 /* ส่วนของ actor */
 /* ------------------------------------------------------------------------- */
-/* svg path {
-  stroke: var(--svg-stroke-color-light);
-  fill: var(--svg-fill-color-light);
+svg path {
+  stroke: #FFD700;
+  fill: #FFD700;
 }
 .dark-theme svg path {
-  stroke: var(--svg-stroke-color-dark);
-  fill: var(--svg-fill-color-dark);
-} */
+  stroke: #FFD700;
+  fill: #FFD700;
+}
   /* ------------------------------------------------------------------------- */

@@ -83,7 +83,7 @@ class Comment(models.Model):
     data = models.TextField()
     score = models.IntegerField(default=1,validators=[MaxValueValidator(10),MinValueValidator(1)])
     spoiler = models.BooleanField()
-    like = models.IntegerField(default=0,auto_created=0)
+    # like = models.IntegerField(default=0,auto_created=0)
     update_date = models.DateTimeField(auto_now=True,verbose_name="Date")
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -96,7 +96,17 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.movie.name}"
-    
+
+class Like(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'comment')
+
+    def __str__(self):
+        return f"Like by {self.user.username} on {self.comment.id}"
+
 from django.db.models.deletion import ProtectedError   
 class Report(models.Model):
     STATUS = (

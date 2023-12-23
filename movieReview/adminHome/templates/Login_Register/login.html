@@ -1,5 +1,4 @@
 {% extends "base1.html" %} {%block title %}
-<link rel="stylelogin" href="../static/css/login_register.css" />
 <title>Login</title>
 {% endblock %} {%block content%}
 <div>
@@ -18,13 +17,13 @@
       />
     </div>
     <div class="card bg-white">
-      <div class="card-body p-4 p-lg-5" style="color: #333;">
+      <div class="card-body p-4 p-lg-5">
 
           <form method="post" action="/login/" id="formcontan">
             {% csrf_token %}
             {{ form.as_p }}
           <div class="d-flex align-items-center mb-3 pb-1">
-            <i class="fas fa-cubes fa-2x me-3" ></i>
+            <i class="fas fa-cubes fa-2x me-3"></i>
             <span  class="h1 fw-bold mb-0 form box">MovieReview</span>
           </div>
 
@@ -77,18 +76,17 @@
           </div>
 
           <div class="pt-1 mb-4">
-
-              <button class="btn btn-dark btn-lg btn-block" type="submit">
+              <button class="btn btn-secondary btn-lg btn-block" type="submit">
                 Login
               </button>
           </div>
 
-          <a class="small text-muted" href="/credentials">Forgot password?</a>
-          <p class="mb-5 pb-lg-2" style="color: #393f81">
+          <a class="small" href="/credentials" style="color: #0766AD;">Forgot password?</a>
+          <p class="mb-5 pb-lg-2">
             Don't have an account?
-            <a href="/register" style="color: #393f81">Register here</a>
+            <a href="/register" style="color: #0766AD">Register here</a>
           </p>
-          <a href="#!" class="small text-muted">About us</a>
+          <a href="#!" class="small"style="color: #0766AD;">About us</a>
         </form>
         {% if login_error %}
         <script>

@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-
+from django.views.decorators.http import require_POST
 
 from django.shortcuts import render
 from django.views.decorators.cache import never_cache
@@ -50,8 +50,62 @@ from adminHome.models import Premium, Premium_list
 from django.shortcuts import render
 from django.template import RequestContext
 
+import requests
+from bs4 import BeautifulSoup
+from django.shortcuts import render
+# Calendar scraper
+def calendarscraper(request):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    }
+    url = 'https://www.boxofficemojo.com/calendar/'
+    data = requests.get(url, headers=headers)
+    soup = BeautifulSoup(data.text, 'html.parser')
+
+    name_list = []
+    tag_list = []
+    actor_list = []
+    image_list = []
+
+    for m in soup.find_all('td', {'class': 'a-text-left mojo-header-column mojo-truncate mojo-field-type-release mojo-cell-wide'}):
+        moviename = m.find('div', {'class': 'a-section a-spacing-none mojo-schedule-release-details'})
+        movietag = m.find('div', {'class': 'a-section a-spacing-none mojo-schedule-genres'})
+
+        if moviename:
+            name_list.append(moviename.find('a').text)
+        else:
+            name_list.append("Don't have name")
+
+        if movietag:
+            tag_list.append(movietag.text.replace('\n','').replace('            ',' ').replace('    ',''))
+        else:
+            tag_list.append("No Tag")
+
+        with_divs = m.find_all('div', {'class': 'a-section a-spacing-none'})
+        filtered_with_divs = [div for div in with_divs if div.find('span', {'class': 'a-text-bold'})]
+
+        if filtered_with_divs:
+            actor_list.append(filtered_with_divs[0].text.replace('With:',''))
+        else:
+            actor_list.append("No Actor")
+
+        img_tag = m.find('img')
+        if img_tag:
+            image_list.append(img_tag.get('src'))
+        else:
+            image_list.append("No Image")
+
+    context = {
+        'name_list': name_list,
+        'tag_list': tag_list,
+        'actor_list': actor_list,
+        'image_list': image_list,
+    }
+
+    return render(request, 'calender.html', context)
+
 def test(request):
-    template = loader.get_template('test.html')
+    template = loader.get_template('Loy Krathong Day.html')
     return HttpResponse(template.render())
 
 # 404 page
@@ -521,32 +575,6 @@ def home(request):
 
 
 
-#Calender - ปฏิทิน
-@never_cache
-def calender(request):
-    # ดึงข้อมูลจาก calendar.py
-    calendar_data = get_calendar_data()
-
-    # ส่งข้อมูลไปยัง template
-    context = {
-        'name_list': calendar_data.get('name_list', []),
-        'actor_list': calendar_data.get('actor_list', []),
-        'image_list': calendar_data.get('image_list', []),
-        'tag_list': calendar_data.get('tag_list', []),
-    }
-    return render(request, 'calender.html', context)
-
-
-def calendar(request):
-    context = {
-        'name_list': name_list,
-        'actor_list': actor_list,
-        'image_list': image_list,
-        'tag_list': tag_list,
-    }
-    return render(request, 'calender.html', context)
-
-
 
 #coin shop - ร้านค้าเหรียญ
 def coinshop(request):
@@ -616,26 +644,63 @@ def coinshop(request):
 
 from django.db.models import Avg
 def moviereview(request, id):
-    print(request, id)
     movie = get_object_or_404(Movie, pk=id)
     form = CommentForm(request.POST)  # Instantiate the form for POST; None will make it unbound for GET
     user = request.user # User
     directors = movie.director.all()
     writers = movie.writer.all()
-    # =review = get_object_or_404(Comment, movie_id=movie, user=user)
-    print(writers)
+    # directors = movie.director.all().values_list('id')  # ตัวอย่าง: เลือกเฉพาะชื่อและ ID
+    # writers = movie.writer.all().values_list('id')
     top_stars = MovieDetail.objects.filter(movie=movie, is_top=True)
-    
+    # movie_details = MovieDetail.objects.all()
+
+    # for detail in movie_details:
+    #     star = detail.star
+    #     # ตรวจสอบ LocalImage ที่เป็น mainstar
+    #     local_images = LocalImage.objects.filter(star=star, mainstar=True)
+        
+    #     if local_images.exists():
+    #         detail.image = local_images.first().image.url
+    #     else:
+    #         # ถ้าไม่มี LocalImage, ใช้ URLImage
+    #         url_images = URLImage.objects.filter(star=star)
+    #         if url_images.exists():
+    #             detail.image_url = url_images.first().image_url
+
+    top_star_images = []  # ใช้ list เพื่อเก็บ URL ของรูปภาพ
+    for star_detail in top_stars:
+        star = star_detail.star  # ดึง object ของ Star
+
+        # ตรวจสอบ LocalImage ที่เป็น mainstar
+        local_images = LocalImage.objects.filter(star=star, mainstar=True)
+        
+        if local_images.exists():
+            # ถ้ามี LocalImage
+            image_url = local_images.first().image.url
+        else:
+            # ถ้าไม่มี LocalImage, ใช้ URLImage
+            url_images = URLImage.objects.filter(star=star, mainstar=True)
+            if url_images.exists():
+                # ถ้ามี URLImage
+                image_url = url_images.first().image_url
+            else:
+                # ถ้าไม่มีทั้ง LocalImage และ URLImage
+                image_url = None
+        top_star_images.append(image_url)
+    print(top_star_images)
+
+
 
     if request.user.is_authenticated :  # Check if the user is authenticated
         commented = Comment.objects.filter(movie=movie, user=user).first()
         other_comments = Comment.objects.filter(movie=movie).exclude(user=user)
+        print(commented)
     else:
         commented = None
         other_comments = Comment.objects.filter(movie=movie).exclude() 
     
-    comment_id = request.POST.get('comment_id')
-    print(comment_id)
+    # comment_id = request.POST.get('comment_id')
+    # print(comment_id)
     # Aggregate the total score for the movie
     avg_score_result = Comment.objects.filter(movie=movie).aggregate(average_score=Avg('score'))
     avg_score = avg_score_result.get('average_score',0)
@@ -650,7 +715,7 @@ def moviereview(request, id):
 
     if request.method == 'POST':
         if commented:  # ตรวจสอบว่าผู้ใช้แสดงความคิดเห็นแล้วหรือไม่
-            form = CommentForm(request.POST, instance=commented)  # ใช้ CommentForm ผูกกับความคิดเห็นที่
+            form = CommentForm(request.POST, instance=commented)  # ใช้ CommentForm ผูกกับความคิดเห็นที่มีอยู่แล้ว
         else:
             form = CommentForm(request.POST)     #ไม่มีความคิดเห็นที่มีอยู่ สร้างความคิดเห็นใหม่ 
 
@@ -680,39 +745,72 @@ def moviereview(request, id):
         # Image movie
         local_images = LocalImage.objects.filter(is_visible=True, movie=movie, mainmovie=0)
         url_images = URLImage.objects.filter(is_visible=True, movie=movie, mainmovie=0)
-        non_mainmovie_images = list(local_images) + list(url_images)
+        movie_images = list(local_images) + list(url_images)
 
         # ดึงรูปภาพจาก LocalImage และ URLImage ที่เป็น mainstar สำหรับ star นี้
-        # stars_with_images = []
+        # movie_details = MovieDetail.objects.select_related('star', 'movie').all()
+        # for detail in movie_details:
+        #     print(f"{detail.star.name} - {detail.character_name} in {detail.movie.name}")
+        # mainstar_local_images = LocalImage.objects.filter(mainstar=True)
+        # if not mainstar_local_images.exists():
+        #     mainstar_url_images = URLImage.objects.filter(mainstar=True)
+        #     for image in mainstar_url_images:
+        #         print(f"Image URL: {image.image_url}")
+        #         stars = ', '.join(star.name for star in image.star.all())
+        #         print(f"Stars: {stars}")
+        # else:
+        #     for image in mainstar_local_images:
+        #         print(f"Image URL: {image.image.url}")
+        #         stars = ', '.join(star.name for star in image.star.all())
+        #         print(f"Stars: {stars}")
 
-        # all_stars = Star.objects.all()
-
-        # for star in all_stars:
-        #     # Get the first 'mainstar' local image
-        #     local_image = LocalImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
-
-        #     # Get the first 'mainstar' URL image
-        #     url_image = URLImage.objects.filter(star=star, mainstar=True, is_visible=True).first()
-
-        #     # Add the star and their image to the list
-        #     stars_with_images.append((star, local_image or url_image))
         context = {
             'movie': movie,
             'user': user,
             'scoreAvg':avg_score,
             'directors':directors,
             'writers':writers,
-            'topcast':top_stars,
-            'mainstar':mainmovie_image,
+            'topcast': top_stars,
+            # 'top_star_images': top_star_images,
+            # 'movie_details': movie_details,
+            'star_images':top_star_images,
             'mainmovie_image': mainmovie_image,
-            'movie_image': non_mainmovie_images,
+            'movie_image': movie_images,
             'video': video,
             'form': form,  # Include form in GET context
             'commented':commented,
             'other_comments':other_comments,
+
+            # ===================
+            # 'mainstar_local_images': mainstar_local_images,
+            # 'mainstar_url_images': mainstar_url_images,
+            # 'movie_details': movie_details,
+            
         }
         return render(request, 'moviereview.html', context)
-    return render(request, 'moviereview.html')
+    return render(request, 'moviereview.html', context)
+
+
+
+
+# @require_POST
+def like_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    like, created = Like.objects.get_or_create(user=request.user, comment=comment)
+
+    if not created:
+        # If like already exists, it means user is unliking the comment
+        like.delete()
+        is_liked = False
+    else:
+        is_liked = True
+
+    # Check for AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({"is_liked": is_liked, "comment_id": comment_id})
+    print(is_liked)
+    # Redirect for non-AJAX request
+    return redirect('moviereview', '1')  # Adjust the redirect as needed
 
 
 def actor(request, id):

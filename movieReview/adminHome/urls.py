@@ -1,9 +1,11 @@
-from django.urls import path #,re_path
+from django.urls import path
 from django.contrib import admin
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import calendar
+
+from .views import calendarscraper
+
 #------------------------------------------------------------------------------------
 # from .views import send_my_email
 from django.contrib.auth import views as auth_views
@@ -14,7 +16,6 @@ urlpatterns = [
     path('',views.home, name='home'),
     path('search/', views.search, name='search'),#งง
     path('admin/', admin.site.urls, name='admin'),
-    path('calender/',views.calender),
     path('login/',views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('register/',views.signup_view, name='register'),
@@ -27,8 +28,7 @@ urlpatterns = [
     path('moviereview/<int:id>/', views.moviereview, name='moviereview'),
     path('actor/<int:id>/', views.actor, name='actor'),
     path('coinshop/', views.coinshop, name='coinshop'),
-    path('calendar/', calendar, name='calendar'),
-
+    path('calender/', calendarscraper, name='calender'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
@@ -45,9 +45,11 @@ urlpatterns = [
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('check_email/', views.check_email, name='check_email'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    path('like_comment/<int:comment_id>/', views.like_comment, name='like_comment'),
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('my_custom_view/', views.my_custom_view, name='my_custom_view')
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
-    path('test/', views.test, name="test"),
+    # path('Loy-Krathong-Day/', views.test, name="Loy Krathong Day"),
 ]    
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

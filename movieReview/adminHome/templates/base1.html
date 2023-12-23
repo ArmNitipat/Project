@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script href="../static/main.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     {% block title %}
     {%endblock%}
     <!-- scroll bar in html css -->
@@ -78,67 +77,80 @@
           display: block;
           color: #fff;
       }
+
+      /* สำหรับหน้าจอขนาดเล็ก */
+      /* (max-width: 978px) , (max-device-width: 1024px)*/
+      @media (max-width: 1024px) {
+        /* .carousel-item img {
+          width: 100%;
+          height: auto;
+        } */
+        .downlevelone{
+        margin-top: 1em; /* เว้น 1 บรรณทัด */
+        }
+      }
     </style>
     <script>
-    function toggleTheme() {
-      document.body.classList.toggle('dark-theme');
-    }
-    function toggleTheme() {
-        let isDark = document.body.classList.toggle('dark-theme');
-        localStorage.setItem('darkTheme', isDark);
-    }
-    // On page load
+      function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+      }
+      function toggleTheme() {
+          let isDark = document.body.classList.toggle('dark-theme');
+          localStorage.setItem('darkTheme', isDark);
+      }
+      // On page load
       window.onload = function() {
-          if (localStorage.getItem('darkTheme') === 'true') {
-              document.body.classList.add('dark-theme');
-          }
+        if (localStorage.getItem('darkTheme') === 'true') {
+            document.body.classList.add('dark-theme');
+        }
       };
     </script>
 
 </head> 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container-fluid sticky-top">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </a>
-          <div class="collapse navbar-collapse container-fluid " id="navbarTogglerDemo03">
-            <ul class="navbar-nav me-auto ">
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg sticky-top">
+    <div class="container-fluid sticky-top">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-              <li>
-                <a href="{% url 'home' %}"><img src="{% static 'icon.png' %}" alt="icon" width="75px" height="40px"></a>
-              </li>
-              <li class="nav-item ms-5">
-                <a href="{% url 'home' %}" class="nav-link"> Home </a>
-              </li>
-                <a href="/calender" class="nav-link"> Calender </a>
-              </li>
-              </li>
-                <a href="/coinshop" class="nav-link"> Shop </a>
-              </li>
-
-              <li style="margin: auto;">
-                <!-- <button onclick="toggleTheme()">Toggle Theme</button> -->
-                <div id="theme-toggle" onclick="toggleTheme()">
-                  <div id="toggle-icon">
-                      <div id="sun-icon">&#9728;</div> <!-- Sun Emoji -->
-                      <div id="moon-icon">&#127769;</div> <!-- Moon Emoji -->
-                  </div>
+        <div class="collapse navbar-collapse container-fluid " id="navbarTogglerDemo03">
+          <ul class="navbar-nav me-auto ">
+            <li class="downlevelone"></li>
+            <li>
+              <a href="{% url 'home' %}"><img src="{% static 'icon.png' %}" alt="icon" width="75px" height="40px"></a>
+            </li>
+            <li class="nav-item ms-3">
+              <a href="{% url 'home' %}" class="nav-link"> Home </a>
+            </li>
+            <li class="nav-item ms-3">
+              <a href="/calender" class="nav-link"> Calender </a>
+            </li>
+            <li class="nav-item ms-3">
+              <a href="/coinshop" class="nav-link"> Shop </a>
+            </li>
+            <li style="margin: auto;">
+              <!-- <button onclick="toggleTheme()">Toggle Theme</button> -->
+              <div id="theme-toggle" onclick="toggleTheme()">
+                <div id="toggle-icon">
+                  <div id="sun-icon">&#9728;</div> <!-- Sun Emoji -->
+                  <div id="moon-icon">&#127769;</div> <!-- Moon Emoji -->
+                </div>
               </div>
-              </li>
-            </ul>
+            </li>
+            <li class="downlevelone"></li>
+          </ul>
 
             <form class="d-flex" action="{% url 'search' %}" method="get">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" value="{{ search_query }}" name="q" maxlength="50">
               <button class="btn btn-outline-success me-2" type="submit">Search</button>
             </form>
 
-          </div>
+        
+        <!-- <ul class="downlevelone"> -->
           <!-- <button  type="button" class=" btn navbar-dark "  ><a href="/login" class="nav-link text-light " >Login</a></button> -->
           {% if user.is_authenticated %}
-          
-          <div class="dropdown btn-group">
+          <div class="dropdown btn-group downlevelone">
             <button type="button" class="btn btn-outline-secondary text-white dropdown-toggle dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="round-image">
                 {% if user.image %}
@@ -157,18 +169,20 @@
                 <li><a class="dropdown-item " href="{% url 'account' %}">Account</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
-        </div>
+          </div>
           {% else %}
-          <button type="button" class="btn navbar-dark">
-          <a href="{% url 'login' %}" class="nav-link text-light">Login</a>
-          </button>
+            <button type="button" class="btn navbar-dark">
+            <a href="{% url 'login' %}" class="nav-link text-light">Login</a>
+            </button>
           {% endif %}
+        <!-- </ul> -->
+      </div>
         </div>      
-      </nav>
-      
-      <div>
+    </nav>
+      <!-- content -->
+    <div>
           {% block content %}          
           {%endblock%}
-      </div>   
+    </div>   
 </body>
 </html>

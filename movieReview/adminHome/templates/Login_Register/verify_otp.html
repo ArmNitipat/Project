@@ -4,8 +4,8 @@
 <style>
     body {
       background-image: url('https://images.pexels.com/photos/9227672/pexels-photo-9227672.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-      background-color: rgb(0, 0, 0);
-      color: rgb(0, 0, 0);
+      /* background-color: rgb(0, 0, 0);
+      color: rgb(0, 0, 0); */
       display: flex;
       flex-direction: column;
       font-family: "Open Sans", sans-serif;
@@ -93,11 +93,10 @@
                 <div class="col-md-12 text-center">
                   <h3 class="text-center mb-2" id="verify-otp">VERIFY OTP</h3>
                   <hr>
-                  <p>An OTP has been sent to your email, please check it.</p>
-                  
+                  An OTP has been sent to your email.<br> please check it.
                 </div>
                 <div class="col-md-12 mt-3">
-                  <p style="color: #00000074;">Enter OTP here</p>
+                  <p>Enter OTP here</p>
                   
                     {% csrf_token %}
 

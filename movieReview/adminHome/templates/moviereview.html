@@ -1,10 +1,8 @@
 {% extends "base1.html" %} {%block title %}
-<link rel="stylelogin" href="../static/css/login_register.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <title>MovieReview</title>
 {% endblock %} {%block content%}
 <style>
-
     body{
         background-color: black;
     }
@@ -41,44 +39,14 @@
 
 
     /* Star rating */
-
-    /* .rating-box{
-      position:relative;
-      padding: 25px 50px 35px;
-
-    }
-    .stars i {
-      color: aliceblue;
-      font-size: 35px;
-      cursor: pointer;
-      transition: color 0.2s ease;
-    }
-    .stars i.active{
-      color: #ff9c1a;
-    }
-    .card.text-dark {
-      background-color: #ffffffc8;
-      border-radius: 10px;
-    }
-
-    .card.rating-box {
-      background-color: #00000000;
-      border: none;
-    }
-
-    .card.rating-box .stars {
-      display: flex;
-      justify-content: center; /* จัดตรงกลางแนวนอน */
-      /*gap: 35px;  ระยะห่างระหว่างดาว 
-    }*/
-
-/* Optional: CSS for active (highlighted) stars */
+  /* Optional: CSS for active (highlighted) stars */
     .stars i.active {
-      color: gold;
+      /* color: gold; */
+      color: rgb(255, 187, 92);
     }
-    .stars{
-      color: rgb(255, 255, 255);
-    }
+    /* .stars{
+      color: rgb(0, 0, 0, 0.3);
+    } */
     .rating-box .stars{
       display: flex;
       align-items: center;
@@ -107,9 +75,79 @@
     .checkarea{
       width: 100%;
     }
-</style>
-<main class="container bg-light bg-dark text-light border border-light" style="width: 120%;">
+    /* new comment css*/
+    .card-body {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
+    }
 
+    .profile-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .profilecomment {
+      border-radius: 50%;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .fw-bold {
+      font-weight: bold;
+    }
+
+    .link-muted {
+      color: #6c757d;
+      text-decoration: none;
+    }
+
+    .link-muted:hover {
+      text-decoration: underline;
+    }
+
+    .badge {
+      padding: 0.25em 0.4em;
+      font-size: 75%;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 0.25rem;
+    }
+
+    .btn-outline-secondary {
+      color: #6c757d;
+      border-color: #6c757d;
+    }
+
+    .btn-outline-secondary:hover {
+      color: #fff;
+      background-color: #6c757d;
+      border-color: #6c757d;
+    }
+
+    /* กด like แล้วเปลี่ยนสี */
+    .heart-btn {
+    font-size: 24px;
+    color: #ccc;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    }
+    .heart-btn.active {
+      color: red;
+      animation: heartPulse 0.3s ease;
+    }
+    @keyframes heartPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+</style>
+<main class="container bg-light bg-dark text-light border border-light" style="width: auto;">
       <div class="p-4 p-md-5  text-white rounded" style="background-color: rgba(35, 35, 35, 0.879);">
         <!--รูปภาพของภาพยนตร์-->
         <div class="row">
@@ -144,14 +182,15 @@
         <div class="col-md-2 bg-dark">
             <hr>
             <h4 style="justify-content: center; align-items: center; " class="text-center mb-2"> Movie Rate</h4>
-
+            
             <!--คะแนนจากเว็บต่างๆ-->
+            {% load static %}
             <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
-              <img src="" style="width: 100px; height: 60px;">
+              <img src="{% static 'icon.png' %}"style="width: 100px; height: 60px;" title="MovieReview">
               <h5>{{ scoreAvg }}/10</h5>
           </div>
             <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
-                <img src="https://cdn-icons-png.flaticon.com/512/5977/5977585.png" style="width: 100px; height: 60px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/5977/5977585.png" style="width: 100px; height: 60px;" title="IMDB">
                 <h5>8.1/10</h5>
             </div>
             <!-- <div class="card mt-3" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
@@ -183,42 +222,18 @@
 
             <div class="row">
               <div class="col-md-7"></div>
-
-
                 <div class="col-md-5 d-flex align-items-center mt-2">
                   <!-- Positive Comment -->
-                  <svg width="20px" height="20px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#0ef69d">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <title>like [#000000]</title>
-                        <desc>Created with Sketch.</desc>
-                        <defs></defs>
-                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g id="Dribbble-Light-Preview" transform="translate(-259.000000, -760.000000)" fill="#0ef69d">
-                                <g id="icons" transform="translate(56.000000, 160.000000)">
-                                    <path d="M203,620 L207.200006,620 L207.200006,608 L203,608 L203,620 Z M223.924431,611.355 L222.100579,617.89 C221.799228,619.131 220.638976,620 219.302324,620 L209.300009,620 L209.300009,608.021 L211.104962,601.825 C211.274012,600.775 212.223214,600 213.339366,600 C214.587817,600 215.600019,600.964 215.600019,602.153 L215.600019,608 L221.126177,608 C222.97313,608 224.340232,609.641 223.924431,611.355 L223.924431,611.355 Z" id="like-[#000000]"></path>
-                                </g>
-                            </g>
-                        </g>
-                    </g>
-                  </svg>
+                  <i class="fa-solid fa-thumbs-up" style="color: #00c832; font-size:30px;"></i>
                   <p class="mb-0 ms-3">Positive</p>
                   <strong class="d-inline-block ms-1 text-center text-light">94%</strong>
                   <div class="divider"></div>
                   <!-- Negative Comment -->
-                  <svg class="mt-2 ms-2" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                      <g id="SVGRepo_iconCarrier">
-                          <path d="M15.609 5.49953V15.6595C15.609 16.0595 15.489 16.4495 15.269 16.7795L12.539 20.8395C12.109 21.4895 11.039 21.9495 10.129 21.6095C9.14904 21.2795 8.49904 20.1795 8.70904 19.1995L9.22904 15.9295C9.26904 15.6295 9.18904 15.3595 9.01904 15.1495C8.84904 14.9595 8.59904 14.8395 8.32904 14.8395H4.21904C3.42904 14.8395 2.74904 14.5195 2.34904 13.9595C1.96904 13.4195 1.89904 12.7195 2.14904 12.0095L4.60904 4.51953C4.91904 3.27953 6.26904 2.26953 7.60904 2.26953H11.509C12.179 2.26953 13.119 2.49953 13.549 2.92953L14.829 3.91953C15.319 4.29953 15.609 4.87953 15.609 5.49953Z" fill="#ff1f1f"></path>
-                          <path d="M18.7894 17.6084H19.8194C21.3694 17.6084 21.9994 17.0084 21.9994 15.5284V5.47844C21.9994 3.99844 21.3694 3.39844 19.8194 3.39844H18.7894C17.2394 3.39844 16.6094 3.99844 16.6094 5.47844V15.5384C16.6094 17.0084 17.2394 17.6084 18.7894 17.6084Z" fill="#ff1f1f"></path>
-                      </g>
-                  </svg>
+                  <i class="fa fa-thumbs-down" style="font-size:30px; color: coral; transform: scaleX(-1);"></i>
                   <p class="mb-0 ms-3">Negative</p>
                   <strong class="d-inline-block ms-1 text-center text-light">6%</strong>
                 </div>
-          </div>
+              </div>
 
             <!--รายละเอียดปีที่ออก เวลาของภาพยนตร์ และ เรทของภาพยนตร์ -->
             <div class="row mt-2">
@@ -333,42 +348,59 @@
     <div class="row g-5">
       <div class="col-md-12 justify-content-center align-items-center ">
         <h3 class="pb-4 mb-1 justify-content-center align-items-center ">
-          Top Cast
+          <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+            <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+          </svg>
+            Top Cast
         </h3>
         <hr>
         <div class="row justify-content-center align-items-center">
 
           <!-- รายชื่อนักแสดง -->
 
-
-
-          
-
-          <!-- {% for detail in topcast %} -->
-          <div class="col-md-5 ms-4 mt-4 text-center" style="display: flex; align-items: center;">
-            {% if detail.main_image %}
-              {% if detail.main_image.image %}
-                <img src="{{ detail.main_image.image.url }}" id="2" alt="Main Image of {{ detail.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
-              {% elif result.main_image.image_url %}
-                <img src="{{ detail.main_image.image_url }}" alt="Main Image of {{ detail.star.name }}" style="width: 140px; height: 140px; object-fit: cover;">
+          <!-- {% for detail in movie_details %}
+          <div>
+              <h2>{{ detail.character_name }} in {{ detail.movie.name }}</h2>
+              <p>Played by: {{ detail.star.name }}</p>
+              {% if detail.image %}
+                  <img src="{{ detail.image }}" alt="Image of {{ detail.star.name }}" id="imageT">
+              {% elif detail.image_url %}
+                  <img src="{{ detail.image_url }}" alt="Image of {{ detail.star.name }}">
+              {% else %}
+                  <p>No image available.</p>
               {% endif %}
-            {% else %}
-              <p>No main image available</p>
-            {% endif %}
-            <div style="margin-left: 10px;">
-              <h4 class="mt-2" style="font-weight: bold;">{{ detail.star.name }}</h4>
-              <p style="font-size: 18px;">{{ detail.character_name }}</p>
-            </div>
           </div>
-        <!-- {% endfor %} -->
+      {% empty %}
+          <p>No movie details available.</p>
+      {% endfor %} -->
+        
+      <div class="container mt-4">
+        <div class="row">
+            <!-- ส่วนแสดงรูปภาพ -->
+            <div class="col-md-6">
+                {% for image in star_images %}
+                    {% if image %}
+                        <img src="{{ image }}" alt="{{ image.star.name }}" class="img-fluid" style="max-width: 10%; height: auto; object-fit: cover;">
+                    {% else %}
+                        <p>No main image available</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+    
+            <!-- ส่วนแสดงรายละเอียดนักแสดง -->
+            <div class="col-md-6">
+                {% for detail in topcast %}
+                    <div>
+                        <h4 class="mt-2 font-weight-bold">{{ detail.star.name }}</h4>
+                        <p style="font-size: 18px;">{{ detail.character_name }}</p>
+                    </div> 
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+        
         <!--Comment-->
-
-
-
-
-
-
-
         <div class="container my-5 py-5 ">
           <br>
           <h3 class="pb-4 mb-1 justify-content-center text-center  align-items-center ">
@@ -392,7 +424,7 @@
                             <h5>{{ user.username }}</h5>
                             <p>Give star for this movie</p>
                             
-                            <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
+                            <div class="card rating-box justify-content-center align-items-center" style="border: none; background-color: unset;">
                               <div class="stars">
                                 {% for i in '0123456789' %}
                                   <!-- Use data-index to store the star's index -->
@@ -444,7 +476,8 @@
               {% if user.username %}
               {% if commented %}
               {% else %}
-              <form method="post" action="{% url 'moviereview' movie.id %}" id="form-check-input">
+              <script>console.log("{{ user.username }}")</script>
+              <form method="post" action="{% url 'like_comment' comment.id %}" id="reviewForm">
               {% csrf_token %}
               <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
                 <div class="card-body p-4">
@@ -457,7 +490,7 @@
                       <p>Give star for this movie</p>
 
                         <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
-                          <div class="stars">
+                          <div class="stars" style="border: #000;">
                             {% for i in '0123456789' %}
                               <!-- Use data-index to store the star's index -->
                               <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
@@ -504,13 +537,15 @@
               {% endif %}
 
               <!--Show Comment-->
-              
               <div class="card text-light " style="background-color: RGB(51,51,51); border-radius: 10px; overflow-y: scroll; max-height: 800px; color: white;">
                 <div class="p-3">
-                <h4 class="mb-0">Recent comments</h4>
-                  <p class="fw-light">Latest Comments section by users</p>
+                <h4 class="mb-0">
+                  <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                    <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
+                  </svg>Recent comments</h4>
+                  <p class="fw-light ms-5">Latest Comments section by users</p>
                 </div>
-                
+
                 {% if commented %}
                 <div class="card-body p-4">
                   <div class="d-flex flex-start">
@@ -521,62 +556,82 @@
                       <h6 class="fw-bold mb-1">{{ commented.user.username }}</h6>
                       <div class="d-flex align-items-center mb-3">
                         <p class="mb-0">
-                          {{ commented.update_date|date:"d,m,Y, H:i a" }}
-                          <!--   -->
+                          {{ commented.update_date|date:"d-m-Y H:i a" }}
                         </p>
+              
                         <!-- Editing functionality -->
                         <a href="javascript:void(0);" class="link-muted" onclick="EditForm()">
                           <i class="fas fa-pencil-alt ms-2"></i>
                         </a>
+              
+                        <!-- Like Button -->
+                        <form action="{% url 'like_comment' commented.id %}" method="post" class="like-form">
+                          {% csrf_token %}
+                          {% if request.user in commented.like_set.all %}
+                          <button id="heartButton-{{ commented.id }}" class="heart-btn liked">
+                            <i class="fas fa-heart ms-2"></i>
+                          </button>
+                          {% else %}
+                          <button id="heartButton-{{ commented.id }}" class="heart-btn">
+                            <i class="fas fa-heart ms-2"></i>
+                          </button>
+                          {% endif %}
+                        </form>
                       </div>
-                        <i class="fas fa-star" style="color: rgb(255, 255, 0);"></i> {{ commented.score }}/10
                       <div>
-                        <div class="collapse">
-                        </div>
-                        <p class="mb-0">
-                          {{ commented.data }}
-                        </p>
+                        <i class="fas fa-star" style="color: rgb(255, 187, 92);"></i> {{ commented.score }}/10
                       </div>
+                      <p class="mb-0">
+                        {{ commented.data }}
+                      </p>
                     </div>
                   </div>
                 </div>
                 {% endif %}
                 {% if other_comments %}
-                  {% for comment in other_comments %}
-                  <div class="card-body p-4">
-                    <div class="d-flex flex-start">
-                      <div class="profile-container me-3">
-                        <img class="rounded-circle shadow-1-strong profilecomment" src="{{ comment.user.image.url }}" alt="avatar" width="60" height="60" />
+                {% for comment in other_comments %}
+                <div class="card-body p-4">
+                  <div class="d-flex flex-start">
+                    <div class="profile-container me-3">
+                      <img class="rounded-circle shadow-1-strong profilecomment" src="{{ comment.user.image.url }}" alt="avatar"
+                        width="60" height="60" />
+                    </div>
+                    <div>
+                      <h6 class="fw-bold mb-1">{{ comment.user.username }}</h6>
+                      <div class="d-flex align-items-center mb-3">
+                        <p class="mb-0">{{ comment.update_date|date:"d-m-Y H:i a" }}</p>
+                
+                        <!-- Like Button -->
+                        <form action="{% url 'like_comment' comment.id %}" method="post" class="like-form">
+                          {% csrf_token %}
+                          {% if request.user in comment.like_set.all %}
+                          <button id="heartButton-{{ comment.id }}" class="heart-btn liked">
+                            <i class="fas fa-heart ms-2"></i>
+                          </button>
+                          {% else %}
+                          <button id="heartButton-{{ comment.id }}" class="heart-btn">
+                            <i class="fas fa-heart ms-2"></i>
+                          </button>
+                          {% endif %}
+                        </form>
                       </div>
                       <div>
-                        <h6 class="fw-bold mb-1">{{ comment.user.username }}</h6>
-                        <div class="d-flex align-items-center mb-3">
-                          <p class="mb-0">
-                            {{ comment.update_date|date:"d,m,Y, H:i a" }}
-                          </p>
-                          <!-- Uncomment the below links if you want to provide editing functionality -->
-                          <a href="" class="link-muted"><i class="fas fa-heart ms-2"></i></a>
-                        </div>
-                        <div>
-                          <i class="fas fa-star" style="color: rgb(255, 255, 0);"></i> {{ comment.score }}/10
-                        </div>
-                        {% if comment.spoiler %}
+                        <i class="fas fa-star" style="color: rgb(255, 187, 92);"></i> {{ comment.score }}/10
+                      </div>
+                      <!-- Spoiler Handling -->
+                      {% if comment.spoiler %}
                         <span class="badge bg-warning text-dark">Warning: Spoilers</span>
                         <button class="btn btn-sm btn-outline-secondary ms-2" type="button" onclick="Spoiler('commentSpoiler-{{ comment.id }}')">Show Comment</button>
                         <div id="commentSpoiler-{{ comment.id }}" class="collapse">
-                          <p class="mb-0">
-                            {{ comment.data }}
-                          </p>
+                          <p class="mb-0">{{ comment.data }}</p>
                         </div>
                         {% else %}
-                        <p class="mb-0">
-                          {{ comment.data }}
-                        </p>
+                        <p class="mb-0">{{ comment.data }}</p>
                         {% endif %}
-                      </div>
                     </div>
                   </div>
-                  {% endfor %}
+                </div>
+                {% endfor %}
                 {% endif %}
                 <!-- ---------------------------------------------- -->
               </div>
@@ -587,7 +642,18 @@
     </div>
 
 
-    <script>
+  <!-- Include jQuery library -->
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+  <script>
+    // $.ajax({
+    var heartButtons = document.querySelectorAll('.heart-btn');
+
+    for (var i = 0; i < heartButtons.length; i++) {
+      heartButtons[i].addEventListener('click', function() {
+        this.classList.toggle('active');
+      });
+    }
+
     function EditForm() {
         // Example: populate the textarea and rating
         document.getElementById('Textarea').value = "{{ review.comment }}";
@@ -614,11 +680,11 @@
 
 
     // Spoiler
-    function Spoiler(elementId) {
-        var spoilerContent = document.getElementById(elementId);
-        if (spoilerContent) {
-            spoilerContent.classList.toggle('show');
-        }
+    function Spoiler(id) {
+      var element = document.getElementById(id);
+      if (element) {
+        element.classList.toggle('collapse');
+      }
     }
 
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -694,7 +760,6 @@
         input.addEventListener('change', updateSendButtonStatus);
       }
     });
-
-    </script>
-  </main>
+  </script>
+</main>
 {%endblock%}

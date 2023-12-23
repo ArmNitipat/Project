@@ -25,8 +25,7 @@ SECRET_KEY = 'yoce^u!roid+a4&ucf**gd1#j8@*q5cbo0+pwk9%_+=s7f8tfz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True    
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['*','mreview1.com']
 
 # Application definition
 
@@ -151,9 +150,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dbmovie',
-        'USER': 'admin02',
-        'PASSWORD': 'mypassword',
-        'HOST': '25.48.97.110',  # หรือ IP ที่ MySQL Server ทำงานอยู่
+        'USER': 'admin01',
+        'PASSWORD': '@myadmin',
+        'HOST': 'localhost',  # หรือ IP ที่ MySQL Server ทำงานอยู่
         'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
     }
 }
