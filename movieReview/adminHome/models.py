@@ -17,7 +17,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Bannerslide(models.Model):
     title = models.CharField(max_length=255, verbose_name="Title")
     image = models.ImageField(upload_to='bannerslides/', verbose_name="Image")
-    description = models.TextField(blank=True, verbose_name="Description")
+    description = models.TextField(blank=True, verbose_name="Description" ,max_length=500)
     active = models.BooleanField(default=True, verbose_name="Is Active")
     order = models.PositiveIntegerField(default=0, verbose_name="Order")
     
@@ -80,13 +80,20 @@ class Premium_list(models.Model):
 
 # mainActor!!!!!!
 class Comment(models.Model):
+    SENTIMENT_CHOICES = (
+        ('Positive', 'Positive'),
+        ('Negative', 'Negative'),
+        ('Neutral', 'Neutral'),
+    )# การกำหนดคู่ของค่า ค่าเเรกจะเก็บในฐานข้อมูล ค่าที่สองจะแสดงในเว็บ
+
     data = models.TextField()
     score = models.IntegerField(default=1,validators=[MaxValueValidator(10),MinValueValidator(1)])
     spoiler = models.BooleanField()
-    # like = models.IntegerField(default=0,auto_created=0)
     update_date = models.DateTimeField(auto_now=True,verbose_name="Date")
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    toplike = models.IntegerField(default=0)
+    sentiment = models.CharField(max_length=8, choices=SENTIMENT_CHOICES, default='Neutral')
 
     def delete(self, *args, **kwargs):
         # Delete related reports
@@ -102,6 +109,7 @@ class Like(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
     class Meta:
+        # ตรวจสอบว่า user และ comment ไม่ซ้ำกัน
         unique_together = ('user', 'comment')
 
     def __str__(self):

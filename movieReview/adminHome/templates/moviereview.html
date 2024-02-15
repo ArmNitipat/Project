@@ -1,5 +1,7 @@
 {% extends "base1.html" %} {%block title %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
 <title>MovieReview</title>
 {% endblock %} {%block content%}
 <style>
@@ -36,7 +38,20 @@
       width: 60px;
       height: 60px;
     }
-
+    .avatar {
+    vertical-align: middle;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 1%; 
+    }
+    .position-avatar {
+      margin-left: 40%;
+    }
+    .position-avatarname{
+      margin-left: 30%;
+    }
 
     /* Star rating */
   /* Optional: CSS for active (highlighted) stars */
@@ -146,13 +161,20 @@
       50% { transform: scale(1.2); }
       100% { transform: scale(1); }
     }
+    a{
+      padding-left: 10px;
+    }
+    body, html {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
 </style>
 <main class="container bg-light bg-dark text-light border border-light" style="width: auto;">
       <div class="p-4 p-md-5  text-white rounded" style="background-color: rgba(35, 35, 35, 0.879);">
         <!--รูปภาพของภาพยนตร์-->
         <div class="row">
-            <div class="col-md-3" style="align-items: center; justify-content: center;">
-                <div class="card" style="display: flex; height: 432px; overflow: hidden; position: relative; background: none; border: none;">
+            <div class="col-md-3 d-flex align-items justify-content-center" style="padding-bottom: 8px;">
+                <div class="card bg-transparent border-0" style="height: 432px; overflow: hidden; position: relative;">
                   {% if mainmovie_image %}
                     {% if mainmovie_image.image %}
                       <img src="{{ mainmovie_image.image.url }}" alt="{{ movie.name }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -185,11 +207,12 @@
             
             <!--คะแนนจากเว็บต่างๆ-->
             {% load static %}
-            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
+            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.500); border-radius: 10px;">
               <img src="{% static 'icon.png' %}"style="width: 100px; height: 60px;" title="MovieReview">
               <h5>{{ scoreAvg }}/10</h5>
-          </div>
-            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
+            </div>
+            <br>
+            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.500); border-radius: 10px;">
                 <img src="https://cdn-icons-png.flaticon.com/512/5977/5977585.png" style="width: 100px; height: 60px;" title="IMDB">
                 <h5>8.1/10</h5>
             </div>
@@ -226,12 +249,12 @@
                   <!-- Positive Comment -->
                   <i class="fa-solid fa-thumbs-up" style="color: #00c832; font-size:30px;"></i>
                   <p class="mb-0 ms-3">Positive</p>
-                  <strong class="d-inline-block ms-1 text-center text-light">94%</strong>
+                  <strong class="d-inline-block ms-1 text-center text-light">{{ positive|floatformat:0 }}</strong>
                   <div class="divider"></div>
                   <!-- Negative Comment -->
                   <i class="fa fa-thumbs-down" style="font-size:30px; color: coral; transform: scaleX(-1);"></i>
                   <p class="mb-0 ms-3">Negative</p>
-                  <strong class="d-inline-block ms-1 text-center text-light">6%</strong>
+                  <strong class="d-inline-block ms-1 text-center text-light">{{ negative|floatformat:0 }}</strong>
                 </div>
               </div>
 
@@ -355,51 +378,35 @@
         </h3>
         <hr>
         <div class="row justify-content-center align-items-center">
-
+          
           <!-- รายชื่อนักแสดง -->
-
-          <!-- {% for detail in movie_details %}
-          <div>
-              <h2>{{ detail.character_name }} in {{ detail.movie.name }}</h2>
-              <p>Played by: {{ detail.star.name }}</p>
-              {% if detail.image %}
-                  <img src="{{ detail.image }}" alt="Image of {{ detail.star.name }}" id="imageT">
-              {% elif detail.image_url %}
-                  <img src="{{ detail.image_url }}" alt="Image of {{ detail.star.name }}">
-              {% else %}
-                  <p>No image available.</p>
-              {% endif %}
-          </div>
-      {% empty %}
-          <p>No movie details available.</p>
-      {% endfor %} -->
-        
-      <div class="container mt-4">
-        <div class="row">
-            <!-- ส่วนแสดงรูปภาพ -->
-            <div class="col-md-6">
-                {% for image in star_images %}
-                    {% if image %}
-                        <img src="{{ image }}" alt="{{ image.star.name }}" class="img-fluid" style="max-width: 10%; height: auto; object-fit: cover;">
-                    {% else %}
-                        <p>No main image available</p>
-                    {% endif %}
-                {% endfor %}
+          <!-- <div class="container mt-4">
+            <div class="row">
+                <div id="actor-container"></div>
             </div>
-    
-            <!-- ส่วนแสดงรายละเอียดนักแสดง -->
-            <div class="col-md-6">
-                {% for detail in topcast %}
-                    <div>
-                        <h4 class="mt-2 font-weight-bold">{{ detail.star.name }}</h4>
-                        <p style="font-size: 18px;">{{ detail.character_name }}</p>
-                    </div> 
+          </div> -->
+        
+          <div class="container mt-4">
+            <div class="row">
+                {% for image, detail in combined_data %}
+                    <div class="col-md-4 center">
+                        <!-- ส่วนแสดงรูปภาพ -->
+                        {% if image %}
+                            <img src="{{ image }}" alt="{{ detail.star.name }}" class="avatar position-avatar">
+                        {% else %}
+                            <p>No main image</p>
+                        {% endif %}
+
+                        <!-- ส่วนแสดงรายละเอียดนักแสดง -->
+                        <div class="position-avatarname">
+                            <h4 class="mt-2 font-weight-bold">{{ detail.star.name }}</h4>
+                            <p style="font-size: 18px;">{{ detail.character_name }}</p>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
         </div>
-    </div>
-    
-        
+
         <!--Comment-->
         <div class="container my-5 py-5 ">
           <br>
@@ -412,10 +419,10 @@
             <div class="col-md-12 col-lg-10">
               {% if user.username %}
               {% if commented %}
-                <form method="post" action="{% url 'moviereview' movie.id %}" id="reviewForm" style="display: none;">
+                <form method="post" action="{% url 'moviereview' movie.id %}" id="RelviewedForm" style="display: none;">
                   {% csrf_token %}
                   <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
-                    <div class="card-body p-4">
+                    <div class="card-body p-4" style="margin: 0;">
                       <div class="d-flex flex-start w-100">
                         <img class="rounded-circle shadow-1-strong me-3 profilecomment"
                           src="{{ user.image.url }}" alt="avatar" width="65"
@@ -431,33 +438,35 @@
                                   <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
                                 {% endfor %}
                               </div>
-                              <input type="hidden" id="rating" name="score" value="{{ review.score }}" minlength="1" maxlength="10">
+                              <input type="hidden" id="rating" name="score" value="{{ commented.score }}" minlength="1" maxlength="10">
                             </div>
                             <!-- Comments form  -->
                             <div class="form-floating mt-2">
-                              <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea" name="data" minlength="6" maxlength="1000">{{ review.data }}</textarea>
+                              <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea" name="data" minlength="6" maxlength="1000" value="{{ commented.data }}"></textarea>
                               <label for="Textarea">Add Comments</label>
                             </div>
+
                             <!-- Rating and Spoiler fields -->
                           <div class=" d-flex justify-content-between mt-3">
                             <div class=".form-check-inline checkarea" >
                               <div class="form-check">
-                                <input class="form-check-input" type="radio" name="spoiler" id="nospoiler" value="0" {% if review.spoiler %}checked{% endif %}>
+                                <input class="form-check-input" for="nospoiler" type="radio" name="spoiler" id="nospoiler" value="0">
                                 <label class="form-check-label" for="nospoiler">
                                   NO SPOILER
                                 </label>
                               </div>
                               <div class="form-check">
-                                <input class="form-check-input" type="radio" name="spoiler" id="spoiler" value="1" {% if review.spoiler %}checked{% endif %}>
+                                <input class="form-check-input" for="spoiler" type="radio" name="spoiler" id="spoiler" value="1">
                                 <label class="form-check-label" for="spoiler">
-                                  SPOILER ALERT!!
+                                  SPOILER
                                 </label>
                               </div>
                               <div class=".form-control">
                                 <div id="textinfo" class="mb-3 mt-3 " style="color: red;"></div> <!-- ส่วนแสดงข้อความเงื่อนไข -->
                               </div>
-                            </div> 
-                    <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                            </div>
+                            
+                      <input type="hidden" name="comment_id" value="{{ comment.pk }}">
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
                       Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
@@ -470,17 +479,15 @@
             {% endif %} 
             {% endif %}
           </div>
-           
-
+        </div>           
               <!-- Input Comment-->
               {% if user.username %}
               {% if commented %}
               {% else %}
-              <script>console.log("{{ user.username }}")</script>
-              <form method="post" action="{% url 'like_comment' comment.id %}" id="reviewForm">
-              {% csrf_token %}
+              <form method="post" action="{% url 'moviereview' movie.id %}">
+                {% csrf_token %}
               <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
-                <div class="card-body p-4">
+                <div class="card-body p-4 m-0">
                   <div class="d-flex flex-start w-100">
                     <img class="rounded-circle shadow-1-strong me-3 profilecomment"
                       src="{{ user.image.url }}" alt="avatar" width="65"
@@ -503,18 +510,19 @@
                           <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea" name="data" minlength="6" maxlength="1000"></textarea>
                           <label for="Textarea">Add Comments</label>
                         </div>
+
                       <div class=" d-flex justify-content-between mt-3">
                         <div class=".form-check-inline checkarea" >
                           <div class="form-check">
-                            <input class="form-check-input" type="radio" name="spoiler" id="nospoiler" value="0">
+                            <input class="form-check-input" for="nospoiler" type="radio" name="spoiler" id="nospoiler" value="0">
                             <label class="form-check-label" for="nospoiler">
                               NO SPOILER
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" type="radio" name="spoiler" id="spoiler" value="1">
+                            <input class="form-check-input" for="spoiler" type="radio" name="spoiler" id="spoiler" value="1">
                             <label class="form-check-label" for="spoiler">
-                              SPOILER ALERT!!
+                              SPOILER
                             </label>
                           </div>
                           <div class=".form-control">
@@ -527,6 +535,12 @@
                         </button>
 
                       </div>
+                      
+                      <div class="preference">
+                        <label for="cheese">Do you like cheese?</label>
+                        <input type="checkbox" name="cheese" id="cheese" />
+                      </div>
+
                     </div>
                     </form>
                   </div>
@@ -545,58 +559,84 @@
                   </svg>Recent comments</h4>
                   <p class="fw-light ms-5">Latest Comments section by users</p>
                 </div>
-
+                
                 {% if commented %}
                 <div class="card-body p-4">
                   <div class="d-flex flex-start">
                     <div class="profile-container me-3">
-                      <img class="rounded-circle shadow-1-strong profilecomment" src="{{ commented.user.image.url }}" alt="avatar" width="60" height="60" />
+                      <img class="rounded-circle shadow-1-strong profilecomment" style="object-fit: cover;" src="{{ commented.user.image.url }}" alt="avatar" width="60" height="60" />
                     </div>
-                    <div>
+                    <div style="width: 100vh;">
                       <h6 class="fw-bold mb-1">{{ commented.user.username }}</h6>
                       <div class="d-flex align-items-center mb-3">
                         <p class="mb-0">
-                          {{ commented.update_date|date:"d-m-Y H:i a" }}
+                          {{ commented.update_date|date:"d-m-Y" }}
+                          {{ commented.update_date|date:"H:i a" }}
                         </p>
-              
-                        <!-- Editing functionality -->
-                        <a href="javascript:void(0);" class="link-muted" onclick="EditForm()">
-                          <i class="fas fa-pencil-alt ms-2"></i>
+
+                        <!-- EditButton -->
+                        <a href="javascript:void(0);" onclick='EditForm("{{commented.data}}", "{{commented.score}}"," {{commented.spoiler}}")'>
+                          <i class="fas fa-pencil-alt" title="Edit"></i>
                         </a>
-              
+                      
                         <!-- Like Button -->
                         <form action="{% url 'like_comment' commented.id %}" method="post" class="like-form">
                           {% csrf_token %}
-                          {% if request.user in commented.like_set.all %}
-                          <button id="heartButton-{{ commented.id }}" class="heart-btn liked">
-                            <i class="fas fa-heart ms-2"></i>
-                          </button>
+                          {% if request.user.is_authenticated %}
+                            {% if commented.id in liked_comments %}
+                              <!-- User liked this comment -->
+                              <button type="submit" id="heartButton-{{ commented.id }}" class="heart-btn active">
+                                <i class="fas fa-heart ms-2" title="Like"></i>
+                              </button>
+                              {% else %}
+                              <!-- User has not liked this comment -->
+                              <button id="heartButton-{{ commented.id }}" class="heart-btn">
+                                <i class="fas fa-heart ms-2"></i>
+                              </button>
+                            {% endif %}
                           {% else %}
-                          <button id="heartButton-{{ commented.id }}" class="heart-btn">
-                            <i class="fas fa-heart ms-2"></i>
-                          </button>
+                            <!-- User not logged in -->
+                            <button id="heartButton-{{ commented.id }}" class="heart-btn">
+                              <i class="fas fa-heart ms-2"></i>
+                            </button>
                           {% endif %}
                         </form>
+
+                        <!-- Like count -->
+                        <div id="like-count-{{ commented.id }}">{{ commented.toplike }}</div>
                       </div>
                       <div>
-                        <i class="fas fa-star" style="color: rgb(255, 187, 92);"></i> {{ commented.score }}/10
+                        <i class="fas fa-star" style="color: rgb(255, 187, 92);" id="commentScore"></i> {{ commented.score }}/10
                       </div>
-                      <p class="mb-0">
+                      <p class="ms-0" id="commentData">
                         {{ commented.data }}
                       </p>
                     </div>
+
+                    <div>
+                      <!-- Report Button -->
+                      <form method="post">
+                      {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-secondary" type="button" title="Repost">
+                        <i class="bi bi-flag"></i>
+                        </button>
+                      </form>
+                    </div>
+
                   </div>
                 </div>
                 {% endif %}
+                
                 {% if other_comments %}
-                {% for comment in other_comments %}
+                {% for comment in other_comments%}
                 <div class="card-body p-4">
                   <div class="d-flex flex-start">
                     <div class="profile-container me-3">
                       <img class="rounded-circle shadow-1-strong profilecomment" src="{{ comment.user.image.url }}" alt="avatar"
                         width="60" height="60" />
                     </div>
-                    <div>
+
+                    <div style="width: 100vh;">
                       <h6 class="fw-bold mb-1">{{ comment.user.username }}</h6>
                       <div class="d-flex align-items-center mb-3">
                         <p class="mb-0">{{ comment.update_date|date:"d-m-Y H:i a" }}</p>
@@ -604,30 +644,53 @@
                         <!-- Like Button -->
                         <form action="{% url 'like_comment' comment.id %}" method="post" class="like-form">
                           {% csrf_token %}
-                          {% if request.user in comment.like_set.all %}
-                          <button id="heartButton-{{ comment.id }}" class="heart-btn liked">
-                            <i class="fas fa-heart ms-2"></i>
-                          </button>
+                          {% if request.user.is_authenticated %}
+                            {% if comment.id in liked_comments %}
+                              <!-- User liked this comment -->
+                              <button type="submit" id="heartButton-{{ comment.id }}" class="heart-btn active">
+                                <i class="fas fa-heart ms-2" title="Like"></i>
+                              </button>
+                            {% else %}
+                              <!-- User has not liked this comment -->
+                              <button type="submit" id="heartButton-{{ comment.id }}" class="heart-btn">
+                                <i class="fas fa-heart ms-2"></i>
+                              </button>
+                            {% endif %}
                           {% else %}
-                          <button id="heartButton-{{ comment.id }}" class="heart-btn">
-                            <i class="fas fa-heart ms-2"></i>
-                          </button>
+                            <!-- User not logged in -->
+                            <button type="button" id="heartButton-{{ comment.id }}" class="heart-btn" onclick="event.preventDefault(); alert('Please log in to like comments.');">
+                              <i class="fas fa-heart ms-2"></i>
+                            </button>
                           {% endif %}
                         </form>
+
+                        <!-- Like count -->
+                        <div id="like-count-{{ comment.id }}">{{ comment.toplike }}</div>
                       </div>
+
                       <div>
                         <i class="fas fa-star" style="color: rgb(255, 187, 92);"></i> {{ comment.score }}/10
                       </div>
+                      
                       <!-- Spoiler Handling -->
                       {% if comment.spoiler %}
-                        <span class="badge bg-warning text-dark">Warning: Spoilers</span>
+                      <span class="badge bg-warning text-dark">Warning: Spoilers</span>
                         <button class="btn btn-sm btn-outline-secondary ms-2" type="button" onclick="Spoiler('commentSpoiler-{{ comment.id }}')">Show Comment</button>
                         <div id="commentSpoiler-{{ comment.id }}" class="collapse">
                           <p class="mb-0">{{ comment.data }}</p>
                         </div>
-                        {% else %}
-                        <p class="mb-0">{{ comment.data }}</p>
-                        {% endif %}
+                      {% else %}
+                          <p class="mb-0">{{ comment.data }}</p>
+                      {% endif %}
+                    </div>
+                    <div>
+                      <!-- Report Button -->
+                      <form action="{% url 'like_comment' comment.id %}" method="post">
+                      {% csrf_token %}
+                        <button class="reportbtn btn btn-sm btn-outline-secondary justify-content-between align-items-start" type="button" title="Repost">
+                          <i class="bi bi-flag"></i>
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -643,42 +706,74 @@
 
 
   <!-- Include jQuery library -->
-  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></> -->
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function () {
+      // Attach a submit event listener to the form
+      document.querySelectorAll('.like-form').forEach(form => {
+        form.onsubmit = function (e) {
+          e.preventDefault(); // Prevent the normal submission action
+          const commentId = this.querySelector('button').id.split('-')[1];
+          console.log(commentId);
+          const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+          fetch(`/like_comment/${commentId}/`, {
+            method: 'POST',
+            body: new FormData(this),
+            headers: {
+              'X-CSRFToken': csrfToken,
+            },
+          })
+          .then(response => response.json())
+          .then(data => {
+            // Update the button style based on the response
+            const heartButton = document.getElementById(`heartButton-${data.comment_id}`);
+            if (data.is_liked) {
+              heartButton.classList.add('active');
+            } else {
+              heartButton.classList.remove('active');
+            }
+
+            const likeCountElement = document.getElementById(`like-count-${data.comment_id}`);
+            if (likeCountElement) {
+              likeCountElement.textContent = data.toplike; // Update this to the new count
+            }
+
+          });
+        };
+      });  
+    });
+  </script>
   <script>
-    // $.ajax({
-    var heartButtons = document.querySelectorAll('.heart-btn');
+    //Edit Form
+     function EditForm(commentData, Rating, commentSpoiler) {
+      document.getElementById('Textarea').value = commentData;
+      document.getElementById('rating').value = Rating;
 
-    for (var i = 0; i < heartButtons.length; i++) {
-      heartButtons[i].addEventListener('click', function() {
-        this.classList.toggle('active');
-      });
+    if (commentSpoiler=="True") {
+        document.getElementById('spoiler').checked = true;
+        document.getElementById('spoiler').toggleAttribute('checked');
+    } else {
+        document.getElementById('nospoiler').checked = true;
+        document.getElementById('nospoiler').toggleAttribute('checked');
     }
 
-    function EditForm() {
-        // Example: populate the textarea and rating
-        document.getElementById('Textarea').value = "{{ review.comment }}";
-        document.getElementById('rating').value = "{{ review.rating }}";
-
-
-        var form = document.getElementById('reviewForm');
-        if (form) {
-            form.style.display = 'block'; // This will make the form visible
-        }
-        // Set the star rating visually if using stars
-          var rating = parseInt("{{ review.rating }}");
-          for (var i = 0; i < rating; i++) {
-              document.getElementById('star' + i).classList.add('checked');
-          }
-
-          // Handle the spoiler radio buttons
-          if ("{{ review.spoiler }}" == "1") {
-              document.getElementById('spoiler').checked = true;
-          } else {
-              document.getElementById('nospoiler').checked = true;
-          }
+    var form = document.getElementById('RelviewedForm');
+    if (form) {
+        form.style.display = 'block'; // Show the form
     }
 
-
+    // var rating = parseInt(Rating);
+    // for (var i = 1; i <= rating; i++) {
+    //     document.getElementById('star' + i).classList.add('checked');
+    // }
+    
+    // var spoiler = commentSpoiler.toLowerCase() === 'true'; // Assuming spoiler is a boolean represented as a string
+    // document.getElementById('spoiler').checked = spoiler;
+    // document.getElementById('nospoiler').checked = !spoiler;
+  }
+  </script>
+  <script>
     // Spoiler
     function Spoiler(id) {
       var element = document.getElementById(id);
@@ -761,5 +856,6 @@
       }
     });
   </script>
+  
 </main>
 {%endblock%}

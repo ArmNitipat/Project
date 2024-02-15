@@ -1,47 +1,73 @@
 {% extends "base1.html" %}
 
 {% block title %}
-<link rel="stylesheet" href="static/login_register.css" />
+<!-- <link rel="stylesheet" href="static/login_register.css" /> -->
 <title>Account</title>
+<style>
+.container {
+  height: 100vh; /* Set the height of the container to 100% of the viewport height */
+}
+
+.row {
+  max-width: 1200px; /* Maximum width of the content */
+  width: 100%; /* Use the full width if the viewport is smaller than 1200px */
+}
+
+.col-12.col-md-4 {
+  display: flex; /* Enable flexbox */
+  justify-content: center; /* Center content horizontally */
+}
+
+.sidebar {
+  position: fixed; /* Fixed position */
+  top: 8%; /* Align top edge of the sidebar with the top of the viewport */
+  left: 25%; /* Align left edge of the sidebar with the left of the viewport */
+  width: 100%; /* Sidebar full width */
+  height: auto; /* Height to fit content */
+  z-index: 1000; /* Ensure sidebar is on top of other content */
+}
+</style>
 {% endblock %}
 
 {% block content %}
 <body class="bg-body-tertiary bg-dark">
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-flex flex-column p-3 text-white bg-dark collapse" style="width: 280px; height: 100vh;">
-          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-            <span class="fs-4">{{ user.username }}</span>
-          </a>
-          <hr>
-          <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item mb-2">
-              <a href="/account" class="nav-link active" aria-current="page">
-                <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                My account
-              </a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="/settingprofile" class="nav-link text-light " style="background-color: rgb(77, 75, 75);" aria-current="page">
-                <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                Profile setting
-              </a>
-            </li>
-          </ul>
-        </div>
+  <div class="container h-100">
+    <div class="row justify-content-center align-items-center">
+      <!-- Sidebar Column -->
+      <div class="col-12 col-md-4 p-0" style="">
+      <div class="sidebar" style="width: 25vh; height: 100%; padding: 15px; width: 280px;">
+        <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><!-- SVG Content --></svg>
+          <span class="fs-4">{{ user.username }}</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item mb-2">
+            <a href="/account" class="nav-link active" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"><!-- SVG Content --></svg>
+              My account
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a href="/settingprofile" class="nav-link text-light" style="background-color: #333;" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"><!-- SVG Content --></svg>
+              Profile setting
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
       <!-- Main Content -->
-      <div class="col-md-5 mx-auto ">
-        <div class="container h-100">
+      <div class="col-12 col-md-8">
+        <div class="container 100vh" style="padding: 0;">
           <div class="row justify-content-start bg-dark">
             <div class="card bg-dark">
-      <main class="card-body bg-dark text-light">
+      <main class="card-body bg-dark text-light p-0 mt-5">
         <div class="d-flex justify-content-center align-items-center">
           {% if user.image %}
           <img alt="Profile Image" id="profile-image" name="image" accept="image/*" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" title="Profile" class="img-circle img-thumbnail isTooltip" src="{{MEDIA_URL}}{{ user.image.url }}" data-original-title="Usuario" onclick="changeProfileImage()" onmouseover="blurImage()" onmouseout="unblurImage()">
           {% else %}
-          <img alt="" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" title="" class="img-circle img-thumbnail isTooltip" src="https://image.api.playstation.com/vulcan/ap/rnd/202108/0410/UAnLUUMdxA9cow8TEe8IfhuC.png" data-original-title="Usuario">
+          <img alt="" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%;" title="" class="img-circle img-thumbnail isTooltip" src="/adminHome/templates/profile_images/istockphoto.jpg" data-original-title="Usuario">
           {% endif %}
         </div>
           <h2 class="mb-1 mt-3 text-center">{{ user.username }}</h2>  
@@ -73,20 +99,16 @@
                   <input type="text" class="form-control" id="lastName" name="lastname" placeholder="{{ user.last_name }}" value="{{ user.last_name }}" required=""readonly disabled>
               </div>
           </div>
-
-          
           
           <div class="mb-2 mt-2">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" placeholder="{{ user.email }}" value="{{ user.email }}" readonly disabled>
-            
           </div>
-
            
           <div class="row">
             <div class="col-md-6">
               <div class="mb-2 mt-2">
-                <label for="id_date_of_birth" class="form-label">Date_of_birth</label>
+                <label for="id_date_of_birth" class="form-label">Bsirth</label>
                 <input type="text" class="form-control" id="date_of_birth" name="date_of_birth " placeholder="{{ user.date_of_birth }}" value="{{ user.date_of_birth }}" readonly disabled>
               </div> 
             </div>
@@ -100,8 +122,6 @@
           <hr class="my-4">
           <button class="w-100 btn btn-primary btn-lg" type="submit">Setting Your Account</button>
         </div> -->
-        
-        
       </form>
       {% if messages %}
       {% for message in messages %}

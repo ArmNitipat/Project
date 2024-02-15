@@ -43,6 +43,15 @@ class MovieDetail(models.Model):
         return f"{self.character_name} in {self.movie.name}"
 
 
+class MovieSentiment(models.Model):
+    movie = models.ForeignKey('Movie', on_delete=models.CASCADE, verbose_name="Movie")
+    positive = models.FloatField(verbose_name="Positive Percentage")
+    negative = models.FloatField(verbose_name="Negative Percentage")
+
+    def __str__(self):
+        return f"{self.movie.name} - Positive: {self.positive}%, Negative: {self.negative}%"
+
+
 def validate_not_gif(value):
     if value.name.endswith('.gif'):
         raise ValidationError("GIFs are not allowed.")

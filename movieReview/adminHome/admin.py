@@ -1,5 +1,5 @@
 from django.contrib import admin
-from adminHome.models import Bannerslide, Comment, Report
+from adminHome.models import Bannerslide, Comment, Report, Premium_list
 
 
 class BannerslideAdmin(admin.ModelAdmin):
@@ -11,7 +11,7 @@ admin.site.register(Bannerslide, BannerslideAdmin)
 
 
 from django.contrib import admin
-from .models import Premium, Premium_list
+from .models import Premium
 
 class PremiumAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -28,7 +28,7 @@ admin.site.register(Premium, PremiumAdmin)
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['user', 'data', 'like', 'score', 'spoiler', 'update_date']
+    list_display = ['user', 'data', 'score', 'spoiler', 'update_date']
 
 
 @admin.register(Report)
@@ -62,3 +62,22 @@ class ReportAdmin(admin.ModelAdmin):
     def delete_comments(self, request, queryset):
         for report in queryset:
             report.comment.delete()
+
+# @admin.register(Premium_list)
+# class Premium_listAdmin(admin.ModelAdmin):
+#     list_display = ['user', 'premium']
+
+#     def user(self, obj):
+#         return obj.user.username
+#     user.short_description = 'User'
+
+#     def premium(self, obj):
+#         return obj.premium.name
+#     premium.short_description = 'Premium Product'
+
+#     actions = ['delete_premiums']
+
+#     @admin.action(description='Delete selected premiums')
+#     def delete_premiums(self, request, queryset):
+#         for premium_list in queryset:
+#             premium_list.premium.delete()

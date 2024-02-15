@@ -49,7 +49,6 @@ urlpatterns = [
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('my_custom_view/', views.my_custom_view, name='my_custom_view')
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
-    # path('Loy-Krathong-Day/', views.test, name="Loy Krathong Day"),
 ]    
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

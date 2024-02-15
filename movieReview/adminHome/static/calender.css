@@ -1,0 +1,42 @@
+.imgposter{
+    width: 150px;
+    height: 222px;
+    object-fit: cover;
+}
+.mcard{
+    min-height: 470px;
+    height: auto;
+    width: auto;
+}
+.card {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+.moviename{
+    font-size: 23px;
+    font-weight: bold;
+    text-align: center;
+}
+.tags{
+    font-weight: bold;
+}
+.monthcolor{
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.moviedate{
+    font-size: 20px;
+    font-weight: bold;
+    bottom: 0;
+    position: absolute;
+}
+.date{
+    font-weight: bold;
+}
+
+.card-body{
+    width: 16vw;
+}
