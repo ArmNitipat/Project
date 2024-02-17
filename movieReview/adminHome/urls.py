@@ -14,7 +14,7 @@ handler404 = 'adminHome.views.error_404_view'
 
 urlpatterns = [
     path('',views.home, name='home'),
-    path('search/', views.search, name='search'),#งง
+    path('search/', views.search, name='search'),
     path('admin/', admin.site.urls, name='admin'),
     path('login/',views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),

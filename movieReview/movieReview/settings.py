@@ -159,7 +159,6 @@ DATABASES = {
 
 #USE Session_Engine:
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Password validation

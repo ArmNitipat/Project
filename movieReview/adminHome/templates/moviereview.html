@@ -615,12 +615,43 @@
 
                     <div>
                       <!-- Report Button -->
-                      <form method="post">
+                      <form>
                       {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-secondary" type="button" title="Repost">
+                        <button title="Repost" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportIssueModal">
                         <i class="bi bi-flag"></i>
                         </button>
                       </form>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="reportIssueModal" tabindex="-1" aria-labelledby="reportIssueModalLabel" aria-hidden="true" style="top: 30vh;">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header text-dark">
+                            <h5 class="modal-title" id="reportIssueModalLabel">รายงานปัญหา</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <!-- Form inside the modal -->
+                            <form id="reportForm">
+                              <div class="mb-3">
+                                <label for="issueType" class="form-label text-dark">เลือกปัญหา</label>
+                                <select class="form-select" id="issueType">
+                                  <option value="spam">สแปม</option>
+                                  <option value="harassment">ความรุนแรงหรือความหวาดกลัว</option>
+                                  <!-- Add other issue types here -->
+                                  <option value="other">อื่นๆ</option>
+                                </select>
+                              </div>
+                              <div class="mb-3" id="additionalTextGroup" style="display: none;">
+                                <label for="customText" class="form-label">รายละเอียดเพิ่มเติม</label>
+                                <textarea class="form-control" id="customText" rows="3"></textarea>
+                              </div>
+                              <button type="submit" class="btn btn-primary">ส่ง</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                   </div>
@@ -687,7 +718,7 @@
                       <!-- Report Button -->
                       <form action="{% url 'like_comment' comment.id %}" method="post">
                       {% csrf_token %}
-                        <button class="reportbtn btn btn-sm btn-outline-secondary justify-content-between align-items-start" type="button" title="Repost">
+                        <button title="Repost" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportIssueModal">
                           <i class="bi bi-flag"></i>
                         </button>
                       </form>
@@ -706,7 +737,7 @@
 
 
   <!-- Include jQuery library -->
-  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', function () {
       // Attach a submit event listener to the form
@@ -743,6 +774,51 @@
         };
       });  
     });
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      // Listen for changes on the issueType select element
+      $('#issueType').change(function(){
+        // Check if the selected value is 'other'
+        if($(this).val() === 'other') {
+          // Show the additional text group
+          $('#additionalTextGroup').show();
+        } else {
+          // Hide the additional text group
+          $('#additionalTextGroup').hide();
+        }
+      });
+    
+      $('#reportForm').on('submit', function(e){
+      e.preventDefault(); // Prevent the default form submission
+      
+      var issueType = $('#issueType').val();
+      var customText = $('#customText').val();
+      
+      // Here you would handle the submission, e.g., via AJAX.
+      // For example:
+      /*
+      $.ajax({
+        type: "POST",
+        url: "your-endpoint-url",
+        data: {
+          issueType: issueType,
+          customText: customText
+        },
+        success: function(response) {
+          // Handle success
+          $('#reportIssueModal').modal('hide'); // Close the modal on success
+        },
+        error: function() {
+          // Handle error
+        }
+      });
+      */
+      
+      console.log('Issue Type:', issueType);
+      console.log('Custom Text:', customText);
+    });
+  });
   </script>
   <script>
     //Edit Form

@@ -45,8 +45,8 @@ class MovieDetail(models.Model):
 
 class MovieSentiment(models.Model):
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE, verbose_name="Movie")
-    positive = models.FloatField(verbose_name="Positive Percentage")
-    negative = models.FloatField(verbose_name="Negative Percentage")
+    positive = models.IntegerField(verbose_name="Positive Percentage", max_length=100)
+    negative = models.IntegerField(verbose_name="Negative Percentage", max_length=100)
 
     def __str__(self):
         return f"{self.movie.name} - Positive: {self.positive}%, Negative: {self.negative}%"
