@@ -42,14 +42,36 @@
                 
               
             </div>
-            <div class="row mb-2" >
+          <div class="container">
+            {% for i in headdate %}
+            <div class="row mt-3 " >
                 <div class=" col-lg-12" >
-                    <div class=" card monthcard">
-                        <p class="mt-3 monthcolor movierelease"> Movie Release Calender </p>
+                    <div class=" card monthcard text-center">
+                        <p class="mt-3 monthcolor movierelease"> {{ i }} </p>
                     </div>
                 </div>
+                
             </div>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+              {% for j in all_list %}
+                {% if j.date == i %}
+                <div class="card mcard">
+                  <div class="row">
+                      <div class="col-3 col-lg-1" >
+                          <img class="imgposter" src="{{j.image}}">
+                      </div>
+                      <div class="col-9 col-lg-11 moviename" >
+                          <p class="namem">{{j.name}}</p>
+                          <p class="movietag"><span class="tags">Tag : </span>{{ j.tag }}</p>
+                          <p class="moviestar"><span class="tags">Actor : </span>{{ j.actor|linebreaksbr|safe }}</p>
+                      </div>
+                  </div>
+              </div>
+              
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </div>
+            <!-- <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
               {% for i in all_list %}
                 <div class="col mb-2">
                     
@@ -74,7 +96,7 @@
               {% endfor %}
           
           
-              </div>
+            </div> -->
               
               
       </div>

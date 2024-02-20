@@ -1,0 +1,163 @@
+body{
+    background-color: black;
+}
+
+.card-link {
+    color: rgb(88, 189, 247);
+    text-decoration: none;
+}
+
+.card-link:hover {
+    text-decoration: underline;
+    color: rgb(88, 189, 247);
+}
+
+.card-link:active {
+    color: rgb(47, 0, 255); /* เปลี่ยนสีลิงก์เมื่อคลิก */
+}
+
+.carousel-item img {
+    width: 364px;
+    height: 560px;
+    object-fit: cover;
+}
+.divider {
+border-left: 1px solid #000; /* สีเส้นแบ่ง */
+height: 30px; /* ความสูงของเส้นแบ่ง */
+margin: 0 10px; /* ระยะห่างของเส้นแบ่งจากข้อความ */
+}
+
+.profile-container{
+  width: 60px;
+  height: 60px;
+}
+.avatar {
+vertical-align: middle;
+width: 100px;
+height: 100px;
+border-radius: 50%;
+object-fit: cover;
+object-position: center 1%; 
+}
+.position-avatar {
+  margin-left: 40%;
+}
+.position-avatarname{
+  margin-left: 30%;
+}
+
+/* Star rating */
+/* Optional: CSS for active (highlighted) stars */
+.stars i.active {
+  /* color: gold; */
+  color: rgb(255, 187, 92);
+}
+/* .stars{
+  color: rgb(0, 0, 0, 0.3);
+} */
+.rating-box .stars{
+  display: flex;
+  align-items: center;
+  gap:25px;
+}
+.card.rating-box .stars i {
+  flex-basis: calc(20% - 5px); /* 20% ความกว้างของแต่ละดาวและลบระยะห่างระหว่างดาวออกไป 5px */
+  text-align: center;
+  font-size: 24px; /* ขนาดของดาว */
+}
+
+@media (max-width: 768px) {
+  /* ในกรณีที่หน้าจอมีขนาดเล็กกว่าหรือเท่ากับ 768px */
+  .card.rating-box .stars {
+    flex-wrap: wrap; /* แสดงเป็นสองแถว */
+  }
+} */
+.profilecomment{
+  object-fit: cover;
+  object-position: center;
+}
+.submitbtn{
+  height: 50%;
+  width: 50%;
+}
+.checkarea{
+  width: 100%;
+}
+/* new comment css*/
+.card-body {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
+}
+
+.profilecomment {
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.link-muted {
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.link-muted:hover {
+  text-decoration: underline;
+}
+
+.badge {
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+/* กด like แล้วเปลี่ยนสี */
+.heart-btn {
+font-size: 24px;
+color: #ccc;
+border: none;
+background: none;
+cursor: pointer;
+transition: color 0.3s ease;
+}
+.heart-btn.active {
+  color: red;
+  animation: heartPulse 0.3s ease;
+}
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+a{
+  padding-left: 10px;
+}
+body, html {
+  max-width: 100%;
+  overflow-x: hidden;
+}

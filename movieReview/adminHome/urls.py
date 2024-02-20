@@ -29,6 +29,7 @@ urlpatterns = [
     path('actor/<int:id>/', views.actor, name='actor'),
     path('coinshop/', views.coinshop, name='coinshop'),
     path('calender/', calendarscraper, name='calender'),
+    path('minigame/', views.minigame, name='minigame'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),

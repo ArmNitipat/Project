@@ -151,7 +151,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dbmovie',
         'USER': 'admin01',
-        'PASSWORD': '@myadmin',
+        'PASSWORD': 'mypassword',
         'HOST': 'localhost',  # หรือ IP ที่ MySQL Server ทำงานอยู่
         'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
     }
@@ -206,9 +206,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = 'adminHome/static/'#Location of static files
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'adminHome/static')]
-STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
+# URL to use when referring to static files located in STATIC_ROOT.
+STATIC_URL = '/static/'
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled, e.g., if you use the collectstatic or findstatic management command or use the static file serving view.
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 #media file
 MEDIA_URL = 'adminHome/templates/'

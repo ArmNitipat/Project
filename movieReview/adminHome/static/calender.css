@@ -1,46 +1,65 @@
-.imgposter{
-    width: 150px;
-    height: 222px;
+.moviename {
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+}
+
+.movietag{
+    font-size: 14px;
+    color: rgb(99, 99, 99);
+}
+.moviestar{
+    font-size: 14px;
+    color: rgb(99, 99, 99);
+}
+.monthcolor {
+    font-size: 35px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+.imgposter {
+    min-height: 100%;
+    min-width: 5vw;
     object-fit: cover;
 }
-.mcard{
-    min-height: 470px;
-    height: auto;
-    width: auto;
-}
-.card {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-}
-.moviename{
-    font-size: 23px;
-    font-weight: bold;
-    text-align: center;
-}
-.tags{
-    font-weight: bold;
-}
-.monthcolor{
-    color: rgb(0, 0, 0);
-    font-size: 30px;
-    font-weight: bold;
+
+/* สำหรับหน้าจอขนาดใหญ่ขึ้นไป */
+@media (min-width: 992px) {
+    .mcard .col-lg-1,
+    .mcard .col-lg-11 {
+        flex: 0 0 auto;
+        width: auto;
+    }
 }
 
-.moviedate{
-    font-size: 20px;
-    font-weight: bold;
-    bottom: 0;
-    position: absolute;
-}
-.date{
-    font-weight: bold;
+/* สำหรับหน้าจอขนาดเล็ก */
+@media (max-width: 991.98px) {
+    .mcard .col-9 {
+        flex: 0 0 auto;
+        width: auto;
+    }
 }
 
-.card-body{
-    width: 16vw;
-}
-.gobutton{
-    height: 100%;
-    width: 100%;
+@media only screen and (max-width: 768px) {
+    .moviename {
+        font-size: 14px; 
+    }
+    .movietag{
+        font-size: 9px;
+    }
+    .moviestar{
+        font-size: 6px;
+    }
+    .imgposter {
+        min-height: 100%;
+        min-width: 20vw;
+        object-fit: cover;
+    }
+    .monthcard {
+        background-color: white;
+    }
+    .monthcolor {
+        font-size: 18px;
+        color: black;
+    }
 }

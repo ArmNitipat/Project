@@ -80,7 +80,7 @@ def calendarscraper(request):
     all_tr_tags = soup.find_all('tr')
     all_list = []
     date = ""
-    date_list = []
+    headdate = []
     for tr_tag in all_tr_tags:
         if tr_tag.get('class') and 'mojo-group-label' in tr_tag.get('class'):
             text = tr_tag.text.strip()
@@ -123,13 +123,16 @@ def calendarscraper(request):
                     'actor': actor,
                     'date': date
                 })
+                if date not in headdate :
+                    headdate.append(date)
 
 
 
     context = {
         'all_list': all_list,
-        'date_list': date_list,
+        'headdate': headdate,
         'years':years
+
     }
 
     return render(request, 'calender.html',context)
@@ -1005,6 +1008,9 @@ def admin_view(request):
     
     return render(request, 'admin/dashboard.html', context)
 
+def minigame(request):
+
+    return render(request, 'minigame.html')
 
 #admin custom view
 # my_custom_view
