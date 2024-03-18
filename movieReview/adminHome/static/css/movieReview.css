@@ -32,20 +32,19 @@ margin: 0 10px; /* ระยะห่างของเส้นแบ่งจ�
   height: 60px;
 }
 .avatar {
-vertical-align: middle;
 width: 100px;
 height: 100px;
 border-radius: 50%;
 object-fit: cover;
 object-position: center 1%; 
 }
-.position-avatar {
-  margin-left: 40%;
-}
-.position-avatarname{
-  margin-left: 30%;
-}
 
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%; 
+}
 /* Star rating */
 /* Optional: CSS for active (highlighted) stars */
 .stars i.active {
@@ -85,7 +84,6 @@ object-position: center 1%;
 }
 /* new comment css*/
 .card-body {
-  background-color: white;
   border-radius: 5px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
@@ -160,4 +158,20 @@ a{
 body, html {
   max-width: 100%;
   overflow-x: hidden;
+}
+.headcomment{
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.detailcomment{
+  font-size: 18px;
+  opacity: 0.8;
+  font-family: 'Times New Roman', Times, serif;
+}
+.pointcimdb{
+  color: darkorange;
+  font-size: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
 }

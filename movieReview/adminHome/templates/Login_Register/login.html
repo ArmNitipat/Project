@@ -86,7 +86,7 @@
             Don't have an account?
             <a href="/register" style="color: #0766AD">Register here</a>
           </p>
-          <a href="#!" class="small"style="color: #0766AD;">About us</a>
+          <a href="/about_us" class="small"style="color: #0766AD;">About us</a>
         </form>
         {% if login_error %}
         <script>
@@ -107,4 +107,11 @@
     style="background-color: rgba(0, 0, 0, 0.6); height: 100lvh">
   </div>
 </div>
+{% if messages %}
+{% for message in messages %}
+<script>
+  alert("{{ message }}");
+</script>
+{% endfor %}
+{% endif %}
 {%endblock%}

@@ -1,27 +1,28 @@
 {% extends "base1.html" %} {%block title %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
 <title>Home</title>
 {% endblock %} {%block content%}
 <style>
   .carousel-inner {
-      background-color: #000000; /* สีพื้นหลังของ Carousel */
-      text-align: center; /* จัดให้รูปภาพอยู่กึ่งกลางตามแนวนอน */
-      height: 65vh; /* ปรับความสูงตามที่คุณต้องการ */
+      background-color: #000000; 
+      text-align: center; 
+      height: 65vh; 
   }
 
   .carousel-item img {
-    width: 100%; /* ปรับความกว้างตามที่คุณต้องการ */
-    height: 80vh; /* ปรับความสูงตามที่คุณต้องการ */
-    object-fit: contain; /* การปรับขนาดรูปภาพเพื่อให้พอดีกับพื้นที่ */
+    width: 100%; 
+    height: 80vh; 
+    object-fit: contain; 
     
 }
 
 .carousel-caption {
     position: absolute;
-    background-color: #0000007a; /* กำหนดสีพื้นหลังสำหรับ h5 */
-    color: white; /* กำหนดสีตัวอักษร */
-    padding: 15px 10px; /* ปรับระยะห่างขอบด้านบนและด้านล่าง 10px และด้านซ้าย-ขวา 15px */
-    z-index: 1; /* กำหนดลำดับการแสดงผลเหนือรูปภาพ */
-    top: 68%; /* ปรับตำแหน่งของ caption ขึ้นหรือลง ณ 20% ของความสูงของรูปภาพ */
+    background-color: #0000007a; 
+    color: white; 
+    padding: 15px 10px; 
+    z-index: 1; 
+    top: 68%; 
 }
   .card-img-top{
     height: 453px;
@@ -29,11 +30,41 @@
     object-fit: cover;
     object-position: center;
   }
+  .imgnewmovie{
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
   .card{
-    width: 306px;
+    width: 250px;
     height: auto;
     text-decoration: none;
   }
+  .cardnewmovie{
+    width: 250px;
+    height: auto;
+    min-height: 520px;
+    text-decoration: none;
+  }
+  .newmoviecardbody{
+    min-height: 151px;
+  }
+  @media screen and (max-width: 768px) {
+    .cardnewmovie {
+      width: 48vw;
+      margin-left: 15px;
+    }
+    .newname{
+      font-size: 16px;
+    }
+    .imgnewmovie{
+      height: auto;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    }
   .card-body{
     text-decoration: none;
     border-radius: 2%px;
@@ -49,8 +80,36 @@
   .positive{
     color: rgb(29, 191, 56);
   }
-  
+  /* NewMovie */
+  ul li{
+      cursor: pointer;
+  }
+  .menu {
+    display: flex;
+    list-style-type: none;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.menu li {
+    margin-right: 0;
+    padding-right: 0;
+}
+
+
+
+    .is-hidden{
+      display:none !important;
+    }
+  .is-hidden .splide__arrows{
+    visibility: hidden;
+  }
+
+
+
+
 </style>
+
 <div style="background-color: #000000;">
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="display: block;margin-left: auto; margin-right: auto;width: 100%;">
     <div class="carousel-inner">
@@ -58,7 +117,7 @@
         <div class="carousel-inner">
           {% for slide in slides %}
           <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="8000">
-            <img src="{{ slide.image.url }}" alt="Banner Slide Image" class="d-block w-100" style="background-color: #000000;">
+            <img src="{{ slide.image.url }}" alt="Banner Slide Image" class="d-block w-100" style=" background-color: #000000; ">
             <div class="carousel-caption d-none d-md-block">
                 <h5>{{ slide.title }}</h5>
                 <p>{{ slide.description }}</p> 
@@ -87,8 +146,51 @@
   </div>
 </div>
 
+
+<div class="overlay" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
+  <div class="row justify-content-center">
+      <div class="col-12 col-md-6 px-0">
+           <h1 class="display-4 fst-italic text-center" style="color: white; text-shadow: 2px 2px 4px #000000; font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 48px;">10 New Movie in Theaters</h1>
+      </div>
+  </div>
+</div>
+<!-- NewMovie Area START -->
+<div class="row justify-content-center align-items-center d-flex">
+  <div class="col-md-9">
+    <div class="splide red" id="a">
+      <div class="splide__track">
+          <ul class="splide__list ">
+              {% for img , name , release in newMovie %}
+              <li class="splide__slide">
+                <div class="border cardnewmovie mb-4">
+                  <a class="" href=""></a>
+                  <a class="" href="">
+                    <img class="card-img-top imgnewmovie" src="{{ img }}" alt="รูปภาพหลักของ {{ name }}">    
+                  </a>
+                  <div class="card-body newmoviecardbody">
+                    <a class="img-wrapper" href="">
+                      <h4 class="card-title newname">{{ name }}</h4>
+                    </a>
+                    <div  style="display: flex; justify-content: space-between;">
+                      <span class="newdate">{{ release }}</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
+          </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- NewMovie Area End -->
 <!--Bottom-->
 <div class="bg-dark text-light text-center mt-1 mb-5">
+  
+  
   <!-- <div
     class="overlay"
     style="background-size: cover">
@@ -97,7 +199,7 @@
   <div class="overlay" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
     <div class="row justify-content-center">
         <div class="col-12 col-md-6 px-0">
-            <h1 class="display-4 fst-italic text-center" style="color: white; text-shadow: 2px 2px 4px #000000;">Movie Rate</h1>
+            <h1 class="display-4 fst-italic text-center" style="color: white; text-shadow: 2px 2px 4px #000000; font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 48px;">Movie Rate</h1>
         </div>
     </div>
   </div>
@@ -112,7 +214,7 @@
           {% for movie in movies %}
           <div class="col-md-3" style="background-color: #000;">
             <a class="" href="{% url 'moviereview' movie.id %}">
-              <div class="card mb-4">
+              <div class="border mb-4">
                 <a class="" href="{% url 'moviereview' movie.id %}">
                   {% if movie.main_image %}
                     {% if movie.main_image.image %} 
@@ -129,19 +231,19 @@
                     <h4 class="card-title">{{ movie.name }}</h4>
                   </a>
                   <div style="display: flex; justify-content: space-between;">
-                    <span class="me-2" style="display: flex; align-items: center; "><i class="fas fa-star"></i> 9 / 10</span>
+                    <span class="me-2" style="display: flex; align-items: center; ">
+                      <i class="fas fa-star px-1"></i>{{movie.avg_score}} / 10</span>
                     <span>{{ movie.release_date.year }}</span>
                   </div>
                   <div style="display: flex; justify-content: space-between;">
-                    <div class="movie_info me-1 positive">Positive: 80%</div>
-                    <div class="movie_info me-1 text-danger">Negative: 20%</div>
+                    <div class="movie_info me-1 positive">Positive: {{movie.positive}}%</div>
+                    <div class="movie_info me-1 text-danger">Negative: {{movie.negative}}%</div>
                   </div>
                 </div>
               </div>
             </a>
           </div>
 
-          <!-- <script>console.log("Image URL:", "{{   movie.main_image.image_url }}");</script> -->
           {% endfor %}
 
         </div>
@@ -149,6 +251,7 @@
     </div>
     
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
   <script>
     $(document).ready(function() {
           $('#carouselExampleCaptions').carousel(); // Initialize the carousel
@@ -193,6 +296,25 @@
       $('#carouselExampleCaptions').carousel(); // Initialize the carousel
     });
   </script>
+  <script>
+    const menu = document.querySelectorAll('.menu li')
+
+
+  </script>
   
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+    let perPageValue = 4; 
+    if (window.innerWidth <= 768) { 
+        perPageValue = 2; 
+    }
+
+    const splide = new Splide('#a', {
+        perPage: perPageValue,
+        perMove: 1,
+    }).mount();
+});
+  </script>
+
 </div>
 {%endblock%}

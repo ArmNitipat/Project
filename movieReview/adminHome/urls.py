@@ -30,6 +30,14 @@ urlpatterns = [
     path('coinshop/', views.coinshop, name='coinshop'),
     path('calender/', calendarscraper, name='calender'),
     path('minigame/', views.minigame, name='minigame'),
+    path('updatecoin/', views.updatecoin, name='updatecoin'),
+    path('update_session/', views.update_session, name='update_session'),
+    path('about_us/', views.about_us, name='about_us'),
+    path('calender/<int:year>/<int:month>/', views.calendarscraper, name='calender'),
+    path('calendarTH/', views.calendarTH, name='calendarTH'),
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    #admin
+    # path('dashboard/', views.dashboard_view, name='dashboard'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
@@ -47,8 +55,11 @@ urlpatterns = [
     path('check_email/', views.check_email, name='check_email'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     path('like_comment/<int:comment_id>/', views.like_comment, name='like_comment'),
+    path('report_comment/<int:comment_id>/', views.report_comment, name='report_comment'),
+    path('scrape_movie_data/<str:movie>/', views.scrape_movie_data, name="scrape_movie_data"),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('my_custom_view/', views.my_custom_view, name='my_custom_view')
+    path('test/', views.test, name='test'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
 ]    
 if settings.DEBUG:

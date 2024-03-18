@@ -1,4 +1,4 @@
-{% extends "base1.html" %} 
+{% extends "base1.html" %}
 {% load static %}
 {%block title %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -8,674 +8,880 @@
 {% endblock %} {%block content%}
 
 <main class="container bg-light bg-dark text-light border border-light" style="width: auto;">
-      <div class="p-4 p-md-5  text-white rounded" style="background-color: rgba(35, 35, 35, 0.879);">
-        <!--รูปภาพของภาพยนตร์-->
-        <div class="row">
-            <div class="col-md-3 d-flex align-items justify-content-center" style="padding-bottom: 8px;">
-                <div class="card bg-transparent border-0" style="height: 432px; overflow: hidden; position: relative;">
-                  {% if mainmovie_image %}
-                    {% if mainmovie_image.image %}
-                      <img src="{{ mainmovie_image.image.url }}" alt="{{ movie.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                    {% elif mainmovie_image.image_url %}
-                      <img src="{{ mainmovie_image.image_url }}" alt="{{ movie.name }}"style="width: 100%; height: 100%; object-fit: cover;">
-                    {% endif %}
-                  {% endif %}
-                </div>
-            </div>
-        <!--คลิปของภาพยนตร์-->
-        <div class="col-md-7 bg-dark">
-            <div class="card" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 432px; background: transparent; border-radius: 15px; overflow: hidden;">
-                <div class="row text-dark" style="width: 100%; height: 432px;">
-                  {% if video %}
-                  <iframe id="myVideo" width="80%" height="432px" src="{{ video.video_url }}&autoplay=1&mute=1&rel=0"
-                          title="{{ movie.title }}"
-                          frameborder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowfullscreen>
-                  </iframe>
-                  {% else %}
-                  {% endif %}
-                </div>
-            </div>
-        </div>
+  <div class="p-4 p-md-5  text-white rounded" style="background-color: rgba(35, 35, 35, 0.879);">
+    <div class="row">
 
-        <div class="col-md-2 bg-dark">
-            <hr>
-            <h4 style="justify-content: center; align-items: center; " class="text-center mb-2"> Movie Rate</h4>
-            
-            <!--คะแนนจากเว็บต่างๆ-->
-            {% load static %}
-            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.500); border-radius: 10px;">
-              <img src="{% static 'icon.png' %}"style="width: 100px; height: 60px;" title="MovieReview">
-              <h5>{{ scoreAvg }}/10</h5>
-            </div>
-            <br>
-            <div class="card" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.500); border-radius: 10px;">
-                <img src="https://cdn-icons-png.flaticon.com/512/5977/5977585.png" style="width: 100px; height: 60px;" title="IMDB">
-                <h5>8.1/10</h5>
-            </div>
-            <!-- <div class="card mt-3" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
-                <img class="mt-1" src="https://cdn.cookielaw.org/logos/17e5cb00-ad90-47f5-a58d-77597d9d2c16/7e979733-6841-4fce-9182-515fac69187f/30d6331f-cc9b-43d7-a9d5-c035c834a1f9/rottentomatoes_logo_40.png" style="width: 100px; height: 40px;">
-                <h5>8.1/10</h5>
-            </div> -->
-            <hr>
-
-            <!--Tagของภาพยนตร์-->
-            <div class="card bg-dark ">
-                <h4 style="justify-content: center; align-items: center; " class="text-center"> Movie Tag</h4>
-              {% for tags in movie.tags.all %}
-                <div class="mt-1 mb-1 border-secondary card bg-transparent text-light" style="display: flex; justify-content: center; align-items: center; border-radius: 10px;">
-                    <h6 class="m-0">{{ tags }}</h6>
-                </div>
-              {% endfor %}
-              </div>
-        </div>
-
-      </div>
-    </div>
-
-
-    <div class="row mb-2 mt-1 ">
-
-      <div class="col-md-8 bg-dark">
-        <div class=" row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-          <div class="text-light bg-dark col p-4 d-flex flex-column position-static">
-
-            <div class="row">
-              <div class="col-md-7"></div>
-                <div class="col-md-5 d-flex align-items-center mt-2">
-                  <!-- Positive Comment -->
-                  <i class="fa-solid fa-thumbs-up" style="color: #00c832; font-size:30px;"></i>
-                  <p class="mb-0 ms-3">Positive</p>
-                  <strong class="d-inline-block ms-1 text-center text-light">{{ positive|floatformat:0 }}</strong>
-                  <div class="divider"></div>
-                  <!-- Negative Comment -->
-                  <i class="fa fa-thumbs-down" style="font-size:30px; color: coral; transform: scaleX(-1);"></i>
-                  <p class="mb-0 ms-3">Negative</p>
-                  <strong class="d-inline-block ms-1 text-center text-light">{{ negative|floatformat:0 }}</strong>
-                </div>
-              </div>
-
-            <!--รายละเอียดปีที่ออก เวลาของภาพยนตร์ และ เรทของภาพยนตร์ -->
-            <div class="row mt-2">
-              <strong class="col-md-7 d-inline-block mb-2 text-primary">
-                  {{ movie.release_date.year }}
-                  {{ movie.rate }}
-                  {{ movie.time}}
-              </strong>
-            </div>
-
-            <!-- ชื่อ ภาพยนตร์ -->
-            <h3 class="mb-0">{{movie}}</h3>
-
-            <!--วันที่ออกฉาย-->
-            <div class="mb-1 text-muted">Release {{ movie.release_date }}</div>
-
-            <!--คำอธิบายภาพยนตร์ หรือ เรื่องย่อ-->
-            <p class="card-text mb-auto" style="color: rgb(177, 177, 177);">{{ movie.story }}</p>
-            <hr>
-            <div>
-
-                <!-- ผู้กำกับ -->
-                <div style="display: flex; flex-direction: row; align-items: center;">
-                  <p class="me-3 mb-auto m-0">Director</p>
-                  {% for director in directors %}
-                      <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'moviereview' director.id %}">
-                          {{ director.name }}
-                      </a>
-                  {% endfor %}
-                </div>
-                <hr>
-
-                <!-- คนเขียนบท -->
-                <div style="display: flex; flex-direction: row; align-items: center;">
-                  <p class="me-3 mb-auto m-0">Writer</p>
-                  {% for writer in writers %}
-                      <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'moviereview' writer.id %}">
-                          {{ writer.name }}
-                      </a>
-                  {% endfor %}
-                </div>
-                <hr>
-
-                <!-- นักแสดง -->
-                <div style="display: flex; flex-direction: row; align-items: center;">
-                    <p class="me-3 mb-auto m-0">Stars</p>
-                    <!-- <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star1-link">
-                        Arm Nitipat
-                    </a>
-                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star2-link">
-                        Mark Sirawit
-                    </a>
-                    <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="star3-link">
-                        Koekae Smartdog
-                    </a> -->
-                    {% for detail in topcast %}
-                      <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'actor' detail.star.id %}">
-                        {{ detail.star.name }}
-                    </a>
-                    {% endfor %}
-                </div>
-                <hr>
-
-                <!--Story line-->
-                <!-- <div style="align-items: center;">
-                    <p class="me-3 mb-auto m-0" style="font-size: 32px; font-weight: bold;">Storyline</p>
-                    <p class="mt-1 mb-3" style="color: rgb(177, 177, 177);">
-                        Peter Parker's secret identity is revealed to the entire world.
-                        Desperate for help, Peter turns to Doctor Strange to make the world forget that he is Spider-Man.
-                        The spell goes horribly wrong and shatters the multiverse, bringing in monstrous villains that could destroy the world.
-                    </p>
-                </div> -->
-
-
-            </div>
-
-
-          </div>
-
+      <!--รูปภาพของภาพยนตร์-->
+      <div class="col d-flex align-items justify-content-center pb-4">
+        <div class="card border" style="height: 432px; overflow: hidden; position: relative;">
+          {% if mainmovie_image %}
+          {% if mainmovie_image.image %}
+          <img src="{{ mainmovie_image.image.url }}" alt="{{ movie.name }}"
+            style="width: 100%; height: 100%; object-fit: cover;">
+          {% elif mainmovie_image.image_url %}
+          <img src="{{ mainmovie_image.image_url }}" alt="{{ movie.name }}"
+            style="width: 100%; height: 100%; object-fit: cover;">
+          {% endif %}
+          {% endif %}
         </div>
       </div>
-      <div class="col-md-4 bg-dark text-light">
 
-        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              {% for image in movie_image %}
-              <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                {% if image.image %}  <!-- Assuming this is a LocalImage object with an 'image' field. -->
-                  <img src="{{ image.image.url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
-                {% elif image.image_url %}  <!-- Assuming this is a URLImage object with an 'image_url' field. -->
-                  <img src="{{ image.image_url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
-                {% endif %}
-              </div>
-            {% endfor %}
-            </div>
-            {% if movie_image %}
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+      <!--คลิปของภาพยนตร์-->
+      <div class="col-md-7">
+        <div class="card"
+          style="display: flex; align-items: center; justify-content: center; width: 100%; height: 432px; background: transparent; border-radius: 15px; overflow: hidden;">
+          <div class="row" style="width: 100%; height: 432px;">
+            {% if video %}
+            <iframe id="myVideo" width="80%" height="432px" src="{{ video.video_url }}&autoplay=1&mute=1&rel=0"
+              title="{{ movie.title }}" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
             {% else %}
             {% endif %}
-            </div>
-      </div>
-      <hr class="bg-dark">
-    </div>
-
-    <div class="row g-5">
-      <div class="col-md-12 justify-content-center align-items-center ">
-        <h3 class="pb-4 mb-1 justify-content-center align-items-center ">
-          <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-            <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-          </svg>
-            Top Cast
-        </h3>
-        <hr>
-        <div class="row justify-content-center align-items-center">
-          
-          <!-- รายชื่อนักแสดง -->
-          <!-- <div class="container mt-4">
-            <div class="row">
-                <div id="actor-container"></div>
-            </div>
-          </div> -->
-        
-          <div class="container mt-4">
-            <div class="row">
-                {% for image, detail in combined_data %}
-                    <div class="col-md-4 center">
-                        <!-- ส่วนแสดงรูปภาพ -->
-                        {% if image %}
-                            <img src="{{ image }}" alt="{{ detail.star.name }}" class="avatar position-avatar">
-                        {% else %}
-                            <p>No main image</p>
-                        {% endif %}
-
-                        <!-- ส่วนแสดงรายละเอียดนักแสดง -->
-                        <div class="position-avatarname">
-                            <h4 class="mt-2 font-weight-bold">{{ detail.star.name }}</h4>
-                            <p style="font-size: 18px;">{{ detail.character_name }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+          </div>
         </div>
+      </div>
 
-        <!--Comment-->
-        <div class="container my-5 py-5 ">
-          <br>
-          <h3 class="pb-4 mb-1 justify-content-center text-center  align-items-center ">
-            Comment Review
-          </h3>
+      <div class="col-md-2">
+        <hr class="m-0">
+        <h4 class="text-center mb-2 p-2"> Movie Rate</h4>
+
+        <!--คะแนนจากเว็บต่างๆ-->
+        <div class="card"
+          style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.500); border-radius: 10px;">
+          <img class="mt-1" src="{% static 'icon.png' %}" title="MovieReview" width="100" height="60">
+          <h5>{{ scoreAvg }}/10</h5>
+        </div>
+        <br>
+
+        <div class="card"
+          style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.500); border-radius: 10px;">
+          <img src="https://cdn-icons-png.flaticon.com/512/5977/5977585.png" title="IMDB" width="100" height="60">
+          <h5>8.1/10</h5>
+        </div>
+        <!-- <div class="card mt-3" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.485); border-radius: 10px;">
+                  <img class="mt-1" src="https://cdn.cookielaw.org/logos/17e5cb00-ad90-47f5-a58d-77597d9d2c16/7e979733-6841-4fce-9182-515fac69187f/30d6331f-cc9b-43d7-a9d5-c035c834a1f9/rottentomatoes_logo_40.png" width="100" height="60">
+                  <h5>8.1/10</h5>
+              </div> -->
+        <hr>
+        <!--Tagของภาพยนตร์-->
+        <div class="card bg-dark text-light">
+          <h4 class="text-center"> Movie Tag</h4>
+          {% for tags in movie.tags.all %}
+          <div class="mt-1 mb-1 border-secondary card bg-transparent rounded text-center">
+            <h6 class="m-0">{{ tags }}</h6>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- รายละเอียดหนัง -->
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row border g-0 rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative bg-opacity-75">  
+        <div class="col p-4 d-flex flex-column position-static">
+
+          <div class="row justify-content-end">
+            <div class="col-md-5 d-flex align-items-center">
+              <!-- Positive Comment -->
+              <i class="fa-solid fa-thumbs-up" style="color: #00c832; font-size:30px;"></i>
+              <p class="mb-0 ms-3">Positive</p>
+              <strong class="d-inline-block ms-1 text-center">{{ positive|floatformat:0 }}</strong>
+              <div class="divider"></div>
+              <!-- Negative Comment -->
+              <i class="fa fa-thumbs-down" style="font-size:30px; color: coral; transform: scaleX(-1);"></i>
+              <p class="mb-0 ms-3">Negative</p>
+              <strong class="d-inline-block ms-1 text-center">{{ negative|floatformat:0 }}</strong>
+            </div>
+          </div>
+
+          <!--รายละเอียดปีที่ออก เวลาของภาพยนตร์ และ เรทของภาพยนตร์ -->
+          <div class="row mt-2">
+            <strong class="col-md-7 d-inline-block mb-2 text-primary">
+              {{ movie.release_date.year }}
+              {{ movie.rate }}
+              {{ movie.time}}
+            </strong>
+          </div>
+
+          <!-- ชื่อ ภาพยนตร์ -->
+          <h3 class="mb-0">{{movie}}</h3>
+
+          <!--วันที่ออกฉาย-->
+          <div class="mb-2 text-muted">Release {{ movie.release_date }}</div>
+
+          <!--คำอธิบายภาพยนตร์ หรือ เรื่องย่อ-->
+          <p class="card-text mb-auto">{{ movie.story }}</p>
           <hr>
-          <div class="mb-3 row d-flex justify-content-center">
-            <!-- edit from -->
-            <div class="col-md-12 col-lg-10">
-              {% if user.username %}
-              {% if commented %}
-                <form method="post" action="{% url 'moviereview' movie.id %}" id="RelviewedForm" style="display: none;">
-                  {% csrf_token %}
-                  <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
-                    <div class="card-body p-4" style="margin: 0;">
-                      <div class="d-flex flex-start w-100">
-                        <img class="rounded-circle shadow-1-strong me-3 profilecomment"
-                          src="{{ user.image.url }}" alt="avatar" width="65"
-                          height="65" style="object-fit: cover;" />
-                          <div class="w-100">
-                            <h5>{{ user.username }}</h5>
-                            <p>Give star for this movie</p>
-                            
-                            <div class="card rating-box justify-content-center align-items-center" style="border: none; background-color: unset;">
-                              <div class="stars">
-                                {% for i in '0123456789' %}
-                                  <!-- Use data-index to store the star's index -->
-                                  <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
-                                {% endfor %}
-                              </div>
-                              <input type="hidden" id="rating" name="score" value="{{ commented.score }}" minlength="1" maxlength="10">
-                            </div>
-                            <!-- Comments form  -->
-                            <div class="form-floating mt-2">
-                              <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea" name="data" minlength="6" maxlength="1000" value="{{ commented.data }}"></textarea>
-                              <label for="Textarea">Add Comments</label>
-                            </div>
+          <div>
 
-                            <!-- Rating and Spoiler fields -->
-                          <div class=" d-flex justify-content-between mt-3">
-                            <div class=".form-check-inline checkarea" >
-                              <div class="form-check">
-                                <input class="form-check-input" for="nospoiler" type="radio" name="spoiler" id="nospoiler" value="0">
-                                <label class="form-check-label" for="nospoiler">
-                                  NO SPOILER
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" for="spoiler" type="radio" name="spoiler" id="spoiler" value="1">
-                                <label class="form-check-label" for="spoiler">
-                                  SPOILER
-                                </label>
-                              </div>
-                              <div class=".form-control">
-                                <div id="textinfo" class="mb-3 mt-3 " style="color: red;"></div> <!-- ส่วนแสดงข้อความเงื่อนไข -->
-                              </div>
-                            </div>
-                            
-                      <input type="hidden" name="comment_id" value="{{ comment.pk }}">
-                    <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
-                      Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
-                    </button>
-                  </div>
-                </div>
-                </form>
+            <!-- ผู้กำกับ -->
+            <div class="row">
+              <div class="col-mb-5 d-flex align-items-center">
+              <p class="me-3 mb-auto m-0">Director</p>
+              {% for director in directors %}
+              <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'moviereview' director.id %}">
+                {{ director.name }}
+              </a>
+              {% endfor %}
               </div>
             </div>
-            {% endif %} 
+            <hr>
+
+            <!-- คนเขียนบท -->
+            <div class="row">
+              <div class="col-mb-5 d-flex align-items-center">
+                <p class="me-3 mb-auto m-0">Writer</p>
+                {% for writer in writers %}
+                <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'moviereview' writer.id %}">
+                  {{ writer.name }}
+                </a>
+                {% endfor %}
+              </div>
+            </div>
+            <hr>
+
+            <!-- นักแสดง -->
+            <div class="row">
+              <div class="col-mb-5 d-flex align-items-center">
+                <p class="me-3 mb-auto m-0">Stars</p>
+                  {% for detail in topcast %}
+                <a class="ms-1 me-2 card-text mb-auto m-0 card-link" href="{% url 'actor' detail.star.id %}">
+                  {{ detail.star.name }}
+                </a>
+                  {% endfor %}
+              </div>
+            </div>
+            <hr>
+
+            <!--Story line-->
+            <!-- <div style="align-items: center;">
+              <p class="me-3 mb-auto m-0" style="font-size: 32px; font-weight: bold;">Storyline</p>
+              <p class="mt-1 mb-3" style="color: rgb(177, 177, 177);">
+                          Peter Parker's secret identity is revealed to the entire world.
+                          Desperate for help, Peter turns to Doctor Strange to make the world forget that he is Spider-Man.
+                          The spell goes horribly wrong and shatters the multiverse, bringing in monstrous villains that could destroy the world.
+              </p>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 pt-4">
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          {% for image in movie_image %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            {% if image.image %} <!-- Assuming this is a LocalImage object with an 'image' field. -->
+            <img src="{{ image.image.url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
+            {% elif image.image_url %} <!-- Assuming this is a URLImage object with an 'image_url' field. -->
+            <img src="{{ image.image_url }}" class="d-block w-100" style="object-fit: cover;" alt="Image description">
             {% endif %}
           </div>
-        </div>           
-              <!-- Input Comment-->
-              {% if user.username %}
-              {% if commented %}
-              {% else %}
-              <form method="post" action="{% url 'moviereview' movie.id %}">
-                {% csrf_token %}
-              <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
-                <div class="card-body p-4 m-0">
-                  <div class="d-flex flex-start w-100">
-                    <img class="rounded-circle shadow-1-strong me-3 profilecomment"
-                      src="{{ user.image.url }}" alt="avatar" width="65"
-                      height="65" style="object-fit: cover;" />
-                    <div class="w-100">
-                       <h5>{{ user.username }}</h5>
-                      <p>Give star for this movie</p>
+          {% endfor %}
+        </div>
+        {% if movie_image %}
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        {% else %}
+        {% endif %}
+      </div>
+    </div>
+    <hr class="bg-dark">
+  </div>
 
-                        <div class="card rating-box justify-content-center align-items-center" style="background-color:#00000000; border: none;">
-                          <div class="stars" style="border: #000;">
-                            {% for i in '0123456789' %}
-                              <!-- Use data-index to store the star's index -->
-                              <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
-                            {% endfor %}
-                          </div>
-                          <input type="hidden" id="rating" name="score" value="" minlength="1" maxlength="10">
-                        </div>
+  <!-- ส่วนแสดงรูปภาพ และ รายละเอียดนักแสดง -->
+  <div class="row g-5">
+    <div class="col">
+      <h3 class="pt-4">
+        <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+          <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        Top Cast
+      </h3>
+      <hr>
 
-                        <div class="form-floating mt-2">
-                          <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea" name="data" minlength="6" maxlength="1000"></textarea>
-                          <label for="Textarea">Add Comments</label>
-                        </div>
-
-                      <div class=" d-flex justify-content-between mt-3">
-                        <div class=".form-check-inline checkarea" >
-                          <div class="form-check">
-                            <input class="form-check-input" for="nospoiler" type="radio" name="spoiler" id="nospoiler" value="0">
-                            <label class="form-check-label" for="nospoiler">
-                              NO SPOILER
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" for="spoiler" type="radio" name="spoiler" id="spoiler" value="1">
-                            <label class="form-check-label" for="spoiler">
-                              SPOILER
-                            </label>
-                          </div>
-                          <div class=".form-control">
-                            <div id="textinfo" class="mb-3 mt-3 " style="color: red;"></div> <!-- ส่วนแสดงข้อความเงื่อนไข -->
-                          </div>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
-                          Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
-                        </button>
-
-                      </div>
-                      
-                      <div class="preference">
-                        <label for="cheese">Do you like cheese?</label>
-                        <input type="checkbox" name="cheese" id="cheese" />
-                      </div>
-
-                    </div>
-                    </form>
-                  </div>
-                </div>
+      <div class="row p-4">
+        {% for image, detail in combined_data %}
+        {% if forloop.counter|divisibleby:2 %}
+            <div class="col-4 ">
+              <!-- ส่วนแสดงรูปภาพ -->
+              {% if image %}
+              <div class="avatar-container">
+                <img src="{{ image }}" alt="{{ detail.star.name }}" class="avatar">
               </div>
-              {% endif %}
               {% else %}
+              <p>No main image</p>
               {% endif %}
 
-              <!--Show Comment-->
-              <div class="card text-light " style="background-color: RGB(51,51,51); border-radius: 10px; overflow-y: scroll; max-height: 800px; color: white;">
-                <div class="p-3">
-                <h4 class="mb-0">
-                  <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                  </svg>Recent comments</h4>
-                  <p class="fw-light ms-5">Latest Comments section by users</p>
-                </div>
-                
-                {% if commented %}
-                <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    <div class="profile-container me-3">
-                      <img class="rounded-circle shadow-1-strong profilecomment" style="object-fit: cover;" src="{{ commented.user.image.url }}" alt="avatar" width="60" height="60" />
-                    </div>
-                    <div style="width: 100vh;">
-                      <h6 class="fw-bold mb-1">{{ commented.user.username }}</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                          {{ commented.update_date|date:"d-m-Y" }}
-                          {{ commented.update_date|date:"H:i a" }}
-                        </p>
+              <!-- ส่วนแสดงรายละเอียดนักแสดง -->
+              <div class="">
+                <h4 class=" font-weight-bold text-center">{{ detail.star.name }}</h4>
+                <p class="text-center" style="font-size: 18px;">{{ detail.character_name }}</p>
+              </div>
+            </div>
+          <div class="col-2"></div>
+        </div>
 
-                        <!-- EditButton -->
-                        <a href="javascript:void(0);" onclick='EditForm("{{commented.data}}", "{{commented.score}}"," {{commented.spoiler}}")'>
-                          <i class="fas fa-pencil-alt" title="Edit"></i>
-                        </a>
-                      
-                        <!-- Like Button -->
-                        <form action="{% url 'like_comment' commented.id %}" method="post" class="like-form">
-                          {% csrf_token %}
-                          {% if request.user.is_authenticated %}
-                            {% if commented.id in liked_comments %}
-                              <!-- User liked this comment -->
-                              <button type="submit" id="heartButton-{{ commented.id }}" class="heart-btn active">
-                                <i class="fas fa-heart ms-2" title="Like"></i>
-                              </button>
-                              {% else %}
-                              <!-- User has not liked this comment -->
-                              <button id="heartButton-{{ commented.id }}" class="heart-btn">
-                                <i class="fas fa-heart ms-2"></i>
-                              </button>
-                            {% endif %}
-                          {% else %}
-                            <!-- User not logged in -->
-                            <button id="heartButton-{{ commented.id }}" class="heart-btn">
-                              <i class="fas fa-heart ms-2"></i>
-                            </button>
-                          {% endif %}
-                        </form>
 
-                        <!-- Like count -->
-                        <div id="like-count-{{ commented.id }}">{{ commented.toplike }}</div>
+        {% else %}
+        <div class="row p-4 " >
+          <div class="col-2"></div>
+          <div class="col-4 ">
+            <!-- ส่วนแสดงรูปภาพ -->
+            {% if image %}
+            <div class="avatar-container">
+              <img src="{{ image }}" alt="{{ detail.star.name }}" class="avatar">
+            </div>
+            {% else %}
+            <p>No main image</p>
+            {% endif %}
+
+            <!-- ส่วนแสดงรายละเอียดนักแสดง -->
+            <div class=" text-center">
+              <h4 class=" font-weight-bold">{{ detail.star.name }}</h4>
+              <p style="font-size: 18px;">{{ detail.character_name }}</p>
+            </div>
+          </div>
+      
+        {% endif %}
+      {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <!--Comment-->
+    <div class="container my-5 ">
+      <br>
+      <h3 class="pb-4 mb-1 justify-content-center text-center  align-items-center ">
+        Comment Review
+      </h3>
+      <hr>
+      <div class="mb-3 row d-flex justify-content-center">
+        <!-- edit from -->
+        <div class="col-md-12 col-lg-10">
+          {% if user.username %}
+          {% if commented %}
+          <form method="post" action="{% url 'moviereview' movie.id %}" id="RelviewedForm" style="display: none;">
+            {% csrf_token %}
+            <div class="card text-dark mb-2" style="background-color: #ffffffe2; border-radius: 10px;" id="fromCheck">
+              <div class="card-body p-4" style="margin: 0;">
+                <div class="d-flex flex-start w-100">
+                  <img class="rounded-circle shadow-1-strong me-3 profilecomment" src="{{ user.image.url }}"
+                    alt="avatar" width="65" height="65" style="object-fit: cover;" />
+                  <div class="w-100">
+                    <h5>{{ user.username }}</h5>
+                    <p>Give star for this movie</p>
+
+                    <div class="card rating-box justify-content-center align-items-center"
+                      style="border: none; background-color: unset;">
+                      <div class="stars">
+                        {% for i in '0123456789' %}
+                        <!-- Use data-index to store the star's index -->
+                        <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
+                        {% endfor %}
                       </div>
-                      <div>
-                        <i class="fas fa-star" style="color: rgb(255, 187, 92);" id="commentScore"></i> {{ commented.score }}/10
-                      </div>
-                      <p class="ms-0" id="commentData">
-                        {{ commented.data }}
-                      </p>
+                      <input type="hidden" id="rating" name="score" value="{{ commented.score }}" minlength="1" maxlength="10">
+                    </div>
+                    <!-- Comments form  -->
+                    <div class="form-floating mt-2">
+                      <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here"
+                        id="Textarea" name="data" minlength="6" maxlength="1000"
+                        value="{{ commented.data }}"></textarea>
+                      <label for="Textarea">Add Comments</label>
                     </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="reportIssueModal" tabindex="-1" aria-labelledby="reportIssueModalLabel" aria-hidden="true" style="top: 30vh;">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header text-dark">
-                            <h5 class="modal-title" id="reportIssueModalLabel">รายงานปัญหา</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            <!-- Form inside the modal -->
-                            <form id="reportForm">
-                              <div class="mb-3">
-                                <label for="issueType" class="form-label text-dark">เลือกปัญหา</label>
-                                <select class="form-select" id="issueType">
-                                  <option value="spam">สแปม</option>
-                                  <option value="harassment">ความรุนแรงหรือความหวาดกลัว</option>
-                                  <!-- Add other issue types here -->
-                                  <option value="other">อื่นๆ</option>
-                                </select>
-                              </div>
-                              <div class="mb-3" id="additionalTextGroup" style="display: none;">
-                                <label for="customText" class="form-label">รายละเอียดเพิ่มเติม</label>
-                                <textarea class="form-control" id="customText" rows="3"></textarea>
-                              </div>
-                              <button type="submit" class="btn btn-primary">ส่ง</button>
-                            </form>
-                          </div>
+                    <!-- Rating and Spoiler fields -->
+                    <div class=" d-flex justify-content-between mt-3">
+                      <div class=".form-check-inline checkarea">
+                        <div class="form-check">
+                          <input class="form-check-input" for="nospoiler" type="radio" name="spoiler" id="nospoiler"
+                            value="0">
+                          <label class="form-check-label" for="nospoiler">
+                            NO SPOILER
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" for="spoiler" type="radio" name="spoiler" id="spoiler" value="1">
+                          <label class="form-check-label" for="spoiler">
+                            SPOILER
+                          </label>
+                        </div>
+                        <div class=".form-control">
+                          <div id="textinfo" class="mb-3 mt-3 " style="color: red;"></div> <!-- ส่วนแสดงข้อความเงื่อนไข -->
                         </div>
                       </div>
-                    </div>
-
-                  </div>
-                </div>
-                {% endif %}
-                
-                {% if other_comments %}
-                {% for comment in other_comments%}
-                <div class="card-body p-4">
-                  <div class="d-flex flex-start">
-                    <div class="profile-container me-3">
-                      <img class="rounded-circle shadow-1-strong profilecomment" src="{{ comment.user.image.url }}" alt="avatar"
-                        width="60" height="60" />
-                    </div>
-
-                    <div style="width: 100vh;">
-                      <h6 class="fw-bold mb-1">{{ comment.user.username }}</h6>
-                      <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">{{ comment.update_date|date:"d-m-Y H:i a" }}</p>
-                
-                        <!-- Like Button -->
-                        <form action="{% url 'like_comment' comment.id %}" method="post" class="like-form">
-                          {% csrf_token %}
-                          {% if request.user.is_authenticated %}
-                            {% if comment.id in liked_comments %}
-                              <!-- User liked this comment -->
-                              <button type="submit" id="heartButton-{{ comment.id }}" class="heart-btn active">
-                                <i class="fas fa-heart ms-2" title="Like"></i>
-                              </button>
-                            {% else %}
-                              <!-- User has not liked this comment -->
-                              <button type="submit" id="heartButton-{{ comment.id }}" class="heart-btn">
-                                <i class="fas fa-heart ms-2"></i>
-                              </button>
-                            {% endif %}
-                          {% else %}
-                            <!-- User not logged in -->
-                            <button type="button" id="heartButton-{{ comment.id }}" class="heart-btn" onclick="event.preventDefault(); alert('Please log in to like comments.');">
-                              <i class="fas fa-heart ms-2"></i>
-                            </button>
-                          {% endif %}
-                        </form>
-
-                        <!-- Like count -->
-                        <div id="like-count-{{ comment.id }}">{{ comment.toplike }}</div>
-                      </div>
-
-                      <div>
-                        <i class="fas fa-star" style="color: rgb(255, 187, 92);"></i> {{ comment.score }}/10
-                      </div>
-                      
-                      <!-- Spoiler Handling -->
-                      {% if comment.spoiler %}
-                      <span class="badge bg-warning text-dark">Warning: Spoilers</span>
-                        <button class="btn btn-sm btn-outline-secondary ms-2" type="button" onclick="Spoiler('commentSpoiler-{{ comment.id }}')">Show Comment</button>
-                        <div id="commentSpoiler-{{ comment.id }}" class="collapse">
-                          <p class="mb-0">{{ comment.data }}</p>
-                        </div>
-                      {% else %}
-                          <p class="mb-0">{{ comment.data }}</p>
-                      {% endif %}
-                    </div>
-                    <div>
-                      <!-- Report Button -->
-                      <form action="{% url 'like_comment' comment.id %}" method="post">
-                      {% csrf_token %}
-                        <button title="Repost" type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportIssueModal">
-                          <i class="bi bi-flag"></i>
-                        </button>
-                      </form>
+    
+                      <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
+                        Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
+                      </button>
+    
                     </div>
                   </div>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  <!-- Input Comment-->
+  {% if user.username %}
+  {% if commented %}
+  {% else %}
+  <div class="card text-light mb-2" style="background-color: RGB(51,51,51); max-height: 800px;">
+    <form method="post" action="{% url 'moviereview' movie.id %}">
+      {% csrf_token %}
+      <div id="fromCheck">
+        <div class="card-body border" style="margin-bottom: 0px;">
+          <div class="d-flex flex-start w-100">
+            <img class="rounded-circle shadow-1-strong me-3 profilecomment" src="{{ user.image.url }}" alt="avatar"
+              width="65" height="65" style="object-fit: cover;" />
+            <div class="w-100">
+              <h5>{{ user.username }}</h5>
+              <p>Give star for this movie</p>
+
+              <div class="card rating-box justify-content-center align-items-center"
+                style="background-color:#00000000; border: none;">
+                <div class="stars" style="border: #000;">
+                  {% for i in '0123456789' %}
+                  <!-- Use data-index to store the star's index -->
+                  <i class="fa-solid fa-star" data-tooltip="{{i}} star" data-index="{{i}}" id="star{{i}}" name="score"></i>
+                  {% endfor %}
                 </div>
-                {% endfor %}
-                {% endif %}
-                <!-- ---------------------------------------------- -->
+                <input type="hidden" id="rating" name="score" value="" minlength="1" maxlength="10">
               </div>
 
+              <div class="form-floating mt-2">
+                <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here" id="Textarea"
+                  name="data" minlength="6" maxlength="1000"></textarea>
+                <label for="Textarea">Add Comments</label>
+              </div>
+
+              <div class=" d-flex justify-content-between mt-3">
+                <div class=".form-check-inline checkarea">
+                  <div class="form-check">
+                    <input class="form-check-input" for="nospoiler" type="radio" name="spoiler" id="nospoiler"
+                      value="0">
+                    <label class="form-check-label" for="nospoiler">
+                      NO SPOILER
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" for="spoiler" type="radio" name="spoiler" id="spoiler" value="1">
+                    <label class="form-check-label" for="spoiler">
+                      SPOILER
+                    </label>
+                  </div>
+                  <div class=".form-control">
+                    <div id="textinfo" class="mb-3 mt-3 " style="color: red;"></div> <!-- ส่วนแสดงข้อความเงื่อนไข -->
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary ms-auto submitbtn" id="Send">
+                  Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
+                </button>
+
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+    </form>
+  </div>
+  {% endif %}
+  {% else %}
+  {% endif %}
+
+  <!-- top comment -->
+  {% if top_comment %}
+  <div class="card text-light mb-2" style="background-color: RGB(51,51,51); max-height: 800px;">
+    <div class="p-3">
+      <h4 class="mb-0">
+        <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none"
+          stroke="#000000">
+          <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>TOP Comment
+      </h4>
+      <p class="fw-light ms-5">From web site ReviewMovie</p>
+    </div>
+    <div class="card-body p-4">
+      <div class="d-flex flex-start">
+        <div class="profile-container me-3">
+          <img class="rounded-circle shadow-1-strong profilecomment" style="object-fit: cover;"
+            src="{{ top_comment.user.image.url }}" alt="avatar" width="60" height="60" />
+        </div>
+        <div style="width: 100vh;">
+          <h6 class="fw-bold mb-1">{{ top_comment.user.username }}</h6>
+          <div class="d-flex align-items-center mb-3">
+            <p class="mb-0">
+              {{ top_comment.update_date|date:"d-m-Y" }}
+              {{ top_comment.update_date|date:"H:i a" }}
+            </p>
+
+            <!-- Like Button -->
+            <form action="{% url 'like_comment' top_comment.id %}" method="post" class="like-form">
+              {% csrf_token %}
+              {% if request.user.is_authenticated %}
+              {% if top_comment.id in liked_comments %}
+              <!-- User liked this comment -->
+              <button type="submit" id="heartButton-{{ top_comment.id }}" class="heart-btn active">
+                <i class="fas fa-heart ms-2" title="Like"></i>
+              </button>
+              {% else %}
+              <!-- User has not liked this comment -->
+              <button type="submit" id="heartButton-{{ top_comment.id }}" class="heart-btn">
+                <i class="fas fa-heart ms-2"></i>
+              </button>
+              {% endif %}
+              {% else %}
+              <!-- User not logged in -->
+              <button type="button" id="heartButton-{{ top_comment.id }}" class="heart-btn"
+                onclick="event.preventDefault(); alert('Please log in to like comments.');">
+                <i class="fas fa-heart ms-2"></i>
+              </button>
+              {% endif %}
+            </form>
+
+            <!-- Like count -->
+          <div id="like-count-{{ top_comment.id }}">{{ top_comment.toplike }}</div>
+          </div>
+          <div>
+            <i class="fas fa-star" style="color: rgb(255, 187, 92);" id="commentScore"></i> {{ top_comment.score }}/10
+          </div>
+          
+          <!-- Spoiler Handling -->
+          {% if top_comment.spoiler %}
+          <span class="badge bg-warning text-dark">Warning: Spoilers</span>
+          <button class="btn btn-sm btn-outline-secondary ms-2" type="button"
+            onclick="Spoiler('commentSpoiler-{{ top_comment.id }}')">Show Comment</button>
+          <div id="commentSpoiler-{{ top_comment.id }}" class="collapse">
+            <p class="mb-0">{{ top_comment.filtered_data }}</p>
+          </div>
+          {% else %}
+          <p class="mb-0">{{ top_comment.filtered_data }}</p>
+          {% endif %}          
+        </div>
+        <div>
+          <!-- Report Button -->
+          <button 
+            title="Repost" type="button" 
+            class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+            data-bs-target="#reportIssueModal">
+            <i class="bi bi-flag"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+  <!--Show Comment-->
+  <div class="card text-light mb-2" style="background-color: RGB(51,51,51); border-radius: 10px; overflow-y: scroll; max-height: 800px;">
+    <div class="p-3">
+      <h4 class="mb-0">
+        <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none"
+          stroke="#000000">
+          <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>Recent comments
+      </h4>
+      <p class="fw-light ms-5">Latest Comments section by users</p>
     </div>
 
+    {% if commented %}
+    <div class="card-body p-4">
+      <div class="d-flex flex-start">
+        <div class="profile-container me-3">
+          <img class="rounded-circle shadow-1-strong profilecomment" style="object-fit: cover;"
+            src="{{ commented.user.image.url }}" alt="avatar" width="60" height="60" />
+        </div>
+        <div style="width: 100vh;">
+          <h6 class="fw-bold mb-1">{{ commented.user.username }}</h6>
+          <div class="d-flex align-items-center mb-3">
+            <p class="mb-0">
+              {{ commented.update_date|date:"d-m-Y" }}
+              {{ commented.update_date|date:"H:i a" }}
+            </p>
 
-  <!-- Include jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript">
-      document.addEventListener('DOMContentLoaded', function () {
-      // Attach a submit event listener to the form
-      document.querySelectorAll('.like-form').forEach(form => {
-        form.onsubmit = function (e) {
-          e.preventDefault(); // Prevent the normal submission action
-          const commentId = this.querySelector('button').id.split('-')[1];
-          console.log(commentId);
-          const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
-    
-          fetch(`/like_comment/${commentId}/`, {
-            method: 'POST',
-            body: new FormData(this),
-            headers: {
-              'X-CSRFToken': csrfToken,
-            },
-          })
-          .then(response => response.json())
-          .then(data => {
-            // Update the button style based on the response
-            const heartButton = document.getElementById(`heartButton-${data.comment_id}`);
-            if (data.is_liked) {
-              heartButton.classList.add('active');
-            } else {
-              heartButton.classList.remove('active');
-            }
+            <!-- EditButton -->
+            <a href="javascript:void(0);"
+              onclick='EditForm(`{{commented.data}}`, `{{commented.score}}`, `{{commented.spoiler}}`)'>
+              <i class="fas fa-pencil-alt" title="Edit"></i>
+            </a>
 
-            const likeCountElement = document.getElementById(`like-count-${data.comment_id}`);
-            if (likeCountElement) {
-              likeCountElement.textContent = data.toplike; // Update this to the new count
-            }
+            <!-- Like Button -->
+            <form action="{% url 'like_comment' commented.id %}" method="post" class="like-form">
+              {% csrf_token %}
+              {% if request.user.is_authenticated %}
+              {% if commented.id in liked_comments %}
+              <!-- User liked this comment -->
+              <button type="submit" id="heartButton-{{ commented.id }}" class="heart-btn active">
+                <i class="fas fa-heart ms-2" title="Like"></i>
+              </button>
+              {% else %}
+              <!-- User has not liked this comment -->
+              <button id="heartButton-{{ commented.id }}" class="heart-btn">
+                <i class="fas fa-heart ms-2"></i>
+              </button>
+              {% endif %}
+              {% else %}
+              <!-- User not logged in -->
+              <button id="heartButton-{{ commented.id }}" class="heart-btn">
+                <i class="fas fa-heart ms-2"></i>
+              </button>
+              {% endif %}
+            </form>
 
-          });
-        };
-      });  
-    });
-  </script>
-  <script type="text/javascript">
-    $(document).ready(function(){
-      // Listen for changes on the issueType select element
-      $('#issueType').change(function(){
-        // Check if the selected value is 'other'
-        if($(this).val() === 'other') {
-          // Show the additional text group
-          $('#additionalTextGroup').show();
+            <!-- Like count -->
+          <div id="like-count-{{ commented.id }}">{{ commented.toplike }}</div>
+          </div>
+          <div>
+            <i class="fas fa-star" style="color: rgb(255, 187, 92);" id="commentScore"></i> {{ commented.score }}/10
+          </div>
+          <p class="ms-0" id="commentData">
+            {{ commented.filtered_data }}
+          </p>
+        </div>
+        <div><h5> You </h5></div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if other_comments %}
+    {% for comment in other_comments%}
+    <div class="card-body p-4">
+      <div class="d-flex flex-start">
+        <div class="profile-container me-3">
+          <img class="rounded-circle shadow-1-strong profilecomment" src="{{ comment.user.image.url }}" alt="avatar"
+            width="60" height="60" />
+        </div>
+
+        <div style="width: 100vh;">
+          <h6 class="fw-bold mb-1">{{ comment.user.username }}</h6>
+          <div class="d-flex align-items-center mb-3">
+            <p class="mb-0">{{ comment.update_date|date:"d-m-Y H:i a" }}</p>
+
+            <!-- Like Button -->
+            <form action="{% url 'like_comment' comment.id %}" method="post" class="like-form">
+              {% csrf_token %}
+              {% if request.user.is_authenticated %}
+              {% if comment.id in liked_comments %}
+              <!-- User liked this comment -->
+              <button type="submit" id="heartButton-{{ comment.id }}" class="heart-btn active">
+                <i class="fas fa-heart ms-2" title="Like"></i>
+              </button>
+              {% else %}
+              <!-- User has not liked this comment -->
+              <button type="submit" id="heartButton-{{ comment.id }}" class="heart-btn">
+                <i class="fas fa-heart ms-2"></i>
+              </button>
+              {% endif %}
+              {% else %}
+              <!-- User not logged in -->
+              <button type="button" id="heartButton-{{ comment.id }}" class="heart-btn"
+                onclick="event.preventDefault(); alert('Please log in to like comments.');">
+                <i class="fas fa-heart ms-2"></i>
+              </button>
+              {% endif %}
+            </form>
+
+            <!-- Like count -->
+            <div id="like-count-{{ comment.id }}">{{ comment.toplike }}</div>
+            </div>
+
+            <div>
+              <i class="fas fa-star" style="color: rgb(255, 187, 92);"></i> {{ comment.score }}/10
+            </div>
+
+          <!-- Spoiler Handling -->
+          {% if comment.spoiler %}
+          <span class="badge bg-warning text-dark">Warning: Spoilers</span>
+          <button class="btn btn-sm btn-outline-secondary ms-2" type="button"
+            onclick="Spoiler('commentSpoiler-{{ comment.id }}')">Show Comment</button>
+          <div id="commentSpoiler-{{ comment.id }}" class="collapse">
+            <p class="mb-0">{{ comment.filtered_data }}</p>
+          </div>
+          {% else %}
+          <p class="mb-0">{{ comment.filtered_data }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <!-- Report Button -->
+          <button 
+            title="Repost" type="button" 
+            class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+            data-bs-target="#reportIssueModal">
+            <i class="bi bi-flag"></i>
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="reportIssueModal" tabindex="-1" aria-labelledby="reportIssueModalLabel" ria-hidden="true" style="top: 30vh;">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header text-dark">
+                  <h5 class="modal-title" id="reportIssueModalLabel">รายงานปัญหา</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <!-- Form inside the modal -->
+                  <form id="reportForm" action="{% url 'report_comment' comment.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                      <label for="issueType" class="form-label text-dark">เลือกปัญหา</label>
+                      <select class="form-select" id="issueType">
+                        <option value="spam">สแปม</option>
+                        <option value="harassment">ความรุนแรงหรือความหวาดกลัว</option>
+                        <!-- Add other issue types here -->
+                        <option value="other">อื่นๆ</option>
+                      </select>
+                    </div>
+                    <div class="mb-3" id="additionalTextGroup" style="display: none;">
+                      <label for="customText" class="form-label">รายละเอียดเพิ่มเติม</label>
+                      <textarea class="form-control" id="customText" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">ส่ง</button>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <!-- <div class="card-body p-4">
+      <p class="text-center">No comments.</p>
+    </div> -->
+    {% endif %}
+    <!-- ---------------------------------------------- -->
+  </div>
+
+  
+  <!-- IMDB Comments -->
+  <div class="card text-light" style="background-color: RGB(51,51,51); border-radius: 10px; overflow-y: scroll; max-height: 800px;">
+      <div class="p-3">
+        <h4 class="mb-0">
+          <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none"
+            stroke="#000000">
+            <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>IMDB Comments
+        </h4>
+        <p class="fw-light ms-5">Top 10 Comment From IMDB</p>
+      </div>
+      <div id="container_comment_IMDB">
+                    <!-- Show IMDB Comments -->
+      </div>
+  </div>
+
+
+<!-- Include jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function () {
+    // Attach a submit event listener to the form
+    document.querySelectorAll('.like-form').forEach(form => {
+      form.onsubmit = function (e) {
+        e.preventDefault(); // Prevent the normal submission action
+        const commentId = this.querySelector('button').id.split('-')[1];
+        console.log(commentId);
+        const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch(`/like_comment/${commentId}/`, {
+          method: 'POST',
+          body: new FormData(this),
+          headers: {
+            'X-CSRFToken': csrfToken,
+          },
+        })
+        .then(response => response.json())
+        .then(data => {
+        // Update the button style based on the response
+        const heartButton = document.getElementById(`heartButton-${data.comment_id}`);
+        if (data.is_liked) {
+          heartButton.classList.add('active');
         } else {
-          // Hide the additional text group
-          $('#additionalTextGroup').hide();
+          heartButton.classList.remove('active');
         }
-      });
-    
-      $('#reportForm').on('submit', function(e){
-      e.preventDefault(); // Prevent the default form submission
-      
-      var issueType = $('#issueType').val();
-      var customText = $('#customText').val();
-      
-      // Here you would handle the submission, e.g., via AJAX.
-      // For example:
-      /*
-      $.ajax({
-        type: "POST",
-        url: "your-endpoint-url",
-        data: {
-          issueType: issueType,
-          customText: customText
-        },
-        success: function(response) {
-          // Handle success
-          $('#reportIssueModal').modal('hide'); // Close the modal on success
-        },
-        error: function() {
-          // Handle error
+
+        const likeCountElement = document.getElementById(`like-count-${data.comment_id}`);
+        if (likeCountElement) {
+          likeCountElement.textContent = data.toplike; // Update this to the new count
         }
+
+        });
+      };
+    });
+  });
+</script>
+
+
+<script>
+const movieNAME = "{{ movie }}";
+
+async function fetchMovieReviews() {
+  try {
+    const response = await fetch(`/scrape_movie_data/${movieNAME}`); // รับข้อมูลรีวิวจาก endpoint
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json(); // แปลงข้อมูลเป็น JSON
+
+    const container = document.getElementById('container_comment_IMDB'); // ตำแหน่งที่จะแสดงผลใน HTML
+    let content = '';
+
+    data.all_list.forEach((item, index) => {
+      const { point, head, spoil, detail } = item;
+
+      content += `
+        <div class="col-md-12 mt-2">
+          <div class="card-body bodyimdb" style="height: auto; width: 100%; justify-content: center;align-items: center;">
+            <div class="ms-3 col-11 align-items-center justify-content-center">
+              <div class="row">
+                <div class="col-md-12">
+                  <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" class="me-2 ipc-icon ipc-icon--star sc-bde20123-4 frBGmx" viewBox="0 0 24 24" fill="currentColor" role="presentation">
+                      <path d="M12 17.27l4.15 2.51c.76.46 1.69-.22 1.49-1.08l-1.1-4.72 3.67-3.18c.67-.58.31-1.68-.57-1.75l-4.83-.41-1.89-4.46c-.34-.81-1.5-.81-1.84 0L9.19 8.63l-4.83.41c-.88.07-1.24 1.17-.57 1.75l3.67 3.18-1.1 4.72c-.2.86.73 1.54 1.49 1.08l4.15-2.5z"></path>
+                    </svg>
+                    <span class="pointcimdb">${point !== 'Don\'t give point.' ? `${point} / 10` : point}</span>
+                  </span>
+                </div>
+              </div>
+              ${spoil === 'Warning: Spoilers' ? `
+                <span class="badge bg-warning text-dark">Warning: Spoilers</span>
+                <button class="btn btn-sm btn-outline-secondary ms-2" type="button" onclick="toggleComment('spoiler-${index + 1}')">Show Comment</button>
+                <div id="spoiler-${index + 1}" class="collapse">
+                  <p class="headcomment mt-3">${head}</p>
+                  <hr>
+                  <p class="mb-0 detailcomment">${detail}</p>
+                </div>
+                ` : `
+                <p class="headcomment mt-3">${head}</p>
+                <hr>
+                <p class="detailcomment">${detail}</p>
+                `}
+            </div>
+          </div>
+        </div>`;
+    });
+
+    container.innerHTML = content; // แสดงผลใน HTML
+  } catch (error) {
+    console.error('There was a problem fetching the movie reviews:', error);
+  }
+}
+// เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
+document.addEventListener('DOMContentLoaded', fetchMovieReviews);
+</script>
+
+  <script>
+  // Logic for issue reporting
+  document.addEventListener("DOMContentLoaded", function() {
+    const issueTypeSelect = document.getElementById("issueType");
+    const additionalTextGroup = document.getElementById("additionalTextGroup");
+    const reportForm = document.getElementById("reportForm");
+    const customText = document.getElementById("customText");
+    // Function to show or hide additional text group
+    issueTypeSelect.addEventListener("change", function() {
+      if (this.value === "other") {
+        additionalTextGroup.style.display = "block";
+      } else {
+        additionalTextGroup.style.display = "none";
+      }
+    });
+
+    // Function to handle form submission
+    reportForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {
+        issueType: issueTypeSelect.value,
+        customText: customText.value,
+      };
+      console.log(issueType);
+      console.log(customText);
+      // Use fetch API to send data to the server
+      fetch(this.action, {
+        
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": formData.get("csrfmiddlewaretoken") // Make sure to include the CSRF token correctly
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) {
+            // if (response.status === 401) {
+            // throw new Error('User not authenticated.');
+            // }
+            // แปลง response เป็น JSON และโยนข้อผิดพลาด
+              // return response.json().then(data => {
+              //   throw {status: response.status, ...data};
+          return response.json().then(data => { throw new Error(data.error);});  
+        }
+        return response.json();
+      })
+      .then(data => {
+          alert(data.message); // ใช้ข้อความที่ส่งกลับมาจากเซิร์ฟเวอร์
+          $('#reportIssueModal').modal('hide'); // ซ่อน modal
+      })
+      .catch(error => {
+          // console.error('Error:', error);
+          alert(error.message);
       });
-      */
-      
-      console.log('Issue Type:', issueType);
-      console.log('Custom Text:', customText);
     });
   });
   </script>
+
   <script>
     //Edit Form
-     function EditForm(commentData, Rating, commentSpoiler) {
+    function EditForm(commentData, Rating, commentSpoiler) {
       document.getElementById('Textarea').value = commentData;
       document.getElementById('rating').value = Rating;
 
-    if (commentSpoiler=="True") {
+      if (commentSpoiler === true) {
         document.getElementById('spoiler').checked = true;
         document.getElementById('spoiler').toggleAttribute('checked');
-    } else {
+      } else {
         document.getElementById('nospoiler').checked = true;
         document.getElementById('nospoiler').toggleAttribute('checked');
-    }
+      }
 
-    var form = document.getElementById('RelviewedForm');
-    if (form) {
+      var form = document.getElementById('RelviewedForm');
+      if (form) {
         form.style.display = 'block'; // Show the form
-    }
+      }
 
-    // var rating = parseInt(Rating);
-    // for (var i = 1; i <= rating; i++) {
-    //     document.getElementById('star' + i).classList.add('checked');
-    // }
-    
-    // var spoiler = commentSpoiler.toLowerCase() === 'true'; // Assuming spoiler is a boolean represented as a string
-    // document.getElementById('spoiler').checked = spoiler;
-    // document.getElementById('nospoiler').checked = !spoiler;
-  }
+      // var rating = parseInt(Rating);
+      // for (var i = 1; i <= rating; i++) {
+      //     document.getElementById('star' + i).classList.add('checked');
+      // }
+
+      // var spoiler = commentSpoiler.toLowerCase() === 'true'; // Assuming spoiler is a boolean represented as a string
+      // document.getElementById('spoiler').checked = spoiler;
+      // document.getElementById('nospoiler').checked = !spoiler;
+    }
   </script>
   <script>
     // Spoiler
@@ -690,7 +896,7 @@
       const stars = document.querySelectorAll('.stars i');
       const tooltipText = document.createElement('div');
       tooltipText.classList.add('tooltip');
-    document.body.appendChild(tooltipText);
+      document.body.appendChild(tooltipText);
       const ratingInput = document.getElementById('rating');
       const SendButton = document.getElementById('Send');
       const textareaInput = document.getElementById('Textarea');
@@ -727,7 +933,7 @@
       // Send button
       updateSendButtonStatus();
 
-      SendButton.addEventListener('click', function(event) {
+      SendButton.addEventListener('click', function (event) {
         if (!ratingInput.value || textareaInput.value.trim().length < 1 || !isSpoilerSelected(spoilerInputs)) {
           event.preventDefault();
           errorInfo.innerText = 'กรุณากรอกข้อมูลให้ครบถ้วน';
@@ -759,7 +965,14 @@
         input.addEventListener('change', updateSendButtonStatus);
       }
     });
+    function toggleComment(elementId) {
+      var x = document.getElementById(elementId);
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
   </script>
-  
 </main>
 {%endblock%}

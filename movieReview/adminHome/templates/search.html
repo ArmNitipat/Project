@@ -6,7 +6,6 @@
 <style>
   body {
     overflow: scroll;
-    background-color: rgba(28, 30, 33, 0.850);
     /* background-image: url("https://images.pexels.com/photos/1983037/pexels-photo-1983037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1") ; */
     background-repeat: no-repeat;
     background-size: cover;
@@ -29,16 +28,8 @@
     overflow: hidden; 
     border-radius: 50%;
   }
-  .custom-link{
-    text-decoration: none;
-    color: black;
-    
-  }
-  .custom-link:hover {
-    color: rgb(65, 67, 181);
-  }
   .card-body{
-    background-color: rgba(255, 255, 255, 0.258);
+    background-color: whitesmoke;
     border-radius: 15px;
   }
   .card-body:hover{
@@ -61,8 +52,11 @@
     justify-content: center;
     overflow: hidden; 
   }
+
+
+
 </style>
-<main class="container bg-light  text-dark border border-light" style="width: 120%;">
+<main class="container bg-light  text-dark border border-light border" style="width: 100%;">
   <div >
     <h1 class="mb-3 mt-3 justify-content-center text-center align-items-center">
       <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
@@ -80,7 +74,7 @@
     <!-- Star -->
     <div class="accordion-item">
       <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style="background-color: lightblue; color: #000;">
           Star
         </button>
       </h2>
@@ -89,9 +83,9 @@
         <div class="accordion-body">
           {% if stars_images %}
             {% for result in stars_images %}
-            <a class="custom-link" href="{% url 'actor' result.star.id %}">
-              <div class="card mb-1">
-                <div class="card-body">
+            <a class="custom-link active" href="{% url 'actor' result.star.id %}" style=" text-decoration:none;">
+              <div class="mb-1">
+                <div class="border card-body bg-light text-dark">
                   <div class="row">
                     <div class="col-md-2">
                       <div class="ms-4 star-entry image-frame">
@@ -124,22 +118,22 @@
       </div>
     </div>
   </div>
-  <div class="accordion text-dark " id="accordionPanelsStayOpenExample">
+  <div class="accordion text-dark " id="accordionPanelsStayOpenExample2">
     <!-- Movie -->
     <div class="accordion-item">
-      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+      <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo" style="background-color: lightblue; color: #000;">
           Movie
         </button>
       </h2>
       <!--Movie Item-->
-      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
         <div class="accordion-body">
           {% if movies_images %}
             {% for result in movies_images %}
-            <a class="custom-link" href="{% url 'moviereview' result.movie.id %}">
-              <div class="card">
-                <div class="card-body">
+            <a class="custom-link" href="{% url 'moviereview' result.movie.id %}" style=" text-decoration:none;">
+              <div class="mb-1">
+                <div class="border card-body bg-light text-dark">
                   <div class="row">
                     <div class="col-md-2">
                       <div class="ms-4 star-entry image-frame">
@@ -174,8 +168,6 @@
     
   </div>
 </main>
-
-
 <!-- {% for star in stars %}
     <div class="star-card">
         <img src="{{ star.mainstar_image.url }}" alt="{{ star.name }}">
@@ -184,9 +176,4 @@
         <!-- Add more details as needed -->
     <!-- </div>
 {% endfor %} -->
-
-<script>
-  // เพิ่ม JavaScript เพิ่มเติม
-</script>
-
 {% endblock %}

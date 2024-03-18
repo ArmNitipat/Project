@@ -4,13 +4,14 @@
   --text-color: #333;
   --primary-color: hsl(211, 100%, 50%);
   --secondary-color: #323232;
-  --card-background-color: #fff;
+  --card-background-color: rgb(245, 245, 245);
   /* ... other light theme colors ... */
   --background-color-light: #fff; /* White background */
   --text-color-light: #000; /* Black text */
   --card-background-color-light: #fff; /* Light gray for cards */
   --svg-stroke-color-light: #000000; /* White for light theme */
   --svg-fill-color-light: #000000; /* Red for light theme */
+  border: #000;
 }
 
 .dark-theme {
@@ -26,6 +27,7 @@
   --card-background-color-dark: #1c1e21; /* Darker gray for cards */
   --svg-stroke-color-dark: #ffffff; /* Black for dark theme */
   --svg-fill-color-dark: #ffffff; /* White for dark theme */
+  border: #fff;
 }
 /* transition: background-color 0.3s, color 0.3s; Smooth transition for theme change */
 body {

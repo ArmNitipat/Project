@@ -4,9 +4,6 @@
 
 <main >
   <style>
-    body{
-        background-color: rgba(0, 0, 0, 0.585);
-    }
     .ButtomProduct {
       background-color: #eee;
       overflow: auto;
@@ -27,6 +24,10 @@
       width: 100%; 
       object-fit: cover;
     }
+    .modal-header {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #dee2e6;
+  }
   </style>
     
     <!-- แนวนอน -->
@@ -215,37 +216,35 @@
         <!-- modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
-            <div class="modal-content justify-content-center align-items-center text-center">
+            <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body text-center">
                 <h3 id="product-name"></h3>
                 <hr>
-                <img id="product-image" style="height: 80%; width: 80%;object-fit: cover; border-radius: 5px; " src="" alt="Product Image" />
+                <img id="product-image" class="img-fluid rounded" src="" alt="Product Image" />
                 <hr>
-                <div class="mt-2 d-flex flex-row align-items-center mb-1 justify-content-center align-items-center text-center">
-                  <h4 id="product-price">{{ premiums.price }} </h4><span class="ms-3" style="font-size: 18px;font-weight: bold; float: left;">Coin</span>
+                <div class="price-container">
+                  <h4 id="product-price"></h4>
+                  <!-- <span class="coin">Coin</span> -->
                 </div>
-                <p id="product-description"></p>
+                <!-- <p id="product-description"></p> -->
               </div>
-
-              <!--ปุ่ม-->
-              <form method="post" action="{% url 'coinshop' %}">
-                {% csrf_token %}
+        
               <div class="modal-footer">
-                <!--ปุ่มปิด-->
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-
-                <!--ปุ่มซื้อ-->
-                <input type="hidden" name="premium_id" value="{{ premium.id }}">
-                <button type="submit" class="btn btn-primary" id="buy-button">Buy</button>
+                <form method="post" action="{% url 'coinshop' %}">
+                  {% csrf_token %}
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <input type="hidden" name="premium_id" value="{{ premium.id }}">
+                  <button type="submit" class="btn btn-primary" id="buy-button">Buy</button>
+                </form>
               </div>
-            </form>
             </div>
           </div>
         </div>
+        
 
       {% if messages %}
       {% for message in messages %}
@@ -294,7 +293,7 @@
               var modal = $(this);
               modal.find('#product-name').text(name);
               modal.find('#product-image').attr('src', image);
-              modal.find('#product-price').text(price);
+              modal.find('#product-price').text(price + " Coin");
               modal.find('#product-description').text(description);
           });
       });

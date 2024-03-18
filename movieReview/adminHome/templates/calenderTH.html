@@ -1,0 +1,65 @@
+
+{% extends "base1.html" %}
+{% load static %}
+{%block title %}
+
+<link rel="stylesheet" href="{% static 'calender.css' %}">
+<title>Movie Calender</title>
+
+{% endblock %} {%block content%}
+    <div class="album py-5 " style="background-color: rgb(46, 46, 46);" >
+      <div class="container">
+        <h2 class="text-light text-center">Calender TH</h2>
+            <div class="row mt-2 mb-2">
+                <div class="col-md-10"></div>
+                <div class="col-md-2" style="background-color: rgb(46, 46, 46);">
+                  <a href="/calender" class="thbutton btn btn-secondary">ENG Calendar</a>
+                </div>
+              
+              
+            </div>
+          <div class="container">
+            {% for i in headdate %}
+                <div class="row mt-3 " >
+                    <div class=" col-lg-12" >
+                        <div class=" card monthcard text-center">
+                            <p class="mt-3 monthcolor movierelease"> {{ i }} </p>
+                        </div>
+                    </div>
+                    
+                </div>
+                {% for j in all_list %}
+                    {% if j.datezone == i %}
+                    <div class="card mcard">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-2 col-lg-1" >
+                                    <img class="imgposter2" src="{{j.image}}" >
+                                </div>
+                                
+                                {% if j.name|length > 40 %}
+                                    <div class="col-10 col-lg-11 moviename4 mt-2" >
+                                {% elif j.name|length > 30 %}
+                                    <div class="col-10 col-lg-11 moviename3" >
+                                {% else %}
+                                    <div class="col-10 col-lg-11 moviename" >
+                                {% endif %}
+                                    <p class="namel">{{j.name}}</p>
+                                    <p class="movietag2"><span class="tags">Tag : </span>{{ j.tag }}</p>
+                                    <p class="moviedate"><span class="Dates">Date : </span>{{ j.release }}</p>
+                                    <p class="movietime"><span class="Times">Time : </span>{{ j.time }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+
+  
+    
+{% endblock %}

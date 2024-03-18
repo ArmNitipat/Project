@@ -1,37 +1,72 @@
 {% extends "base1.html" %} 
 {% load static %}
 {%block title %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/minigame.css' %}">
 <title>MiniGame</title>
 {% endblock %} {%block content%}
 <main class="container bg-light bg-dark text-light border border-light" style="width: auto;">
-    <div class="p-4 p-md-5  text-white rounded bg-dark">
+    <div class="p-4 p-md-8 text-white rounded bg-dark flex-column">
         <h1 class="display-4 text-center">MiniGame</h1>
-        <p class="lead">Play the game and earn points</p>
-        <div class="row" id="rowAsk" style="display: none;">
-            <div class="col d-flex justify-content-center">
-                <img src="https://cdn2.imagine.art/imagine-frontend/assets/images/RowImageSlider37.webp" class="img-fluid" alt="Responsive image" style="height: 30vh; width: 30vm;">
-            </div>
-        </div>
-        <div class="row p-4"id="rowAnswer" style="display: none;"  >
-            <div class="col-md-6 p-3" style="display: flex;">
-                <div class="card w-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Answer 1</h5>
-                        <p class="card-text">Guess the movie from the given image</p>
+        <div class="row">
+            Play the game and earn points User
+            <!-- Timer Card -->
+            <div class="row justify-content-end p-3" id="Timebody" style="display: none;">
+                <div class="border col-6 col-sm-4 col-md-3 col-lg-2 p-0" style="background: none;">
+                    <div class="card-body text-center align-items-center p-2 ">
+                        Time left: 
+                        <span id="time">8</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 p-3" style="display: flex;" >
-                <div class="card w-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Answer 2</h5>
-                        <p class="card-text">Guess the actor from the given image</p>
+            
+            
+            <div class="container" id="colbut">
+                <div class="row justify-content-center text-center" id="rowbut">
+                    <div class="col d-flex flex-column align-items-center justify-content-center" style="height: 60vh;">
+                        <div class="row p-3 divSup" id="showRowsButton1">
+                            <button class="button text-center">Game Movie</button>
+                        </div>
+                        <div class="row p-3 divSup" id="showRowsButton2">
+                            <button class="button text-center">Game Actor</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="rowAsk" style="display: none;">
+                <div class="col d-flex justify-content-center">
+                    <img src="" class="img-fluid" alt="" style="height: 30vh; width: 30vm;">
+                </div>
+            </div>
+    
+    
+            <div class="row p-6 justify-content-center" id="rowAnswer" style="display: none;">
+                {% for main_name in main_names %}
+                <!-- Option -->
+                <div class="col-md-6 p-3 d-flex justify-content-center align-items-center">
+                    <div class="border card-body w-100">
+                        <a href="#" class="answerBtn text-center d-block p-3" data-answer="{{ main_name }}" id="{{ main_name }}" style="text-decoration:none;">
+                            <h5 class="card-title">{{ main_name }}</h5>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    
+            <div class="row justify-content-center" id="rowScore" style="display: none;">
+                <div class="col-md-2">
+                    <div class="border text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Score</h5>
+                            <p class="card-text">Your score is: <span id="score">0</span></p>
+                            <input type="hidden" name="csrfmiddlewaretoken" value="your_csrf_token_value"></input>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
-    <button id="showRowsButton">Game ทายภาพหนัง</button>
+    <div id="correctAnswer" style="display: none;"></div>
+    <script src="{% static 'js/minigame.js' %}"></script>
 </main>
-<script src="{% static 'js/minigame.js' %}"></script>
 {% endblock %}

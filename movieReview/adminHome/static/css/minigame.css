@@ -1,0 +1,83 @@
+/* Base button styling */
+@import url('htpps://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+.divSup{
+position: relative;
+  width: 45vw;
+  height: 100px;
+  display: inline-block;
+  background: #fff;
+  margin: 20px;
+}
+.divSup:before,
+.divSup:after
+{
+/* content:''; */
+  position: absolute;
+  inset: 0;
+  transition: 0.5s;
+  background: #f00
+}
+.divSup:nth-child(1):before,
+.divSup:nth-child(1):after
+{
+ background: linear-gradient(45deg, #00ccff, #0e1538, #d400d4)
+}
+.divSup:nth-child(2):before,
+.divSup:nth-child(2):after
+{
+  background: linear-gradient(45deg, #f0075b, #0e1538, #1aff22);
+}
+.divSup:hover:before
+{
+  inset: -3px;  
+}
+.divSup:hover:after
+{
+  inset: -3px;  
+  filter: blur(10px);
+}
+.divSup button{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  background: #0e1538;
+  z-index: 10;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #fff;
+  border: 1px solid #040a29;
+  overflow: hidden;
+}
+.divSup button::before{
+  content:'';
+  /* position: absolute; */
+  top: 0;
+  left: -50%;
+  width: 100%;
+  height: 100%;
+  transform: skew(25deg)
+}
+
+a { text-decoration:none; } 
+
+@media (max-width: 768px) { /* For tablets and below */
+    .button {
+        padding: 8px 15px; /* Slightly smaller padding */
+        font-size: 14px; /* Smaller font size */
+    }
+}
+
+@media (max-width: 480px) { /* For mobile phones */
+    .button {
+        width: 100%; /* Full width */
+        padding: 10px; /* Adjust padding */
+        font-size: 16px; /* Ensure readability */
+    }
+}

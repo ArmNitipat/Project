@@ -1,0 +1,77 @@
+{% extends "base1.html" %} 
+{% load static %}
+{%block title %}
+<title>About US</title>
+{% endblock %} {%block content%}
+<style>
+    .hero-section { background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://static.naewna.com/uploads/news/source/702842.jpg') center/cover no-repeat; }
+    .content {opacity: 0; transform: translateX(-100%);}
+    .isshow {animation: slideIn 1s forwards ease-out;}
+    .hidden {visibility: hidden; /* Keep the element from taking space until it's shown */}
+    .pleft {padding-left: 2%;}
+    @keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }to {
+        opacity: 1;
+        transform: translateX(0);}
+    }
+</style>
+<main class="container">
+<div class="hero-section p-4 md-5 text-center text-light">
+    <h1 class="display-4">About Us</h1>
+</div>
+<div class="row-md-12 text-light text-center p-5">
+    <h3>This project is created for educational purposes and does not seek profit.</h3>
+</div>
+<div class="row align-items-center justify-content-center">    
+    <div class="col-3 me-3 p-3 border ">
+        <img src="{% static 'icon.png' %}" class="w-100 h-100 img-fluid"    >
+    </div>
+    
+    <div class="col-md-8 text-light p-3">
+        <p class="lead content hidden">We are a Team have only 2 people who crafted this website as part of our project, currently in our sophomore year at Mahanakorn University of Technology.</p>
+        <p class="lead content hidden">Our platform uses AI to analyze the sentiments of movies. To know if the movie is positive or negative.</p>
+        <p class="lead content hidden">Opinion information from other websites has been collected and displayed on our website for convenient access to a variety of information at the same time.</p>
+        <p class="lead content hidden">We hope you enjoy our website and find it useful.</p>
+    </div> 
+</div>
+
+<div class="row p-6">
+    <div class="col-md-6 text-light">
+        <h3>Objective</h3>
+        <p class="lead content hidden pleft ">We want to provide a platform for movie enthusiasts to share their thoughts and opinions on their favorite movies and actors. We aim to create a community of like-minded individuals who share a passion for cinema.</p>
+        
+        <h3>Vision</h3>
+        <p class="lead content hidden pleft">We want to create a platform that is accessible to everyone, regardless of their background or experience. We want to provide a space where people can come together to discuss and celebrate their love of movies.</p>
+        
+        <h3>Contact us</h3>
+        <p class="lead content hidden pleft">If you have any questions or feedback, please feel free to contact us. We would love to hear from you!</p>
+        
+        <h3>Our Team</h3>
+        <p class="lead content hidden pleft">Our team is made up of a group of passionate movie enthusiasts who are dedicated to creating a platform that is inclusive and welcoming to all.</p>
+    </div>
+    <div class="col-md-6 text-center">
+        <div class="row d-flex h-100 w-100 align-items-center justify-content-center">
+            <img src="https://i.gifer.com/VIso.gif" class="h-60 w-60 p-5">
+        </div>
+    </div>
+</div>
+
+</main>
+<script>
+    window.addEventListener('load', () => {
+        const sections = document.querySelectorAll('.hidden');
+        console.log(sections);
+        let delay = 0;
+        sections.forEach(section => {
+            setTimeout(() => {
+                section.classList.add('isshow');
+                section.classList.remove('hidden');
+            }, delay);
+            delay += 1000; // Adjust delay as needed
+        });
+    });
+    </script>
+{% endblock %}

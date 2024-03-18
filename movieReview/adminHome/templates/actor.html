@@ -231,9 +231,9 @@
           <hr>
           <ul class="nav nav-tabs bg-dark" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="bg-dark nav-link active" id="Personal_Detail-tab" data-bs-toggle="tab" data-bs-target="#Personal_Detail" type="button" role="tab" aria-controls="Personal_Detail" aria-selected="true">Personal Detail</button>
+              <button class="bg-dark text-light nav-link active" id="Personal_Detail-tab" data-bs-toggle="tab" data-bs-target="#Personal_Detail" type="button" role="tab" aria-controls="Personal_Detail" aria-selected="true">Personal Detail</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
               <button class="bg-dark nav-link" id="Movie_Actor-tab" data-bs-toggle="tab" data-bs-target="#Movie_Actor" type="button" role="tab" aria-controls="Movie_Actor" aria-selected="false">Actor</button>
             </li>
             <li class="nav-item" role="presentation">
@@ -241,7 +241,7 @@
             </li>
             <li class="nav-item" role="presentation">
               <button class="bg-dark nav-link" id="Writer-tab" data-bs-toggle="tab" data-bs-target="#Writer" type="button" role="tab" aria-controls="Writer" aria-selected="false">Writer</button>
-            </li>
+            </li> -->
           </ul>
           <!--Tab Personaldetail_MovieActor_-->
           <div class="tab-content" id="myTabContent">
@@ -559,7 +559,6 @@
             <!--Producer-->
 
 
-
             <div class="tab-pane fade text-dark" id="Producer" role="tabpanel" aria-labelledby="Producer-tab">
               <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
                 <div class="row mb-2">
@@ -748,7 +747,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
- <script>
+<script>
         $('#imageModal').on('show.bs.modal', function (event) {
         var modal = $(this);
         var image = event.relatedTarget;
@@ -772,6 +771,6 @@
       });
     });
   });
-      </script>
+</script>
 </main>
 {%endblock%}

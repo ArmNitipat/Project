@@ -116,6 +116,7 @@ class Like(models.Model):
         return f"Like by {self.user.username} on {self.comment.id}"
 
 from django.db.models.deletion import ProtectedError   
+from django.utils import timezone
 class Report(models.Model):
     STATUS = (
         ('waiting', 'Waiting'),
@@ -144,3 +145,12 @@ class Report(models.Model):
 
     def __str__(self):
         return f"Report {self.id} for comment {self.comment.id}"
+    
+class GamePlay(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sessions_today = models.IntegerField(default=0)
+
+    @classmethod
+    def can_play(cls, user):
+        gameplay, _ = cls.objects.get_or_create(user=user)
+        return gameplay.sessions_today < 3

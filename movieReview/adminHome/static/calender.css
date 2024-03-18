@@ -1,26 +1,40 @@
-.moviename {
+
+.moviename,.moviename2,.moviename3,.moviename4 {
     font-size: 25px;
     font-weight: bold;
-    color: black;
 }
 
-.movietag{
+.movietag,.moviestar{
     font-size: 14px;
-    color: rgb(99, 99, 99);
+    opacity: 0.7;
 }
-.moviestar{
-    font-size: 14px;
-    color: rgb(99, 99, 99);
+.movietag2,.moviedate,.movietime{
+    font-size: 20px;
+    opacity: 0.7;
 }
 .monthcolor {
     font-size: 35px;
     color: rgb(0, 0, 0);
     font-weight: bold;
 }
-.imgposter {
+.imgposter{
     min-height: 100%;
+    
     min-width: 5vw;
+    
     object-fit: cover;
+}
+.imgposter2{
+    min-height: 100%;
+    max-height: 100%;
+    max-width: 10vw;
+    min-width: 6vw;
+    
+    object-fit: cover;
+}
+.tags2{
+    font-size: 16px;
+    opacity: 0.7;
 }
 
 /* สำหรับหน้าจอขนาดใหญ่ขึ้นไป */
@@ -33,26 +47,48 @@
 }
 
 /* สำหรับหน้าจอขนาดเล็ก */
-@media (max-width: 991.98px) {
-    .mcard .col-9 {
+@media (max-width: 800px) {
+    .mcard .col-10 {
         flex: 0 0 auto;
         width: auto;
     }
+    .mcard .col-lg-11 {
+        margin-left: 40px; 
+    }
 }
-
 @media only screen and (max-width: 768px) {
     .moviename {
         font-size: 14px; 
     }
-    .movietag{
-        font-size: 9px;
+    .moviename3 {
+        font-size: 11px;
     }
+    .moviename2 {
+        font-size: 8px;
+    }
+    .moviename4{
+        font-size: 8px;
+    }
+    .movietag{
+        font-size: 8px;
+        opacity: 0.9;
+    }
+    .movietag2,.moviedate,.movietime{
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
     .moviestar{
         font-size: 6px;
     }
-    .imgposter {
+    .imgposter{
         min-height: 100%;
-        min-width: 20vw;
+        min-width: 15vw;
+        object-fit: cover;
+    }
+    .imgposter2{
+        min-height: 100%;
+        min-width: 23vw;
         object-fit: cover;
     }
     .monthcard {

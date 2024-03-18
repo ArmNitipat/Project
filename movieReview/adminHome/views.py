@@ -1,3 +1,5 @@
+from decimal import Decimal
+import json
 from django.db import transaction
 from pyexpat.errors import messages
 from django.contrib import messages
@@ -68,13 +70,20 @@ import datetime
 
 
 # Calendar scraper
-def calendarscraper(request):
+def calendarscraper(request, year=None, month=None):
+    if year is None or month is None:
+        year = datetime.datetime.now().year
+        month = datetime.datetime.now().month
+    else:
+        year = int(year)
+        month = int(month)
+
+    url = f'https://www.boxofficemojo.com/calendar/{year}-{month}-01'
     current_year = datetime.datetime.now().year
     years = range(current_year + 2, 1923, -1)
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     }
-    url = 'https://www.boxofficemojo.com/calendar/'
     data = requests.get(url, headers=headers)
     soup = BeautifulSoup(data.text, 'html.parser')
     all_tr_tags = soup.find_all('tr')
@@ -131,11 +140,91 @@ def calendarscraper(request):
     context = {
         'all_list': all_list,
         'headdate': headdate,
-        'years':years
+        'years':years,
+        'year':year,
+        'month':month,
+        'url':url
 
     }
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({'success': True})
+    else:
+        return render(request, 'calender.html', context)
 
-    return render(request, 'calender.html',context)
+
+#Calendar TH
+def calendarTH(request):
+    headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    url = "https://www.majorcineplex.com/movie#movie-page-coming"
+    data = requests.get(url, headers=headers)
+    soup = BeautifulSoup(data.text)
+    calendarzone = soup.find('div',{'class':'box-movie-coming'})
+    headdate_list=[]
+    date = ''
+    all_list = []
+    for m1 in calendarzone.find_all('div', {'class': 'bma-movie-list'}):
+        date = m1.find('div', {'class': 'bmaml-month'}).text
+        headdate_list.append(date)
+        for m2 in m1.find_all('div', {'class': 'ml-box'}):
+            datezone = date
+            
+            name =m2.find('div', {'class': 'mlb-name'}).text.strip()
+            release = m2.find('div', {'class': 'mlb-date'}).text.strip()
+            
+            # Tag
+            tag = m2.find('span', {'class': 'genres_span'})
+            tagl = tag.text.strip() if tag else "Don't have tag yet"
+            
+            # Time
+            time = m2.find('div', {'class': 'mlbc-time'}).text.strip()
+            timel = time if time != '00 ชม. 00 นาที' else "Don't know yet"
+            
+            # Image
+            div_tag = m2.find('div', {'class': 'mlb-cover adv_tic'}) or m2.find('div', {'class': 'mlb-cover'})
+            if div_tag:
+                style_attribute = div_tag.get('style')
+                if style_attribute:
+                    url_start_index = style_attribute.find('url(') + len('url(')
+                    url_end_index = style_attribute.find(')')
+                    image_url = style_attribute[url_start_index:url_end_index].strip('"')
+                    img = image_url
+            all_list.append({
+                'name':name,
+                'datezone':datezone,
+                'release':release,
+                'tag':tagl,
+                'time':timel,
+                'image':img,
+            })
+    context = {
+        'headdate': headdate_list,
+        'all_list':all_list,
+    }
+
+    return render(request, 'calenderTH.html', context)
+
+#Scarping Movie Comment
+def moviecommentlink(moviename):
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    moviename = str(moviename)
+    search_url ='https://www.imdb.com/find?q='+moviename+'&s=tt&ttype=ft&ref_=fn_ft'
+    print(search_url)
+    data = requests.get(search_url, headers=headers)
+    soup = BeautifulSoup(data.text)
+    linkmovie = soup.find('div',{'class':'sc-17bafbdb-2 iUyFfD'})
+    link_element = linkmovie.find('a', {'class': 'ipc-metadata-list-summary-item__t'})
+    linkcomment = ""
+    link_element = linkmovie.find('a', {'class': 'ipc-metadata-list-summary-item__t'})
+    if link_element:
+        href_value = link_element.get('href')
+        linkcomment = href_value.split('?')[0]
+    else:
+        print("Link element not found")
+    url = 'https://www.imdb.com' + linkcomment + 'reviews?ref_=tt_urv'
+    
+    return url
+
 
 # 404 page
 def handler404(request, *args, **argv):
@@ -159,9 +248,13 @@ def search(request):
     except ValueError:
         year_lookup = False
     if search_query:  # ถ้ามีการค้นหาที่ส่งมา
-
+        if search_query.startswith('#'):
+            # ถ้า search_query เริ่มต้นด้วย # ให้ค้นหาชื่อประเภทหนัง
+            idtage = MovieTag.objects.filter(name__icontains=search_query[1:]).values_list('id', flat=True).first()
+        else:
+            idtage = None
         if year_lookup:
-            stars = Star.objects.filter(born_date__year=search_year)
+            stars = Star.objects.filter(born_date__year=search_year)  # ค้นหาดาราที่เกิดในปีที่ค้นหา
         else:
             stars = Star.objects.filter(name__icontains=search_query)  # ค้นหาดาราที่มีชื่อตรงกับคำค้น !!(name_icontains = search ) ==== (sql) WHERE headline ILIKE '%ชื่อ%'; 
         
@@ -179,8 +272,13 @@ def search(request):
         if year_lookup:
             movies = Movie.objects.filter(release_date__year=search_year)
         else:
-            # หาก search_query ไม่ใช่ปี ให้ค้นหาตามชื่อ
-            movies = Movie.objects.filter(name__icontains=search_query)
+            if idtage:
+                # หาก search_query เป็นประเภทหนัง ให้ค้นหาตามประเภท
+                movies = Movie.objects.filter(tags=idtage)
+            
+            else:
+                # หาก search_query ไม่ใช่ปี ให้ค้นหาตามชื่อหนัง
+                movies = Movie.objects.filter(name__icontains=search_query)
         
         for movie in movies:
             # ภาพหลักหรับหนังแต่ละเรื่อง
@@ -197,7 +295,6 @@ def search(request):
                 'main_image': main_image,
             })
 
-        print(stars)
         context={
             'search_query':search_query,
             'star':stars,
@@ -211,40 +308,40 @@ def search(request):
 
 @login_required
 def update_user(request):
+    user = request.user
     if request.method == 'POST':
         # รับข้อมูลจาก POST request
         new_firstname = request.POST.get('firstname')
         new_lastname = request.POST.get('lastname')
         new_email = request.POST.get('email')
         new_image = request.FILES.get('profile_image')
-        user = request.user
-
         # อัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
-        if new_email != user.email and User.objects.filter(email=new_email).exclude(pk=user.pk).exists():
-            messages.error(request, 'There is already a user using this email.')
-            return redirect('settingprofile')
+        if new_email == user.email:
+            # messages.error(request, 'There is already a user using this email.')]
+            pass
+        elif User.objects.filter(email=new_email).exclude(pk=user.pk).exists():
+            # messages.error(request, 'There is already a user using this email.')]
+            print(User.objects.filter(email=new_email).exclude(pk=user.pk).exists())
+            return JsonResponse({"message": "There is already a user using this email."})
         
-        user = request.user
         user.first_name = new_firstname
         user.last_name = new_lastname
         user.email = new_email
-        user.save()
-        
         # ถ้ามีรูปภาพเก่าในโมเดล, ลบมัน
         if new_image:
             if user.image and user.image.name != 'profile_images/istockphoto.jpg':
                 user.image.delete(save=False)
             user.image = new_image
-            user.save()
-        messages.success(request, 'ข้อมูลของคุณถูกอัปเดตแล้ว')
-        return redirect('settingprofile')  # ลิงก์ไปยังหน้าโปรไฟล์หลังจากอัปเดตข้อมูล
+        user.save()
+            # messages.success(request, 'ข้อมูลของคุณถูกอัปเดตแล้ว')
+        return JsonResponse({"message": "Update Successfully."})
     return redirect('account')
 
 
 @login_required
-def get_user_data(request, user_id):
+def get_user_data(request):
     try:
-        user = User.objects.get(id=user_id)
+        user = request.user
         user_data = {
             "first_name": user.first_name,
             "last_name": user.last_name,
@@ -268,8 +365,6 @@ def check_email(request):
 
 def signup_view(request):
     if request.method == 'POST':
-        # username = request.POST.get('username')
-        # email = request.POST.get('email')
         form = SignupForm(request.POST, request.FILES)
         
         if form.is_valid():
@@ -326,14 +421,6 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib import messages
 import random
-#เตรียมลบ
-# def check_credentials(request):
-#     if request.method == "POST":
-#         username = request.POST.get('username')
-#         email = request.POST.get('email')
-#       # return redirect('resetpassword')
-
-#     return render(request, 'Login_Register/credentials.html')
 from django.core.exceptions import MultipleObjectsReturned
 
 def check_credentials(request):
@@ -576,36 +663,68 @@ def changepassword(request):
 
 from .models import Bannerslide
 
-# Home page
+# หน้าหลัก
 def home(request):
     log_user_ip(request)
     slides = Bannerslide.objects.filter(active=True).order_by('order')
-    movies = Movie.objects.all()
-    
+    movies = Movie.objects.filter(is_show='1')
     movie_main_images = []
 
     for movie in movies:
         # ตรวจสอบและกำหนด main_image ในนี่
-        main_local_image = LocalImage.objects.filter(movie=movie, mainmovie=True).first()
+        main_local_image = LocalImage.objects.filter(movie_id=movie.id, mainmovie=True).first()
         if main_local_image:
             movie.main_image = main_local_image
         else:
-            main_url_image = URLImage.objects.filter(movie=movie, mainmovie=True).first()
+            main_url_image = URLImage.objects.filter(movie_id=movie.id, mainmovie=True).first()
             movie.main_image = main_url_image
-    # if request.user.is_authenticated:
-    print(movie_main_images)
+        
+        # ตรวจสอบและกำหนด sentiment
+        movie_sentiment = MovieSentiment.objects.filter(movie_id=movie.id).values('positive','negative').first()
+        if movie_sentiment:
+            # ถ้า movie_sentiment ไม่เป็น None, เก็บข้อมูล sentiment ไว้ใน object movie
+            movie.positive = movie_sentiment.get('positive', 0)
+            movie.negative = movie_sentiment.get('negative', 0)
+        else:
+            # ถ้า movie_sentiment เป็น None, กำหนดค่าเริ่มต้น
+            movie.positive = 0
+            movie.negative = 0
+        #Score
+        avg_score_result = Comment.objects.filter(movie_id=movie.id).aggregate(average_score=Avg('score'))
+        avg_score = avg_score_result.get('average_score',0)
+        if avg_score:
+            avg_score = round(avg_score, 1)
+            movie.avg_score = avg_score
+        else:
+            avg_score = 0
+            movie.avg_score = avg_score
+
+    #New Movie
+    headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    url = "https://www.rottentomatoes.com/browse/movies_in_theaters/sort:newest"
+    data = requests.get(url, headers=headers)
+    soup = BeautifulSoup(data.text)
+    imgmovie = []
+    namemovie = []
+    releasedate = []
+    for c in soup.find_all('div',{'class':'flex-container'}):
+
+        imgmovie.append(c.find('rt-img',{'class':'posterImage'}).get('src'))
+        namemovie.append(c.find('span',{'class':'p--small'}).text.replace('\n        ','').replace('  ',''))
+        releasedate.append(c.find('span',{'class':'smaller'}).text.replace('\n        ','').replace('  ','').replace('Opened ',''))
+        if(len(imgmovie)==10):
+            break
+    NewMovie_list = zip(imgmovie,namemovie,releasedate)
+
     context = {
-                    'username': request.user.username,
-                    'slides': slides,
-                    'movies':movies,
-                    'mainmovie_image':movie_main_images,
+                'username': request.user.username,
+                'slides': slides,
+                'movies':movies,
+                'mainmovie_image':movie_main_images,
+                'newMovie':NewMovie_list
               }
     return render(request, 'home.html', context)
-    # else:
-        # return render(request, 'home.html', {'slides': slides})
-
-
-
 
 #coin shop - ร้านค้าเหรียญ
 def coinshop(request):
@@ -624,6 +743,7 @@ def coinshop(request):
             messages.error(request, "The selected product does not exist.")
             return redirect('coinshop')
     else:
+        messages.error(request, "Please login to purchase products.")
         return redirect('login')    
     with transaction.atomic():  #Transaction Handling
         if premium_item.expires < date.today():
@@ -703,8 +823,8 @@ def sentiment(text):
         return "Neutral"
     else:
         # โหลดโมเดลและ CountVectorizer ที่ถูกฟิตแล้ว
-        model = joblib.load('C:/Users/Administrator/Desktop/movieReview/movieReview/adminHome/ai/NueralNetwork_model.joblib')
-        tfidf_v = joblib.load('C:/Users/Administrator/Desktop/movieReview/movieReview/adminHome/ai/tfidf_vectorizer.joblib')  # ต้องมีการบันทึก CountVectorizer ที่ถูกฟิตแล้วเป็นไฟล์
+        model = joblib.load('E:/Project_MovieReview707/movieReview/adminHome/ai/NueralNetwork_model.joblib')
+        tfidf_v = joblib.load('E:/Project_MovieReview707/movieReview/adminHome/ai/tfidf_vectorizer.joblib')  # ต้องมีการบันทึก CountVectorizer ที่ถูกฟิตแล้วเป็นไฟล์
         
         # ปรับแต่งและแปลงข้อความเป็นเวกเตอร์
         processed_text = preprocess(text)
@@ -736,8 +856,22 @@ def movieSentiment(id):
         defaults={'positive': positive_percent, 'negative': negative_percent}
     )
 
+
+def filter_comment(queryset):
+    with open('adminHome/ai/bad-words.txt', 'r') as file:
+        bad_words = [word.strip() for word in file.readlines()]
+
+    for comment in queryset:
+        filtered_text = comment.data
+        for word in bad_words:
+            filtered_text = filtered_text.replace(word, '*' * len(word))
+        comment.filtered_data = filtered_text  # สร้าง attribute ใหม่ไม่ได้บันทึกลงฐานข้อมูล
+
+    return queryset
+
 from django.db.models import Avg
 from django.db.models import Count
+
 # Movie review page
 def moviereview(request, id):
     movie = get_object_or_404(Movie, pk=id)
@@ -746,7 +880,45 @@ def moviereview(request, id):
     directors = movie.director.all()
     writers = movie.writer.all()
     top_stars = MovieDetail.objects.filter(movie=movie, is_top=True)
+    #######################################################
+    #Scraping Movie Point
+    # pointIMDB = moviepointscraping(str(movie.name))
+    
+    # linkscrapingcomment = moviecommentlink(movie.name)
+    # urls=linkscrapingcomment
+    # headers = {
+    # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    # data = requests.get(urls, headers=headers)
+    # soup = BeautifulSoup(data.text)
+    # pointcomment = []
+    # headcomment=[]
+    # detailcomment = []
+    # spoilcomment = []
+    # for idx, m in enumerate(soup.find_all('div',{'class':'review-container'})):
+    #     if idx >= 10:
+    #         break
+    #     rating_container = m.find('span', {'class': 'rating-other-user-rating'})
+    #     if rating_container is not None:
+    #         point = rating_container.find('span').text
+    #         print(point)
+    #         pointcomment.append(point)
+    #     else:
+    #         point = "Don't give point."
+    #         print(point)
+    #         pointcomment.append(point)
+    #     headcomment.append(m.find('a',{'class':'title'}).text.replace('\n',''))
+    #     detailcomment.append(m.find('div',{'class':'text show-more__control'}).text)
+    #     spoil = m.find('span',{'class':'spoiler-warning'})
+    #     if spoil is not None:
+    #         spoilcomment.append(spoil.text)
+    #     else:
+    #         spoil = "Normal"
+    #         spoilcomment.append(spoil)
 
+
+    
+    # all_list = zip(pointcomment,headcomment,spoilcomment,detailcomment)
+    # moviecommentformIMDB()
     #######################################################
     #Star Image
     top_star_images = []  # ใช้ list เพื่อเก็บ URL ของรูปภาพ
@@ -774,10 +946,16 @@ def moviereview(request, id):
     if user.is_authenticated :  # Check if the user
         commented = Comment.objects.filter(movie=movie, user=user).first()  
         other_comments = Comment.objects.filter(movie=movie).exclude(user=user)
+        other_top = Comment.objects.filter(movie=movie).exclude(user=user).annotate(likes_count=Count('like')).order_by('-likes_count')
     else:
         commented = None
-        other_comments = Comment.objects.filter(movie=movie).exclude() 
-    
+        other_comments = Comment.objects.filter(movie=movie).exclude()
+        other_top = Comment.objects.filter(movie=movie).annotate(likes_count=Count('like')).order_by('-likes_count') 
+    #Top coment
+    # Fetch the top comment based on likes
+    # Assuming you want to exclude the current user's comment from being the top comment
+    top_comment = other_top.first() if other_comments else None
+    # คำนวณคะแนนเฉลี่ยของความคิดเห็น
     avg_score_result = Comment.objects.filter(movie=movie).aggregate(average_score=Avg('score'))
     avg_score = avg_score_result.get('average_score',0)
     #######################################################
@@ -794,11 +972,11 @@ def moviereview(request, id):
         else:
             form = CommentForm(request.POST)     #ไม่มีความคิดเห็นที่มีอยู่ สร้างความคิดเห็นใหม่ 
         if form.is_valid():
+            print(form)
             comment = form.save(commit=False)
-            # comment.spoiler = True if request.POST.get('spoiler') == '1' else False
-            print(comment.spoiler)
+            comment.spoiler = True if request.POST.get('spoiler') == '1' else False
+            # print(comment.spoiler)
             comment.sentiment = sentiment(comment.data)
-            sentiment(comment.data)
             comment.user = request.user
             comment.movie = movie
             comment.save()
@@ -828,7 +1006,7 @@ def moviereview(request, id):
 
         # get MovieSentiment
         movie_sentiment = MovieSentiment.objects.filter(movie=movie)
- 
+
         # like comment
         if user.is_authenticated:
             # Check if the user has already liked the comment
@@ -839,20 +1017,33 @@ def moviereview(request, id):
             # print(liked_comments)
             liked_commentsss = Comment.objects.filter(like__user=request.user).values_list('id', flat=True)
             liked_commentsss = [comment for comment in liked_commentsss]
-            if movie_sentiment.exists():
-                positive = round(movie_sentiment[0].positive)
-                negative = round(movie_sentiment[0].negative)
-            else:
-                positive = 0
-                negative = 0
         else:
             is_liked = False
             liked_commentsss = None
+        # คำนวณจำนวนความคิดเห็น Positive และ Negative (ไม่รวม Neutral)
+        if movie_sentiment.exists():
+            positive = round(movie_sentiment[0].positive)
+            negative = round(movie_sentiment[0].negative)
+        else:
             positive = 0
             negative = 0
 
         other_comments = other_comments.annotate(likes_count=Count('like'))
         combined_data = zip(top_star_images, top_stars)
+        # filter comment
+        if top_comment:
+            other_comments = other_comments.exclude(id=top_comment.id)
+            top_comment = filter_comment([top_comment])
+            top_comment = top_comment[0] if top_comment else None
+        else:
+            top_comment = None
+        if commented == None:
+            other_comments = filter_comment(list(other_comments))
+        else: 
+           commented = filter_comment([commented])
+           other_comments = filter_comment(list(other_comments))
+        commented = commented[0] if commented else None
+        print(top_comment)
         context = {
             'combined_data': combined_data,
             'movie': movie,
@@ -868,6 +1059,7 @@ def moviereview(request, id):
             'form': form,
             'commented':commented,
             'other_comments':other_comments,
+            'top_comment':top_comment,
             'is_liked': is_liked,
             'liked_comments':liked_commentsss,
             'positive': positive,
@@ -876,6 +1068,52 @@ def moviereview(request, id):
         return render(request, 'moviereview.html', context)
     return render(request, 'moviereview.html', context)
 
+#Scraping Movie Data
+def scrape_movie_data(request, movie):
+    movie_name = movie
+    print(movie_name)
+    if movie_name:
+        linkscrapingcomment = moviecommentlink(movie_name)
+        urls = linkscrapingcomment
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+        }
+        
+        data = requests.get(urls, headers=headers)
+        soup = BeautifulSoup(data.text)
+        
+        pointcomment = []
+        headcomment = []
+        detailcomment = []
+        spoilcomment = []
+        
+        for idx, m in enumerate(soup.find_all('div',{'class':'review-container'})):
+            if idx >= 10:
+                break
+            rating_container = m.find('span', {'class': 'rating-other-user-rating'})
+            if rating_container is not None:
+                point = rating_container.find('span').text
+                pointcomment.append(point)
+            else:
+                point = "Don't give point."
+                pointcomment.append(point)
+            headcomment.append(m.find('a',{'class':'title'}).text.replace('\n',''))
+            detailcomment.append(m.find('div',{'class':'text show-more__control'}).text)
+            spoil = m.find('span',{'class':'spoiler-warning'})
+            if spoil is not None:
+                spoilcomment.append(spoil.text)
+            else:
+                spoil = "Normal"
+                spoilcomment.append(spoil)
+        all_list = zip(pointcomment, headcomment, spoilcomment, detailcomment)
+        context = {
+            'all_list': [dict(zip(['point', 'head', 'spoil', 'detail'], item)) for item in all_list],
+        }
+        return JsonResponse(context)
+    else:
+        # หากไม่ได้รับ id หรือชื่อของภาพยนตร์
+        return JsonResponse({'error': 'Missing movie id or name'}, status=400)
 
 from django.http import JsonResponse
 from .models import Comment, Like  
@@ -921,6 +1159,28 @@ def like_comment(request, comment_id):
     }
     return JsonResponse(context)
 
+
+
+def report_comment(request, comment_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Please log in to report a comment.'}, status=401)
+
+    try:
+        comment = Comment.objects.get(id=comment_id)
+        data = json.loads(request.body.decode('utf-8'))
+        if data.get('issueType') == 'other':
+            reason = data.get('customText')
+        else:
+            reason = data.get('issueType')
+
+        # Create a new Report instance and save
+        Report.objects.create(comment=comment, reason=reason)
+
+        return JsonResponse({'message': 'Report submitted successfully.'}, status=201)
+    except Comment.DoesNotExist:
+        return JsonResponse({'error': 'Comment not found.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 
 def actor(request, id):
@@ -1008,9 +1268,144 @@ def admin_view(request):
     
     return render(request, 'admin/dashboard.html', context)
 
+# ========================================================================================================================
+# minigame
 def minigame(request):
+    category = request.GET.get('category')
+    print(category)
+    if not request.user.is_authenticated:
+        return redirect('login')
+        
+    if category == 'Movie':
+        movies = list(Movie.objects.order_by('?')[:4])
+        mainmovie_images = []
+        answer = movies[0].name
+        for movie in movies:
+            main_local_image = LocalImage.objects.filter(movie=movie, mainmovie=True).first()
+            if main_local_image:
+                mainmovie_images.append(main_local_image.image.url)
+            else:
+                main_url_image = URLImage.objects.filter(movie=movie, mainmovie=True).first()
+                if main_url_image:
+                    mainmovie_images.append(main_url_image.image_url)
+                else:
+                    mainmovie_images.append(None) # หรือ URL รูปภาพเริ่มต้น
+        mainmovie_image = mainmovie_images[0]
+        movie_names = [movie.name for movie in movies]
+        random.shuffle(movie_names)
+        context = {
+            'mainmovie_images': mainmovie_image,
+            'answer': answer,
+            'main_names': movie_names,
+        }
+        print(context)
+    elif category == 'Star':
+        local_main_image = LocalImage.objects.filter(is_visible=True, mainstar=True).order_by('?').first()
+        url_main_image = URLImage.objects.filter(is_visible=True, mainstar=True).order_by('?').first()
+        main_images = local_main_image, url_main_image
+        main_images = [img for img in main_images if img]  # Filter out None values
+        random.shuffle(main_images)
 
-    return render(request, 'minigame.html')
+        if not main_images:  # If no images are found
+            return HttpResponse("No images found", status=404)  # Handle this case appropriately
 
+        main_image = main_images[0]  # Now we are sure it's not None
+        print(main_image)
+        main_star_name =  [str(star.name) for star in main_image.star.all()]
+        
+        # remove list
+        delimiter = ", "
+        main_star_name = delimiter.join(main_star_name)
+
+        # Prepare star names
+        star_names = [main_star_name] + [star.name for star in Star.objects.exclude(name=main_star_name).order_by('?')[:3]]
+        random.shuffle(star_names)
+        print(main_star_name)
+        context = {
+            'mainstar_image': main_image.image.url if isinstance(main_image, LocalImage) else main_image.image_url,
+            'answer': main_star_name,
+            'main_names': star_names,
+        }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        print(context)
+        return JsonResponse(context) 
+    else:
+        return render(request, 'minigame.html')
+
+@login_required
+@require_POST    
+def updatecoin(request):
+    user = request.user
+    user.coin += Decimal('0.20')
+    user.save()
+    return JsonResponse({"status": "success"}) 
+
+@login_required
+def update_session(request):
+    user = request.user
+    
+    # Attempt to retrieve the user's gameplay record, assuming it's reset daily
+    gameplay, created = GamePlay.objects.get_or_create(user=user)
+    
+    if gameplay.sessions_today >= 3:
+        # User has reached the limit for the day
+        return JsonResponse({'error': 'You have reached the daily game limit.'}, status=403)
+    
+    # Increment the session count and save
+    gameplay.sessions_today += 1
+    gameplay.save()
+    
+    # Successfully updated the session count
+    return JsonResponse({'message': 'Session updated successfully'})
+# ========================================================================================================================
+# หน้าเกี่ยวกับเรา
+def about_us(request):
+    return render(request, 'Login_Register/about_us.html')
+
+# ========================================================================================================================
+# ใช้เพื่อทดสอบ
+def test(request):
+    # request_type = request.GET.get('type')
+
+    # if request_type == 'get_movies':
+    #     movies = Movie.objects.filter(is_show=True).values('id', 'name')
+    #     return JsonResponse(list(movies), safe=False)
+
+    # elif request_type == 'get_user_login_count':
+    #     user_login_count = 10  # Replace with your actual logic to get the count
+    #     return JsonResponse({'count': user_login_count})
+
+    # elif request_type == 'get_comments_data':
+    #     movie_id = request.GET.get('movie_id')
+    #     comments = Comment.objects.filter(movie_id=movie_id).values('sentiment').annotate(count=Count('sentiment'))
+    #     data = {sentiment['sentiment']: sentiment['count'] for sentiment in comments}
+    #     return JsonResponse(data)
+
+    # elif request_type == 'get_movie_sentiments':
+    #     movie_id = request.GET.get('movie_id')
+    #     sentiment_data = MovieSentiment.objects.filter(movie_id=movie_id).values('positive', 'negative')
+    #     if sentiment_data:
+    #         return JsonResponse(sentiment_data[0])
+    #     return JsonResponse({'positive': 0, 'negative': 0})
+
+    # return JsonResponse({'error': 'Invalid request type'}, status=400)
+    return render(request, 'test.html')
+# ========================================================================================================================
 #admin custom view
 # my_custom_view
+    # views.py
+
+# def dashboard_view(request):
+#     # สมมติว่าคุณเก็บข้อมูลกราฟใน database
+#     data = {
+#         'labels': ["January", "February", "March", "April", "May", "June", "July"],
+#         'datasets': [{
+#             'label': "Data",
+#             'backgroundColor': "rgba(255, 99, 132, 0.2)",
+#             'borderColor': "rgba(255, 99, 132, 1)",
+#             'borderWidth': 1,
+#             'data': [10, 20, 30, 40, 50, 60, 70]
+#         }]
+#     }
+#     # return JsonResponse(data)
+#     return render(request, 'admin/dashboard.html', {'data': data})
