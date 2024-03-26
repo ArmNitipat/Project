@@ -94,10 +94,12 @@ JAZZMIN_SETTINGS = {
         {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
 
         # model admin to link to (Permissions checked against model)
-        {"model": "auth.User"},
+        # {"model": "auth.User"},
 
         # App with dropdown menu to all its models pages (Permissions checked against models)
-        {"app": "books"},
+        # {"app": "books"},
+
+        {"name": "Home", "url": "home", "permissions": ["auth.view_user"]}
     ],
 
     #############
@@ -132,10 +134,10 @@ JAZZMIN_SETTINGS = {
 
     # Custom links to append to app groups, keyed on app name
     "custom_links": {
-        "auth": [
-            {"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["auth.view_user"]},
-            {"name": "Scraping", "url": "home", "icon": "fas fa-cogs", "permissions": ["auth.view_user"]},
-            {"name": "Dashboard", "url": "home", "icon": "fas fa-chart-line", "permissions": ["auth.view_user"]},],
+        # "auth": [
+        #     {"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["auth.view_user"]},
+        #     {"name": "Scraping", "url": "home", "icon": "fas fa-cogs", "permissions": ["auth.view_user"]},
+        #     {"name": "Dashboard", "url": "home", "icon": "fas fa-chart-line", "permissions": ["auth.view_user"]},],
         # "star": [{"name": "Home", "url": "home", "icon": "fas fa-home", "permissions": ["star.view_star"]
         # },],
     },

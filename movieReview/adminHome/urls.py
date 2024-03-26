@@ -37,7 +37,7 @@ urlpatterns = [
     path('calendarTH/', views.calendarTH, name='calendarTH'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     #admin
-    # path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),

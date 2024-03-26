@@ -58,7 +58,6 @@ def log_user_ip(request):
     with open('ad.txt', 'a') as file:
         file.write(ip + '\n')
 
-
 # from django.db.models import Q
 from django.shortcuts import render
 from django.template import RequestContext
@@ -67,6 +66,13 @@ import requests
 from bs4 import BeautifulSoup
 from django.shortcuts import render
 import datetime
+
+def list_Time_login (user):
+    user = user
+    # บันทึกข้อมูลผู้ใช้เมื่อล็อกอินสำเร็จ
+    with open('login_records.txt', 'a') as file:
+        login_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        file.write(f"{user.id}, {user.username}, {login_time}\n")
 
 
 # Calendar scraper
@@ -387,14 +393,15 @@ def signup_view(request):
 
 #Login
 def login_view(request):
-    log_user_ip(request)
-    context = {}
+    # log_user_ip(request)
+    context = {}    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
+            list_Time_login(user)
             return redirect('home')
         else:
             context['login_error'] = "This username and password could not be found."
@@ -1365,47 +1372,252 @@ def about_us(request):
 # ========================================================================================================================
 # ใช้เพื่อทดสอบ
 def test(request):
-    # request_type = request.GET.get('type')
 
-    # if request_type == 'get_movies':
-    #     movies = Movie.objects.filter(is_show=True).values('id', 'name')
-    #     return JsonResponse(list(movies), safe=False)
+    # # วันนี้
+    # today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    # today_end = today_start + timezone.timedelta(days=1)
 
-    # elif request_type == 'get_user_login_count':
-    #     user_login_count = 10  # Replace with your actual logic to get the count
-    #     return JsonResponse({'count': user_login_count})
+    # # เมื่อวานนี้
+    # yesterday_start = today_start - timezone.timedelta(days=1)
+    # yesterday_end = today_start
 
-    # elif request_type == 'get_comments_data':
-    #     movie_id = request.GET.get('movie_id')
-    #     comments = Comment.objects.filter(movie_id=movie_id).values('sentiment').annotate(count=Count('sentiment'))
-    #     data = {sentiment['sentiment']: sentiment['count'] for sentiment in comments}
-    #     return JsonResponse(data)
+    # # ผู้ใช้ที่เข้าสู่ระบบเมื่อวาน
+    # users_logged_in_yesterday = User.objects.filter(last_login__range=(yesterday_start, yesterday_end))
+    # print(users_logged_in_yesterday)
+    # # ผู้ใช้ที่เข้าสู่ระบบวันนี้
+    # users_logged_in_today = User.objects.filter(last_login__range=(today_start, today_end))
+    # print(users_logged_in_today)
+    # # ไอดีผู้ใช้ที่เข้าสู่ระบบเมื่อวาน
+    # yesterday_user_ids = set(users_logged_in_yesterday.values_list('id', flat=True))
+    # print(yesterday_user_ids)
+    # # ไอดีผู้ใช้ที่เข้าสู่ระบบวันนี้
+    # today_user_ids = set(users_logged_in_today.values_list('id', flat=True))
+    # print(yesterday_user_ids)
+    # # หาไอดีผู้ใช้ที่ปรากฏในทั้งสองชุด
+    # users_logged_in_both_days = yesterday_user_ids.intersection(today_user_ids)
+    # print(users_logged_in_both_days)
+    # # นับจำนวนผู้ใช้ที่เข้าสู่ระบบทั้งสองวัน
+    # count_users_logged_in_both_days = len(users_logged_in_both_days)
+    # print(count_users_logged_in_both_days)
 
-    # elif request_type == 'get_movie_sentiments':
-    #     movie_id = request.GET.get('movie_id')
-    #     sentiment_data = MovieSentiment.objects.filter(movie_id=movie_id).values('positive', 'negative')
-    #     if sentiment_data:
-    #         return JsonResponse(sentiment_data[0])
-    #     return JsonResponse({'positive': 0, 'negative': 0})
+    # # request_type = request.GET.get('type')
 
-    # return JsonResponse({'error': 'Invalid request type'}, status=400)
+    # # if request_type == 'get_movies':
+    # #     movies = Movie.objects.filter(is_show=True).values('id', 'name')
+    # #     return JsonResponse(list(movies), safe=False)
+
+    # # elif request_type == 'get_user_login_count':
+    # #     user_login_count = 10  # Replace with your actual logic to get the count
+    # #     return JsonResponse({'count': user_login_count})
+
+    # # elif request_type == 'get_comments_data':
+    # #     movie_id = request.GET.get('movie_id')
+    # #     comments = Comment.objects.filter(movie_id=movie_id).values('sentiment').annotate(count=Count('sentiment'))
+    # #     data = {sentiment['sentiment']: sentiment['count'] for sentiment in comments}
+    # #     return JsonResponse(data)
+
+    # # elif request_type == 'get_movie_sentiments':
+    # #     movie_id = request.GET.get('movie_id')
+    # #     sentiment_data = MovieSentiment.objects.filter(movie_id=movie_id).values('positive', 'negative')
+    # #     if sentiment_data:
+    # #         return JsonResponse(sentiment_data[0])
+    # #     return JsonResponse({'positive': 0, 'negative': 0})
+
+    # # return JsonResponse({'error': 'Invalid request type'}, status=400)
+    
+    # movie_all = Movie.objects.all().values('id', 'name')
+    # if request.method == 'POST':
+    #     movie = {}
+    #     movies_id = 3
+    #     for movie_id in movies_id:
+    #         movie_name = Movie.objects.filter(id = movie_id).values('name')
+    #         movie['name'] = movie_name
+    #         movie_sentiment = Comment.objects.filter(movie_id = movies_id).values('sentiment')
+    #         movie_count = movie_sentiment.count()
+            
+    # # print(newmovie)
+    # count_day = {}
+    # today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    # day1 = today - timezone.timedelta(days=1)
+    # day2 = today - timezone.timedelta(days=2)
+    # day3 = today - timezone.timedelta(days=3)
+    # day4 = today - timezone.timedelta(days=4)
+    # day5 = today - timezone.timedelta(days=5)
+    # day6 = today - timezone.timedelta(days=6)
+
+    # users_logged_in_today = User.objects.filter(last_login__gte=today)
+    # count_users_logged_in_today = users_logged_in_today.count()
+    # count_day['today'] = count_users_logged_in_today
+
+    # users_logged_in_day1 = User.objects.filter(last_login__range=(day1, today))
+    # count_users_logged_in_day1 = users_logged_in_day1.count()
+    # count_day['day1'] = count_users_logged_in_day1
+
+    # users_logged_in_day2 = User.objects.filter(last_login__range=(day2, day1))
+    # count_users_logged_in_day2 = users_logged_in_day2.count()
+    # count_day['day2'] = count_users_logged_in_day2
+
+    # users_logged_in_day3 = User.objects.filter(last_login__range=(day3, day2))
+    # count_users_logged_in_day3 = users_logged_in_day3.count()
+    # count_day['day3'] = count_users_logged_in_day3
+
+    # users_logged_in_day4 = User.objects.filter(last_login__range=(day4, day3))
+    # count_users_logged_in_day4 = users_logged_in_day4.count()
+    # count_day['day4'] = count_users_logged_in_day4
+
+    # users_logged_in_day5 = User.objects.filter(last_login__range=(day5, day4))
+    # count_users_logged_in_day5 = users_logged_in_day5.count()
+    # count_day['day5'] = count_users_logged_in_day5
+
+    # users_logged_in_day6 = User.objects.filter(last_login__range=(day6, day5))
+    # count_users_logged_in_day6 = users_logged_in_day6.count()
+    # count_day['day6'] = count_users_logged_in_day6
+    
+    # max_user = max(count_day.values()) + 4
+    # count_day['max_user'] = max_user
+    # movie = [{ "name": "The Shawshank", "comment": "8", "positive": "6", "negative": "2"},
+    #         {"name": "The Dark Knight", "comment": "2", "positive": "1", "negative": "1"},
+    #         {"name": "The Godfather", "comment": "5", "positive": "3", "negative": "2"},
+    #         {"name": "The Godfather: Part II", "comment": "4", "positive": "2", "negative": "2"},
+    #         {"name": "The Lord of the Rings: The Return of the King", "comment": "7", "positive": "3", "negative": "4"},
+    #         {"name": "Pulp Fiction", "comment": "2", "positive": "1", "negative": "1"},
+    #         {"name": "Schindler's List", "comment": "3", "positive": "2", "negative": "1"}]
+    # max_comment = 10
+    # context = {
+    #     'count_day': count_day,
+    #     'movies': movie,
+    #     'max_comment': max_comment,
+    #     'movie_all': movie_all
+    # }
+
+    user_data = pd.read_csv('E:\Project_MovieReview707\movieReview\user_comment_converted.txt', sep='\t')
+    user_data['timestamp'] = pd.to_datetime(user_data['timestamp'])
+    login_counts = user_data.groupby(user_data['timestamp'].dt.date).size().reset_index(name='login_count')
+
+    # จัดเตรียมข้อมูลสำหรับส่งไปยัง template
+    context = {
+        'labels': login_counts['timestamp'].dt.strftime('%Y-%m-%d').tolist(),
+        'values': login_counts['login_count'].tolist(),
+    }
+    print(context)
     return render(request, 'test.html')
 # ========================================================================================================================
 #admin custom view
 # my_custom_view
     # views.py
 
-# def dashboard_view(request):
-#     # สมมติว่าคุณเก็บข้อมูลกราฟใน database
-#     data = {
-#         'labels': ["January", "February", "March", "April", "May", "June", "July"],
-#         'datasets': [{
-#             'label': "Data",
-#             'backgroundColor': "rgba(255, 99, 132, 0.2)",
-#             'borderColor': "rgba(255, 99, 132, 1)",
-#             'borderWidth': 1,
-#             'data': [10, 20, 30, 40, 50, 60, 70]
-#         }]
-#     }
-#     # return JsonResponse(data)
-#     return render(request, 'admin/dashboard.html', {'data': data})
+def get_day_name(date):
+    return date.strftime('%A')
+
+def dashboard_view(request):
+    count_day = {}
+    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    day1 = today - timezone.timedelta(days=1)
+    day2 = today - timezone.timedelta(days=2)
+    day3 = today - timezone.timedelta(days=3)
+    day4 = today - timezone.timedelta(days=4)
+    day5 = today - timezone.timedelta(days=5)
+    day6 = today - timezone.timedelta(days=6)
+
+    users_logged_in_today = User.objects.filter(last_login__gte=today)
+    count_users_logged_in_today = users_logged_in_today.count()
+    count_day['today'] = count_users_logged_in_today
+
+    users_logged_in_day1 = User.objects.filter(last_login__range=(day1, today))
+    count_users_logged_in_day1 = users_logged_in_day1.count()
+    count_day['day1'] = count_users_logged_in_day1
+
+    users_logged_in_day2 = User.objects.filter(last_login__range=(day2, day1))
+    count_users_logged_in_day2 = users_logged_in_day2.count()
+    count_day['day2'] = count_users_logged_in_day2
+
+    users_logged_in_day3 = User.objects.filter(last_login__range=(day3, day2))
+    count_users_logged_in_day3 = users_logged_in_day3.count()
+    count_day['day3'] = count_users_logged_in_day3
+
+    users_logged_in_day4 = User.objects.filter(last_login__range=(day4, day3))
+    count_users_logged_in_day4 = users_logged_in_day4.count()
+    count_day['day4'] = count_users_logged_in_day4
+
+    users_logged_in_day5 = User.objects.filter(last_login__range=(day5, day4))
+    count_users_logged_in_day5 = users_logged_in_day5.count()
+    count_day['day5'] = count_users_logged_in_day5
+
+    users_logged_in_day6 = User.objects.filter(last_login__range=(day6, day5))
+    count_users_logged_in_day6 = users_logged_in_day6.count()
+    count_day['day6'] = count_users_logged_in_day6
+
+
+    max_user = max(count_day.values()) + 3
+    count_day['max_user'] = max_user
+
+    # Get the day of the week for today
+    day_of_week = get_day_name(today)
+    count_day['day_name'] = day_of_week
+    day_of_week = get_day_name(day1)
+    count_day['day1_name'] = day_of_week
+    day_of_week = get_day_name(day2)
+    count_day['day2_name'] = day_of_week
+    day_of_week = get_day_name(day3)
+    count_day['day3_name'] = day_of_week
+    day_of_week = get_day_name(day4)
+    count_day['day4_name'] = day_of_week
+    day_of_week = get_day_name(day5)
+    count_day['day5_name'] = day_of_week
+    day_of_week = get_day_name(day6)
+    count_day['day6_name'] = day_of_week
+
+
+    # for i in range(7):
+    #     day = today - timezone.timedelta(days=i)
+    #     next_day = today - timezone.timedelta(days=i-1) if i > 0 else today + timezone.timedelta(days=1)
+    #     print(day, next_day)
+    #     users_logged_in = User.objects.filter(last_login__range=(day, next_day))
+    #     count_users_logged_in = users_logged_in.count()
+    #     print(count_users_logged_in)
+    #     # ใช้ฟังก์ชัน strftime เพื่อรับชื่อของวัน
+    #     day_name = get_day_name(day)
+    #     count_day[day_name] = count_users_logged_in
+
+    # # ได้หนัง 5 เรื่องล่าสุดที่กำลังฉาย
+    # latest_movie = Movie.objects.filter(is_show=1).order_by('-release_date')[:5].values('id', 'name')
+
+    # movies_comments_info = []
+
+    # for movie in latest_movie:
+    #     # นับคอมเมนต์ทั้งหมดสำหรับหนังแต่ละเรื่อง
+    #     comments_count = Comment.objects.filter(movie_id=movie['id']).count()
+        
+    #     # นับคอมเมนต์บวก
+    #     positive_count = Comment.objects.filter(movie_id=movie['id'], sentiment='positive').count()
+        
+    #     # นับคอมเมนต์ลบ
+    #     negative_count = Comment.objects.filter(movie_id=movie['id'], sentiment='negative').count()
+
+    #     # เพิ่มข้อมูลลงในรายการ
+    #     movies_comments_info.append({
+    #         "id": int(movie['id']),
+    #         "name": movie['name'],
+    #         "comment": int(comments_count),
+    #         "positive": int(positive_count),
+    #         "negative": int(negative_count)
+    #     })
+
+    # # หา max comment ดัวยการใช้ฟังก์ชัน max และ lambda
+    # max_comment = max(movies_comments_info, key=lambda x: x['comment'])['comment']
+    # max_comment += 2
+
+    movie = [{"name": "The Lord of the Rings: The Return of the King", "comment": "15", "positive": "12", "negative": "3"},
+             {"name": "The Dark Knight", "comment": " 10", "positive": "8", "negative": "2"},
+             {"name": "The Shawshank", "comment": "8", "positive": "6", "negative": "2"},
+             {"name": "The Godfather: Part II", "comment": "7", "positive": "5", "negative": "2"},
+             {"name": "The Godfather", "comment": "12", "positive": "9", "negative": "3"},]
+    max_comment = 18
+    movie_all = Movie.objects.all().values('id', 'name')
+    context = {
+        'count_day': count_day,
+        'movies': movie,
+        'max_comment': max_comment,
+        'movie_all': movie_all
+    }
+    return render(request, 'admin/dashboard.html' ,context)

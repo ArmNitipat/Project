@@ -8,49 +8,66 @@
 {% block content %}
 <main class="container bg-light bg-dark text-light" style="width: auto;">
 <style>
-#myChart {
+  canvas {
     width: 100% !important;
-    max-width: 800px;
     height: auto !important;
-}
-
+  }
 </style>
-  <div class="row pb-4 pt-4">
-    <h1>Graphs</h1>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6">
-    </div>
-  </div>
-  <div class="row ms-4">
-    <div class="col ps-2">
-      <select id="dataType">
-        <option value="usersLoggedIn">Number of Users Logged In</option>
-        <option value="commentsPerMovie">Comments per Movie</option>
-      </select>
-    </div>
-    <div class="col ps-2">
-      <!-- Movie Selection Dropdown (hidden initially) -->
-      <select id="movieSelection" style="display:none;">
-        <!-- Options will be dynamically populated based on the movie data -->
-      </select>
-    </div>
-    <div class="col ps-2">
-      <select class="ps-4" id="graphType">
-        <option value="bar">Bar</option>
-        <option value="line">Line</option>
-        <option value="pie">Pie</option>
-      </select>
+<div class="container">
+  <h1 class="text-center">Graph Home</h1>
+  <div class="row d-flex justify-content-end pt-2">
+    <div class="col">
+      <button id="bto-user-login">
+        <i class="fas fa-cog"></i>
+      </button>
     </div>
     <div class="col">
-      <!-- <label for="colorPicker">Choose a color for the graph:</label> -->
-      <input type="color" id="colorPicker" name="color" value="#ff0000">
-      <button onclick="updateGraphColor()">Update Graph Color</button>
+      <button id="bto-movie-comment" data-toggle="modal" data-target="#movieModal">
+        <i class="fas fa-cog"></i>
+      </button>
     </div>
   </div>
-<canvas id="myChart"></canvas>
+  <div class="row pt-2">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Users Logged In</h5>
+          <canvas id="loginChart" width="400" height="400"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Movies</h5>
 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    var ctx = document.getElementById('loginChart').getContext('2d');
+    var loginChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ data.dates|safe }},
+            datasets: [{
+                label: 'Number of Logins',
+                data: {{ data.counts|safe }},
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 </main>
 {% endblock %}
