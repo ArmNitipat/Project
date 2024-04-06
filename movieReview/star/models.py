@@ -97,7 +97,7 @@ class Star(models.Model):
     # star_type = models.ForeignKey(StarType, on_delete=models.CASCADE)
     job = models.ManyToManyField(StarType, related_name='stars', blank=True)
     history = models.TextField(blank=True,null=False)
-    height = models.FloatField(null=False, blank=True,default=0,help_text="height in meters.")
+    height = models.FloatField(null=False, blank=True,default=0,help_text="Height in meters. Example: 1.75")
     born_date = models.DateField(null=True, blank=True)
     born_location = models.CharField(null=True, blank=True,max_length=255)
     died_date = models.DateField(null=True, blank=True)

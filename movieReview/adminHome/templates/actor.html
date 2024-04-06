@@ -3,237 +3,256 @@
 
 <title>MovieReview</title>
 {% endblock %} {%block content%}
-    <style>
-      body{
-        background-color: black;
-      }
-  .carousel-control-prev , .carousel-control-next{
-        width: 6vh;
-        height: 6vh;
-        background-color: rgb(255, 255, 255);
-        border-radius: 50%;
-        top:50%;
-        transform: translateY(-50%);
-        transition: none;
-      }
-    .card-wrapper{
-      display:flex ;
+<style>
+  body {
+    background-color: black;
+  }
 
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 6vh;
+    height: 6vh;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: none;
+  }
+
+  .card-wrapper {
+    display: flex;
+
+  }
+
+  @media (min-width:700px) {
+    .card {
+      width: 100%;
     }
 
-    @media (min-width:700px){
-      .card{
-        width: 100%;
-      }
 
+  }
 
-    }
-
-    @media (max-width: 700px) {
-      .cardpro.space {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-      }
-    }
-    .card{
-      margin: 0 .5em;
-      width: cal(100%/4);
-      /* background-color: #212121!important; */
-    }
-    .image-wrapper{
-      height: 13vw;
-      margin: 0 auto;
-    }
-    .image-wrapper img{
-      max-width: 100%;
-      max-height: 100%;
-    }
-    .starpro{
-      width: 300px;
-      height: 400px;
-      margin: 0;
-      align-items: center;
-      justify-content: center;
-    }
+  @media (max-width: 700px) {
     .cardpro.space {
-      margin-left: 1rem !important;
-      margin-right: 1rem !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
     }
-    /* div{
+  }
+
+  .card {
+    margin: 0 .5em;
+    width: cal(100%/4);
+    /* background-color: #212121!important; */
+  }
+
+  .image-wrapper {
+    height: 13vw;
+    margin: 0 auto;
+  }
+
+  .image-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .starpro {
+    width: 300px;
+    height: 400px;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cardpro.space {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+  }
+
+  /* div{
       margin: 0px;
       padding: 0px;
       border: 0px;
       font: inherit;
       vertical-align: baseline;
     } */
-    .profile-w{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .starimage{
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-    #imageModal .modal-dialog {
-      width: auto;
-      max-width: none;
-      height: auto;
-      max-height: none;
-    }
+  .profile-w {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    #imageModal .modal-content {
-        width: 50vw;
-        height: auto;
-        max-height: none;
-        display: flex;
-        flex-direction: column;
-    }
+  .starimage {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 
-    #imageModal .modal-body {
-        text-align: center;
-    }
+  #imageModal .modal-dialog {
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+  }
 
-    #imageModal .modal-body img {
-        max-width: 100%;
-        height: auto;
-    }
-    .modal-backdrop.show {
-        opacity: 0.7;
-        background-color: rgba(0, 0, 0, 0.7);
-    }
+  #imageModal .modal-content {
+    width: 50vw;
+    height: auto;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+  }
 
-    #imageModal .modal-dialog {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1050;
-    }
+  #imageModal .modal-body {
+    text-align: center;
+  }
 
-    </style>
+  #imageModal .modal-body img {
+    max-width: 100%;
+    height: auto;
+  }
 
-    <main class="container text-white" style="background-color: #9999994b;">
-      <div class="p-4 p-md-5 mb-4 text-white rounded "> <!--style="background-color: rgba(0, 0, 0, 0.604);" -->
-        <div class="row">
-            <div class="col-md-12 px-0">
-              <!--ชื่อนักแสดง-->
-                <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 48px;">{{ star.name }}</h1>
-              </div>
+  .modal-backdrop.show {
+    opacity: 0.7;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  #imageModal .modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+  }
+</style>
+
+<main class="container text-white" style="background-color: #9999994b;">
+  <div class="p-4 p-md-5 mb-4 text-white rounded "> <!--style="background-color: rgba(0, 0, 0, 0.604);" -->
+    <div class="row">
+      <div class="col-md-12 px-0">
+        <!--ชื่อนักแสดง-->
+        <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 48px;">{{ star.name }}</h1>
+      </div>
+    </div>
+    <div class="row ms-2 mb-1">
+      <div class="col-md-12 px-0"
+        style="font-size: 14px; display: flex; flex-direction: row; align-items: center; color: rgba(255, 255, 255, 0.497);">
+        <!--ตำแหน่งนักแสดง-->
+        {% for job_name in jobs_list %}
+        <p style="margin: 0 10px 0 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px;">
+          {{ job_name }}
+        </p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- story star -->
+    <div class="card-body mb-auto" style="max-width: 75vw; border-radius: 10px;">
+      <div class="row d-flex flex-md-row">
+        <div class="col-md-3 mt-3 mb-3 d-flex profile-w bg-dark">
+          {% if mainstar_image %}
+          {% if mainstar_image.image %}
+          <img class="starpro" src="{{ mainstar_image.image.url }}" alt="{{ star.name }}"
+            style="border-radius: 8px; width: 100%; height: auto;">
+          {% elif mainstar_image.image_url %}
+          <img class="starpro" src="{{ mainstar_image.image_url }}" alt="{{ star.name }}"
+            style="border-radius: 8px; width: 100%; height: auto;">
+          {% endif %}
+          {% endif %}
         </div>
-        <div class="row ms-2 mb-1">
-            <div class="col-md-12 px-0" style="font-size: 14px; display: flex; flex-direction: row; align-items: center; color: rgba(255, 255, 255, 0.497);">
-                <!--ตำแหน่งนักแสดง-->
-                {% for job_name in jobs_list %}
-                <p style="margin: 0 10px 0 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px;" >
-                    {{ job_name }}
-                </p>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- story star -->
-        <div class="card-body mb-auto" style="max-width: 75vw; border-radius: 10px;">
-          <div class="row d-flex flex-md-row">
-            <div class="col-md-3 mt-3 mb-3 d-flex profile-w bg-dark">
-              {% if mainstar_image %}
-                {% if mainstar_image.image %}
-                  <img class="starpro" src="{{ mainstar_image.image.url }}" alt="{{ star.name }}" style="border-radius: 8px; width: 100%; height: auto;">
-                {% elif mainstar_image.image_url %}
-                  <img class="starpro" src="{{ mainstar_image.image_url }}" alt="{{ star.name }}" style="border-radius: 8px; width: 100%; height: auto;">
-                {% endif %}
-              {% endif %}
-            </div>
-            <div class="col-md-8 mt d-flex flex-md-column">
-              <div class="card-body">
-                <h4 class="card-title">{{ star.name }}</h4>
-                <hr>
-                <p class="card-text mt-3">{{ star.history }}<br>
-                  <a class="ms-1 me-2 card-link" href="writers-link">Read More</a>
-                </p>
-                <p class="card-text"><small class="text-muted">{{ star.update_time }}</small></p>
-                <hr>
-                <!-- Uncomment and modify below sections as needed -->
-                <!-- <p class="card-text mt-3">Born <small class="text-muted">{{ star.born_date }}, {{ star.born_location }}</small></p> -->
-                <!-- <p class="card-text mt-1">Height <small class="text-muted">{{ height }}″ ({{ star.height }}m)</small></p> -->
-                <!-- Official Site and Social Links -->
-                <!-- <p class="card-text mt-1">Official site</p> -->
-                <!-- <div class="social-links d-flex"> -->
-                <!-- {% for site in official_list %} -->
-                <!--   <a href="{{ site.Official_sites }}" class="text-decoration-none" style="color: rgb(114, 117, 253);" target="_blank">{{ site.name_site }}</a> -->
-                <!-- {% endfor %} -->
-              </div>
-            </div>
+        <div class="col-md-8 mt d-flex flex-md-column">
+          <div class="card-body">
+            <h4 class="card-title">{{ star.name }}</h4>
+            <hr>
+            <p class="card-text mt-3">{{ star.history }}<br>
+              <a class="ms-1 me-2 card-link" href="writers-link">Read More</a>
+            </p>
+            <p class="card-text"><small class="text-muted">{{ star.update_time }}</small></p>
+            <hr>
+            <!-- Uncomment and modify below sections as needed -->
+            <!-- <p class="card-text mt-3">Born <small class="text-muted">{{ star.born_date }}, {{ star.born_location }}</small></p> -->
+            <!-- <p class="card-text mt-1">Height <small class="text-muted">{{ height }}″ ({{ star.height }}m)</small></p> -->
+            <!-- Official Site and Social Links -->
+            <!-- <p class="card-text mt-1">Official site</p> -->
+            <!-- <div class="social-links d-flex"> -->
+            <!-- {% for site in official_list %} -->
+            <!--   <a href="{{ site.Official_sites }}" class="text-decoration-none" style="color: rgb(114, 117, 253);" target="_blank">{{ site.name_site }}</a> -->
+            <!-- {% endfor %} -->
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
 
 
+  <!--Photo-->
+  <hr>
+  <h2 class="mt-3 justify-content-center align-items-center">
+    <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
+      <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg> Photo :
+  </h2>
 
-      <!--Photo-->
-      <hr>
-      <h2 class="mt-3 justify-content-center align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-          <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-        </svg> Photo :</h2>
-
-      <div id="carouselExampleControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-        <div class="carousel">
-          {% for image in non_mainstar_images %}
-              {% if forloop.counter0|divisibleby:4 %}
-                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                      <div class="card-wrapper" style="display: flex; background-color: #212121;">
-              {% endif %}
-              <div class="card" style="width: 18rem;">
-                  <div class="image-wrapper">
-                      <img class="starimage" src="{{ image.image_url }}" alt="{{ star.name }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ image.image_url }}">
-                  </div>
+  <div id="carouselExampleControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel">
+        {% for image in non_mainstar_images %}
+        {% if forloop.counter0|divisibleby:4 %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="card-wrapper" style="display: flex; background-color: #212121;">
+            {% endif %}
+            <div class="card" style="width: 18rem;">
+              <div class="image-wrapper">
+                <img class="starimage" src="{{ image.image_url }}" alt="{{ star.name }}" data-bs-toggle="modal"
+                  data-bs-target="#imageModal" data-image-url="{{ image.image_url }}">
               </div>
-              {% if forloop.counter|divisibleby:4 or forloop.last %}
-                      </div>
-                  </div>
-              {% endif %}
-          {% endfor %}
+            </div>
+            {% if forloop.counter|divisibleby:4 or forloop.last %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
       </div>
 
       <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" id="customModalDialog">
           <div class="modal-content">
             <div class="modal-body">
-              <img style="height: 80vh; width: 100%; object-fit: contain;" id="modalImage" src="" class="img-fluid" alt="...">
+              <img style="height: 80vh; width: 100%; object-fit: contain;" id="modalImage" src="" class="img-fluid"
+                alt="...">
             </div>
           </div>
         </div>
       </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
 
 
 
 
 
 
-      <div class="row g-5">
-        <div class="col-md-11  justify-content-center align-items-center">
+    <div class="row g-5">
+      <div class="col-md-11  justify-content-center align-items-center">
 
-
-          <hr>
-          <ul class="nav nav-tabs bg-dark" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="bg-dark text-light nav-link active" id="Personal_Detail-tab" data-bs-toggle="tab" data-bs-target="#Personal_Detail" type="button" role="tab" aria-controls="Personal_Detail" aria-selected="true">Personal Detail</button>
-            </li>
-            <!-- <li class="nav-item" role="presentation">
+        <hr>
+        <ul class="nav nav-tabs bg-dark" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="bg-dark text-light nav-link active" id="Personal_Detail-tab" data-bs-toggle="tab"
+              data-bs-target="#Personal_Detail" type="button" role="tab" aria-controls="Personal_Detail"
+              aria-selected="true">Personal Detail</button>
+          </li>
+          <!-- <li class="nav-item" role="presentation">
               <button class="bg-dark nav-link" id="Movie_Actor-tab" data-bs-toggle="tab" data-bs-target="#Movie_Actor" type="button" role="tab" aria-controls="Movie_Actor" aria-selected="false">Actor</button>
             </li>
             <li class="nav-item" role="presentation">
@@ -242,88 +261,93 @@
             <li class="nav-item" role="presentation">
               <button class="bg-dark nav-link" id="Writer-tab" data-bs-toggle="tab" data-bs-target="#Writer" type="button" role="tab" aria-controls="Writer" aria-selected="false">Writer</button>
             </li> -->
-          </ul>
-          <!--Tab Personaldetail_MovieActor_-->
-          <div class="tab-content" id="myTabContent">
-            <div class="card-body tab-pane fade show active" id="Personal_Detail" role="tabpanel" aria-labelledby="Personal_Detail-tab">
-              <div class=" mt-3" style=" border-radius: 15px;">
-                <h2 class="mt-3 justify-content-center text-center align-items-center">
-                  <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                  </svg>
-                  Personal detail
-                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                    <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                  </svg>
+        </ul>
+        <!--Tab Personaldetail_MovieActor_-->
+        <div class="tab-content" id="myTabContent">
+          <div class="card-body tab-pane fade show active" id="Personal_Detail" role="tabpanel"
+            aria-labelledby="Personal_Detail-tab">
+            <div class=" mt-3" style=" border-radius: 15px;">
+              <h2 class="mt-3 justify-content-center text-center align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svgs" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                  stroke="#000000">
+                  <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                Personal detail
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                  stroke="#000000">
+                  <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
 
-                </h2>
-                <div class="row ">
-                  <!--ชื่อที่ใช้เรียก-->
-                  <div class="ms-5 col-md-11">
-                    <hr>
-                    <div class="d-flex align-items-center">
+              </h2>
+              <div class="row ">
+                <!--ชื่อที่ใช้เรียก-->
+                <div class="ms-5 col-md-11">
+                  <hr>
+                  <div class="d-flex align-items-center">
+                    <div class="col-2">
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Alternative names</h4>
+                    </div>
+                    <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
+                      {% for name in alternative_names %}
+                      <p class="ms-3">{{ name }}</p>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
 
-                      <div class="col-2">
-                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Alternative names</h4>
-                      </div>
-                      <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
-                        {% for name in alternative_names %}
-                        <p class="ms-3">{{ name }}</p>
+                <!--ส่วนสูง-->
+                <div class="ms-5 col-md-11">
+                  <hr>
+                  <div class="d-flex align-items-center">
+                    <div class="col-2">
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Height</h4>
+                    </div>
+                    <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
+                      <p class="ms-3"> {{ height }}″ ({{ star.height }} m)</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!--วันเดือนปีเกิด-->
+                <div class="ms-5 col-md-11">
+                  <hr>
+                  <div class="d-flex align-items-center">
+                    <div class="col-2">
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Born</h4>
+                    </div>
+                    <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
+                      <p class="ms-3">{{ star.born_date }}</p>
+                      <p class="ms-3">{{ star.born_location }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!--สถานะ-->
+                <div class="ms-5 col-md-11">
+                  <hr>
+                  <div class="d-flex align-items-center">
+                    <div class="col-2">
+                      <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Spouses</h4>
+                    </div>
+                    <div class="col-8 mt-3 row">
+                      <div style="display: flex; flex-direction: column;">
+                        {% for marriage in spouse %}
+                        <a href="{{ site.Official_sites }}" 
+                          class="text-decoration-none"
+                          style="color: rgb(114, 117, 253);" 
+                          target="_blank">{{ marriage.spouse.name }}
+                        </a>- Married on:{{ marriage.marriage_date }}
+                          {% if marriage.divorce %}
+                          , Divorced on: {{ marriage.divorce_date}}
+                          {% endif %}
                         {% endfor %}
-                      </div>
-                    </div>
-                  </div>
-                  <!--ส่วนสูง-->
-
-                  <div class="ms-5 col-md-11">
-                    <hr>
-                    <div class="d-flex align-items-center">
-                      <div class="col-2">
-                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Height</h4>
-                      </div>
-                      <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
-                        <p class="ms-3"> {{ height }}″ ({{ star.height }} m)</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!--วันเดือนปีเกิด-->
-
-                  <div class="ms-5 col-md-11">
-                    <hr>
-                    <div class="d-flex align-items-center">
-                      <div class="col-2">
-                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Born</h4>
-                      </div>
-                      <div class="col-8 mt-3" style="display: flex; flex-wrap: wrap;">
-                        <p class="ms-3">{{ star.born_date }}</p>
-                        <p class="ms-3">{{ star.born_location }}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!--สถานะ-->
-
-                  <div class="ms-5 col-md-11">
-                    <hr>
-                    <div class="d-flex align-items-center">
-                      <div class="col-2">
-                        <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Spouses</h4>
-                      </div>
-                      <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
-                        <div style="display: flex; flex-direction: column;">
-                          <!-- <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Susan DowneyAugust</span> 27, 2005 - present (2 children)</p>
-                          <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Deborah Falconer</span> 29, 1992 - April 26, 2004 (divorced, 1 child)</p> -->
-                          {% for marriage in spouse %}
-                          <a href="{{ site.Official_sites }}" class="text-decoration-none" style="color: rgb(114, 117, 253);" target="_blank">{{ marriage.spouse.name }}</a>- Married on: {{ marriage.marriage_date }}{% if marriage.divorce %}, Divorced on: {{ marriage.divorce_date }}{% endif %}
-                          {% endfor %}
-                          <!-- {% for relationship in spouse_to_others %}
+                        <!-- {% for relationship in spouse_to_others %}
                           <li>{{ relationship.star.name }} - Married on: {{ relationship.marriage_date }}{% if relationship.divorce %}, Divorced on: {{ relationship.divorce_date }}{% endif %}</li>
                           {% endfor %} -->
-                        </div>
                       </div>
                     </div>
                   </div>
+                </div>
 
 
                 <!--ลูก-->
@@ -336,7 +360,7 @@
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                       <div style="display: flex; flex-direction: column;">
                         {% for children in children %}
-                        <p><span style="color: rgb(114, 117, 253);">{{ children }}</span> </p>
+                        <a><span style="color: rgb(114, 117, 253);">{{ children }}</span></a>
                         {% endfor %}
                         <!-- <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Indio Falconer Downey</span> </p> -->
                         <!-- <p style="color: rgba(255, 255, 255, 0.64);">Avri Roel Downey</p>
@@ -356,9 +380,9 @@
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                       <div style="display: flex; flex-direction: column;">
                         {% for parent in parent %}
-                          <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">{{ parent }}</span>
-                        {% endfor %}
-                        <!-- <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Robert Downey Sr.</span> </p>
+                        <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">{{ parent }}</span>
+                          {% endfor %}
+                          <!-- <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Robert Downey Sr.</span> </p>
                         <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Elsie Downey</span> </p>
                         <p style="color: rgba(255, 255, 255, 0.64);"><span style="color: rgb(114, 117, 253);">Elsie Downey</span> </p> -->
                       </div>
@@ -376,11 +400,11 @@
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
                       <div style="display: flex; flex-direction: column;">
                         {% if relatives %}
-                          {% for relative in relatives %}
-                          <a><span style="color: rgb(114, 117, 253);">{{ relative.relative_name }}</span> (Sibling) </a>
-                          {% endfor %}
-                          {% else %}
-                          <p class="ms-3">-</p>
+                        {% for relative in relatives %}
+                        <a><span style="color: rgb(114, 117, 253);">{{ relative.relative_name }}</span> (Sibling) </a>
+                        {% endfor %}
+                        {% else %}
+                        <p class="ms-3">-</p>
                         {% endif %}
                       </div>
                     </div>
@@ -395,205 +419,80 @@
                       <h4 class="me-3 mb-auto m-0" style="font-weight: bold;">Other works</h4>
                     </div>
                     <div class="col-8 mt-3" style="display: flex; flex-direction: row; align-items: center;">
-                    {% if other_works %}
+                      {% if other_works %}
                       {% for other_works in other_works %}
-                        <p class="ms-3">{{ other_works.work_description }}</p>
+                      <p class="ms-3">{{ other_works.work_description }}</p>
                       {% endfor %}
                       {% else %}
-                        <p class="ms-3">-</p>
-                    {% endif %}
+                      <p class="ms-3">-</p>
+                      {% endif %}
                     </div>
                   </div>
                   <hr>
                 </div>
               </div>
             </div>
-            </div>
+          </div>
 
 
-            <!--Actor-->
+          <!--Actor-->
+          <div class="tab-pane fade" id="Movie_Actor" role="tabpanel" aria-labelledby="Movie_Actor-tab">
+            <div class="mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
+              <div class="row mb-2">
 
+                <h2 class="mt-3 justify-content-center text-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000">
+                    <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  Actor
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000">
+                    <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </h2>
 
-            <div class="tab-pane fade" id="Movie_Actor" role="tabpanel" aria-labelledby="Movie_Actor-tab">
-              <div class="mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
-                <div class="row mb-2">
-
-                  <h2 class="mt-3 justify-content-center text-center align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                    </svg>
-                    Actor
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                    </svg>
-                  </h2>
-
-                  <div class="row text-dark mt-2 mb-2" style="border-radius: 10px;">
-                    <hr>
-                    <div class="col-md-6">
-
-                      <div class="card mt-2" style="width: 90%;">
-                        <div class="row">
-                          <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                            <a href="">
-                              <img src="https://m.media-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_FMjpg_UX1000_.jpg"   alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                            </a></div>
-                          <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
-                            <div class="card-body d-flex justify-content-between flex-column">
-                              <div class="ms-2">
-                                <a href="" class="text-decoration-none" >
-                                  <h4 class="card-title justify-content-center align-items-center text-center">Iron Man</h4>
-                                </a>
-                                <hr>
-                                <p class="card-text">Tony Stark</p><br>
-                                <a href="" class="text-decoration-none" >
-                                  <p class="card-text">2008</p>
-                                </a>
-                                <div class="d-flex align-items-center mt-3">
-                                  <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                  <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
-                                  <h5 class="mt-2">7.9</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="card mt-2" style="width: 90%;">
-                        <div class="row">
-                          <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                            <a href="">
-                              <img src="https://m.media-amazon.com/images/M/MV5BMjE5MzcyNjk1M15BMl5BanBnXkFtZTcwMjQ4MjcxOQ@@._V1_.jpg"   alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                            </a></div>
-                          <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
-                            <div class="card-body d-flex justify-content-between flex-column">
-                              <div class="ms-2">
-                                <a href="" class="text-decoration-none">
-                                  <h4 class="card-title justify-content-center align-items-center text-center">Iron Man 3</h4>
-                                </a>
-                                <hr>
-                                <p class="card-text">Tony Stark</p><br>
-                                <a href="" class="text-decoration-none">
-                                  <p class="card-text">2013</p>
-                                </a>
-                                <div class="d-flex align-items-center mt-3">
-                                  <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                  <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
-                                  <h5 class="mt-2">7.1</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="card mt-2" style="width: 90%;">
-                        <div class="row">
-                          <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                            <a href="">
-                              <img src="https://www.ubuy.co.th/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvODFhaTZ6eDZlWEwuX0FDX1NMMTMwNF8uanBn.jpg"   alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                            </a></div>
-                          <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
-                            <div class="card-body d-flex justify-content-between flex-column">
-                              <div class="ms-2">
-                                <a href="" class="text-decoration-none">
-                                  <h4 class="card-title justify-content-center align-items-center text-center">Avengers Endgame</h4>
-                                </a>
-                                <hr>
-                                <p class="card-text">Tony Stark</p><br>
-                                <a href="" class="text-decoration-none">
-                                  <p class="card-text">2019</p>
-                                </a>
-                                <div class="d-flex align-items-center mt-3">
-                                  <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                  <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
-                                  <h5 class="mt-2">8.4</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="card mt-2" style="width: 90%;">
-                        <div class="row">
-                          <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                            <a href="" >
-                              <img src="https://m.media-amazon.com/images/M/MV5BMTg0NjEwNjUxM15BMl5BanBnXkFtZTcwMzk0MjQ5Mg@@._V1_.jpg" class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                            </a></div>
-                          <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
-                            <div class="card-body d-flex justify-content-between flex-column">
-                              <div class="ms-2">
-                                <a href="" class="text-decoration-none">
-                                  <h4 class="card-title justify-content-center align-items-center text-center">Sherlock Holmes</h4>
-                                </a>
-                                <hr>
-                                <p class="card-text">Sherlock Holmes</p><br>
-                                <a href="" class="text-decoration-none">
-                                  <p class="card-text">2009</p>
-                                </a>
-                                <div class="d-flex align-items-center mt-3">
-                                  <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                  <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
-                                  <h5 class="mt-2">7.6</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!--Producer-->
-
-
-            <div class="tab-pane fade text-dark" id="Producer" role="tabpanel" aria-labelledby="Producer-tab">
-              <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
-                <div class="row mb-2">
-                  <h2 class="text-light mt-3 justify-content-center text-center align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                    </svg>
-                    Producer
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                    </svg>
-                  </h2>
+                <div class="row text-dark mt-2 mb-2" style="border-radius: 10px;">
+                  <hr>
                   <div class="col-md-6">
+
                     <div class="card mt-2" style="width: 90%;">
                       <div class="row">
-                        <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
+                        <div class="col-md-4 justify-content-center align-items-center text-center">
+                          <!-- คอลัมน์สำหรับรูปภาพ -->
                           <a href="">
-                            <img src="https://m.media-amazon.com/images/M/MV5BMjEwZGRiZjktZWMwZC00MzdkLThjZDAtNjU3NmMxY2IwNmMwXkEyXkFqcGdeQXVyMTMzOTQyOTk1._V1_.jpg"   alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                          </a></div>
+                            <img
+                              src="https://m.media-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_FMjpg_UX1000_.jpg"
+                              alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                          </a>
+                        </div>
                         <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
                           <div class="card-body d-flex justify-content-between flex-column">
                             <div class="ms-2">
                               <a href="" class="text-decoration-none">
-                                <h4 class="card-title justify-content-center align-items-center text-center">Downey's Dream Cars</h4>
+                                <h4 class="card-title justify-content-center align-items-center text-center">Iron Man
+                                </h4>
                               </a>
                               <hr>
-                              <p class="card-text">executive producer</p>
-                              <p class="card-text" style="color: blue;">TV Series   6 episodes</p>
+                              <p class="card-text">Tony Stark</p><br>
                               <a href="" class="text-decoration-none">
-                                <p class="card-text">2023</p>
+                                <p class="card-text">2008</p>
                               </a>
                               <div class="d-flex align-items-center mt-3">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
-                                <h5 class="mt-2">6.4</h5>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                  style="height: 25px; width: 75px; display: inline-block; ">
+                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  style="display: inline-block; vertical-align: middle;">
+                                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                  <g id="SVGRepo_iconCarrier">
+                                    <path
+                                      d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                      fill="#ffc800"></path>
+                                  </g>
+                                </svg>
+                                <h5 class="mt-2">7.9</h5>
                               </div>
                             </div>
                           </div>
@@ -605,26 +504,41 @@
                   <div class="col-md-6">
                     <div class="card mt-2" style="width: 90%;">
                       <div class="row">
-                        <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                          <a href="" >
-                            <img src="https://m.media-amazon.com/images/M/MV5BYWIyODIwZTAtZWYyYy00Y2NkLThlNjQtMzQwYmJhNTRkOTRjXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg" class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                          </a></div>
+                        <div class="col-md-4 justify-content-center align-items-center text-center">
+                          <!-- คอลัมน์สำหรับรูปภาพ -->
+                          <a href="">
+                            <img
+                              src="https://m.media-amazon.com/images/M/MV5BMjE5MzcyNjk1M15BMl5BanBnXkFtZTcwMjQ4MjcxOQ@@._V1_.jpg"
+                              alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                          </a>
+                        </div>
                         <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
                           <div class="card-body d-flex justify-content-between flex-column">
                             <div class="ms-2">
                               <a href="" class="text-decoration-none">
-                                <h4 class="card-title justify-content-center align-items-center text-center">Sweet Tooth</h4>
+                                <h4 class="card-title justify-content-center align-items-center text-center">Iron Man 3
+                                </h4>
                               </a>
                               <hr>
-                              <p class="card-text">executive producer</p>
-                              <p class="card-text" style="color: blue;">TV Series   16 episodes</p>
+                              <p class="card-text">Tony Stark</p><br>
                               <a href="" class="text-decoration-none">
-                                <p class="card-text">2021-2023</p>
+                                <p class="card-text">2013</p>
                               </a>
                               <div class="d-flex align-items-center mt-3">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
-                                <h5 class="mt-2">7.8</h5>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                  style="height: 25px; width: 75px; display: inline-block; ">
+                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  style="display: inline-block; vertical-align: middle;">
+                                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                  <g id="SVGRepo_iconCarrier">
+                                    <path
+                                      d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                      fill="#ffc800"></path>
+                                  </g>
+                                </svg>
+                                <h5 class="mt-2">7.1</h5>
                               </div>
                             </div>
                           </div>
@@ -636,25 +550,86 @@
                   <div class="col-md-6">
                     <div class="card mt-2" style="width: 90%;">
                       <div class="row">
-                        <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                          <a href="" >
-                            <img src="https://m.media-amazon.com/images/M/MV5BZDQxNTcyNTgtZTdlMC00NmRiLTllNDYtZmQyODkwNzU2OTMzXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_.jpg" class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                          </a></div>
+                        <div class="col-md-4 justify-content-center align-items-center text-center">
+                          <!-- คอลัมน์สำหรับรูปภาพ -->
+                          <a href="">
+                            <img
+                              src="https://www.ubuy.co.th/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvODFhaTZ6eDZlWEwuX0FDX1NMMTMwNF8uanBn.jpg"
+                              alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                          </a>
+                        </div>
                         <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
                           <div class="card-body d-flex justify-content-between flex-column">
                             <div class="ms-2">
                               <a href="" class="text-decoration-none">
-                                <h4 class="card-title justify-content-center align-items-center text-center">Perry Mason</h4>
+                                <h4 class="card-title justify-content-center align-items-center text-center">Avengers
+                                  Endgame</h4>
                               </a>
                               <hr>
-                              <p class="card-text">executive producer</p>
-                              <p class="card-text" style="color: blue;">TV Series   14 episodes</p>
+                              <p class="card-text">Tony Stark</p><br>
                               <a href="" class="text-decoration-none">
-                                <p class="card-text">2020-2023</p>
+                                <p class="card-text">2019</p>
                               </a>
                               <div class="d-flex align-items-center mt-3">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                  style="height: 25px; width: 75px; display: inline-block; ">
+                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  style="display: inline-block; vertical-align: middle;">
+                                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                  <g id="SVGRepo_iconCarrier">
+                                    <path
+                                      d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                      fill="#ffc800"></path>
+                                  </g>
+                                </svg>
+                                <h5 class="mt-2">8.4</h5>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="card mt-2" style="width: 90%;">
+                      <div class="row">
+                        <div class="col-md-4 justify-content-center align-items-center text-center">
+                          <!-- คอลัมน์สำหรับรูปภาพ -->
+                          <a href="">
+                            <img
+                              src="https://m.media-amazon.com/images/M/MV5BMTg0NjEwNjUxM15BMl5BanBnXkFtZTcwMzk0MjQ5Mg@@._V1_.jpg"
+                              class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                          </a>
+                        </div>
+                        <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                          <div class="card-body d-flex justify-content-between flex-column">
+                            <div class="ms-2">
+                              <a href="" class="text-decoration-none">
+                                <h4 class="card-title justify-content-center align-items-center text-center">Sherlock
+                                  Holmes</h4>
+                              </a>
+                              <hr>
+                              <p class="card-text">Sherlock Holmes</p><br>
+                              <a href="" class="text-decoration-none">
+                                <p class="card-text">2009</p>
+                              </a>
+                              <div class="d-flex align-items-center mt-3">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                  style="height: 25px; width: 75px; display: inline-block; ">
+                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  style="display: inline-block; vertical-align: middle;">
+                                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                  <g id="SVGRepo_iconCarrier">
+                                    <path
+                                      d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                      fill="#ffc800"></path>
+                                  </g>
+                                </svg>
                                 <h5 class="mt-2">7.6</h5>
                               </div>
                             </div>
@@ -664,113 +639,296 @@
                     </div>
                   </div>
 
-                  <div class="col-md-6">
-                    <div class="card mt-2" style="width: 90%;">
-                      <div class="row">
-                        <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                          <a href="" >
-                            <img src="https://m.media-amazon.com/images/M/MV5BMjA4YTBiZGYtZTFiNC00NmQ1LTk5ZjYtZDhmNjBkM2QyMDMwXkEyXkFqcGdeQXVyMTM1MjI2OTYx._V1_.jpg" class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                          </a></div>
-                        <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
-                          <div class="card-body d-flex justify-content-between flex-column">
-                            <div class="ms-2">
-                              <a href="" class="text-decoration-none">
-                                <h4 class="card-title justify-content-center align-items-center text-center">The Sunshine Place</h4>
-                              </a>
-                              <hr>
-                              <p class="card-text">executive producer</p>
-                              <p class="card-text" style="color: blue;">Podcast Series    6 episodes</p>
-                              <a href="" class="text-decoration-none">
-                                <p class="card-text">2022</p>
-                              </a>
-
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
-            <div class="tab-pane fade" id="Writer" role="tabpanel" aria-labelledby="Writer-tab">
-              <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
-                <div class="row mb-2">
-                  <h2 class="text-light mt-3 justify-content-center text-center align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                    </svg>
-                    Writer
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000000">
-                      <path d="M12 21V3"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ></path>
-                    </svg>
-                  </h2>
-                  <div class="col-md-6">
-                    <div class="card mt-2" style="width: 90%;">
-                      <div class="row text-dark">
-                        <div class="col-md-4 justify-content-center align-items-center text-center"> <!-- คอลัมน์สำหรับรูปภาพ -->
-                          <a href="">
-                            <img src="https://m.media-amazon.com/images/M/MV5BNjg3MjYyNDQ4N15BMl5BanBnXkFtZTgwMDUzNTkwMzE@._V1_.jpg"   alt="..." style="object-fit: cover; height: 250px; width: 175px;">
-                          </a></div>
-                        <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
-                          <div class="card-body d-flex justify-content-between flex-column">
-                            <div class="ms-2">
-                              <a href="" class="text-decoration-none">
-                                <h4 class="card-title justify-content-center align-items-center text-center">The Last Party</h4>
-                              </a>
-                              <hr>
-                              <p class="card-text">writer</p><br>
-                              <a href="" class="text-decoration-none">
-                                <p class="card-text">1993</p>
-                              </a>
-                              <div class="d-flex align-items-center mt-3">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"  style="height: 25px; width: 75px; display: inline-block; ">
-                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#ffc800"></path> </g></svg>
-                                <h5 class="mt-2">6.6</h5>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
-            </div>
-
-
           </div>
+
+          <!--Producer-->
+          <div class="tab-pane fade text-dark" id="Producer" role="tabpanel" aria-labelledby="Producer-tab">
+            <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
+              <div class="row mb-2">
+                <h2 class="text-light mt-3 justify-content-center text-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000">
+                    <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  Producer
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000">
+                    <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </h2>
+                <div class="col-md-6">
+                  <div class="card mt-2" style="width: 90%;">
+                    <div class="row">
+                      <div class="col-md-4 justify-content-center align-items-center text-center">
+                        <!-- คอลัมน์สำหรับรูปภาพ -->
+                        <a href="">
+                          <img
+                            src="https://m.media-amazon.com/images/M/MV5BMjEwZGRiZjktZWMwZC00MzdkLThjZDAtNjU3NmMxY2IwNmMwXkEyXkFqcGdeQXVyMTMzOTQyOTk1._V1_.jpg"
+                            alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                        </a>
+                      </div>
+                      <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                        <div class="card-body d-flex justify-content-between flex-column">
+                          <div class="ms-2">
+                            <a href="" class="text-decoration-none">
+                              <h4 class="card-title justify-content-center align-items-center text-center">Downey's
+                                Dream Cars</h4>
+                            </a>
+                            <hr>
+                            <p class="card-text">executive producer</p>
+                            <p class="card-text" style="color: blue;">TV Series 6 episodes</p>
+                            <a href="" class="text-decoration-none">
+                              <p class="card-text">2023</p>
+                            </a>
+                            <div class="d-flex align-items-center mt-3">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                style="height: 25px; width: 75px; display: inline-block; ">
+                              <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style="display: inline-block; vertical-align: middle;">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  <path
+                                    d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                    fill="#ffc800"></path>
+                                </g>
+                              </svg>
+                              <h5 class="mt-2">6.4</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="card mt-2" style="width: 90%;">
+                    <div class="row">
+                      <div class="col-md-4 justify-content-center align-items-center text-center">
+                        <!-- คอลัมน์สำหรับรูปภาพ -->
+                        <a href="">
+                          <img
+                            src="https://m.media-amazon.com/images/M/MV5BYWIyODIwZTAtZWYyYy00Y2NkLThlNjQtMzQwYmJhNTRkOTRjXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg"
+                            class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                        </a>
+                      </div>
+                      <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                        <div class="card-body d-flex justify-content-between flex-column">
+                          <div class="ms-2">
+                            <a href="" class="text-decoration-none">
+                              <h4 class="card-title justify-content-center align-items-center text-center">Sweet Tooth
+                              </h4>
+                            </a>
+                            <hr>
+                            <p class="card-text">executive producer</p>
+                            <p class="card-text" style="color: blue;">TV Series 16 episodes</p>
+                            <a href="" class="text-decoration-none">
+                              <p class="card-text">2021-2023</p>
+                            </a>
+                            <div class="d-flex align-items-center mt-3">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                style="height: 25px; width: 75px; display: inline-block; ">
+                              <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style="display: inline-block; vertical-align: middle;">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  <path
+                                    d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                    fill="#ffc800"></path>
+                                </g>
+                              </svg>
+                              <h5 class="mt-2">7.8</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="card mt-2" style="width: 90%;">
+                    <div class="row">
+                      <div class="col-md-4 justify-content-center align-items-center text-center">
+                        <!-- คอลัมน์สำหรับรูปภาพ -->
+                        <a href="">
+                          <img
+                            src="https://m.media-amazon.com/images/M/MV5BZDQxNTcyNTgtZTdlMC00NmRiLTllNDYtZmQyODkwNzU2OTMzXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_.jpg"
+                            class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                        </a>
+                      </div>
+                      <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                        <div class="card-body d-flex justify-content-between flex-column">
+                          <div class="ms-2">
+                            <a href="" class="text-decoration-none">
+                              <h4 class="card-title justify-content-center align-items-center text-center">Perry Mason
+                              </h4>
+                            </a>
+                            <hr>
+                            <p class="card-text">executive producer</p>
+                            <p class="card-text" style="color: blue;">TV Series 14 episodes</p>
+                            <a href="" class="text-decoration-none">
+                              <p class="card-text">2020-2023</p>
+                            </a>
+                            <div class="d-flex align-items-center mt-3">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                style="height: 25px; width: 75px; display: inline-block; ">
+                              <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style="display: inline-block; vertical-align: middle;">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  <path
+                                    d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                    fill="#ffc800"></path>
+                                </g>
+                              </svg>
+                              <h5 class="mt-2">7.6</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="card mt-2" style="width: 90%;">
+                    <div class="row">
+                      <div class="col-md-4 justify-content-center align-items-center text-center">
+                        <!-- คอลัมน์สำหรับรูปภาพ -->
+                        <a href="">
+                          <img
+                            src="https://m.media-amazon.com/images/M/MV5BMjA4YTBiZGYtZTFiNC00NmQ1LTk5ZjYtZDhmNjBkM2QyMDMwXkEyXkFqcGdeQXVyMTM1MjI2OTYx._V1_.jpg"
+                            class="card-img-top " alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                        </a>
+                      </div>
+                      <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                        <div class="card-body d-flex justify-content-between flex-column">
+                          <div class="ms-2">
+                            <a href="" class="text-decoration-none">
+                              <h4 class="card-title justify-content-center align-items-center text-center">The Sunshine Place</h4>
+                            </a>
+                            <hr>
+                            <p class="card-text">executive producer</p>
+                            <p class="card-text" style="color: blue;">Podcast Series 6 episodes</p>
+                            <a href="" class="text-decoration-none">
+                              <p class="card-text">2022</p>
+                            </a>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="Writer" role="tabpanel" aria-labelledby="Writer-tab">
+            <div class="bg-dark mt-3" style="background-color: rgba(144, 144, 144, 0.099); border-radius: 15px;">
+              <div class="row mb-2">
+                <h2 class="text-light mt-3 justify-content-center text-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000">
+                    <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  Writer
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000">
+                    <path d="M12 21V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </h2>
+                <div class="col-md-6">
+                  <div class="card mt-2" style="width: 90%;">
+                    <div class="row text-dark">
+                      <div class="col-md-4 justify-content-center align-items-center text-center">
+                        <!-- คอลัมน์สำหรับรูปภาพ -->
+                        <a href="">
+                          <img
+                            src="https://m.media-amazon.com/images/M/MV5BNjg3MjYyNDQ4N15BMl5BanBnXkFtZTgwMDUzNTkwMzE@._V1_.jpg"
+                            alt="..." style="object-fit: cover; height: 250px; width: 175px;">
+                        </a>
+                      </div>
+                      <div class="col-md-8"> <!-- คอลัมน์สำหรับ card-body -->
+                        <div class="card-body d-flex justify-content-between flex-column">
+                          <div class="ms-2">
+                            <a href="" class="text-decoration-none">
+                              <h4 class="card-title justify-content-center align-items-center text-center">The Last
+                                Party</h4>
+                            </a>
+                            <hr>
+                            <p class="card-text">writer</p><br>
+                            <a href="" class="text-decoration-none">
+                              <p class="card-text">1993</p>
+                            </a>
+                            <div class="d-flex align-items-center mt-3">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                                style="height: 25px; width: 75px; display: inline-block; ">
+                              <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style="display: inline-block; vertical-align: middle;">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  <path
+                                    d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"
+                                    fill="#ffc800"></path>
+                                </g>
+                              </svg>
+                              <h5 class="mt-2">6.6</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-        $('#imageModal').on('show.bs.modal', function (event) {
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      $('#imageModal').on('show.bs.modal', function (event) {
         var modal = $(this);
         var image = event.relatedTarget;
         var imageUrl = $(image).data('image-url');
         modal.find('#modalImage').attr('src', imageUrl);
-    });
-
-    $(document).ready(function () {
-    // เมื่อ Modal แสดง
-    $('#imageModal').on('show.bs.modal', function (e) {
-      // ดึงขนาดของรูปภาพ
-      var imageWidth = $('#modalImage').prop('naturalWidth');
-      var imageHeight = $('#modalImage').prop('naturalHeight');
-
-      // ปรับขนาดของ Modal
-      $('#customModalDialog').css({
-        'max-width': imageWidth + 'px',
-        'width': 'auto',
-        'max-height': imageHeight + 'px',
-        'height': 'auto'
       });
-    });
-  });
-</script>
+
+      $(document).ready(function () {
+        // เมื่อ Modal แสดง
+        $('#imageModal').on('show.bs.modal', function (e) {
+          // ดึงขนาดของรูปภาพ
+          var imageWidth = $('#modalImage').prop('naturalWidth');
+          var imageHeight = $('#modalImage').prop('naturalHeight');
+
+          // ปรับขนาดของ Modal
+          $('#customModalDialog').css({
+            'max-width': imageWidth + 'px',
+            'width': 'auto',
+            'max-height': imageHeight + 'px',
+            'height': 'auto'
+          });
+        });
+      });
+    </script>
 </main>
 {%endblock%}

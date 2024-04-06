@@ -29,6 +29,7 @@
   --svg-fill-color-dark: #ffffff; /* White for dark theme */
   border: #fff;
 }
+
 /* transition: background-color 0.3s, color 0.3s; Smooth transition for theme change */
 body {
   background-color: var(--background-color-light);
@@ -38,6 +39,7 @@ body {
 .dark-theme body {
   background-color: var(--background-color-dark);
   color: var(--text-color-dark);
+
 }
 .card {
   color: rgb(228, 230, 235);
@@ -45,6 +47,15 @@ body {
 .dark-theme .card{
   color: rgb(228, 230, 235);
 }
+.card-footer {
+  color: rgb(228, 230, 235);
+  background-color: var(--card-background-color-light);
+}
+.dark-theme .card-footer {
+  color: rgb(228, 230, 235);
+  background-color: var(--card-background-color-dark);
+}
+
 .bg-image, .card-body , .col-md-3 {
   background-color: var(--card-background-color-light);
   color: rgb(0, 0, 0);

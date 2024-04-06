@@ -1,11 +1,15 @@
-{% extends "base1.html" %} {%block title %}
-<link rel="stylesheet" href="static/login_register.css" />
+{% extends "base1.html" %}  
+{% block extrahead %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{%endblock%}
+{%block title %}
 <title>Register</title>
 {% endblock %} {%block content%}
 <style>
 body {
-  background-color: rgb(55, 45, 56);
-  color: black;
   display: flex;
   flex-direction: column;
   font-family: "Open Sans", sans-serif;
@@ -14,25 +18,25 @@ body {
   margin-right: 0px;
 }
 #defaultProfilePicture {
-        display: none;
+  display: none;
 }
 .my-message-text {
-    color: red; /* หรือสีอื่น ๆ ที่คุณต้องการ */
-    font-size: 14px; /* หรือขนาดที่คุณต้องการ */
+  color: red; /* หรือสีอื่น ๆ ที่คุณต้องการ */
+  font-size: 14px; /* หรือขนาดที่คุณต้องการ */
 }
 </style>
 <div>
 
 <section class="h-100 h-custom bg-dark">
+<main>  
   <div
     class="bg-dark img-fluid position-relative h-100"
-    style="
+    style=
+    "
       background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
       background-size: cover;
       background-position: center;
-      height: 100%;
-    "
-    >
+    ">
     <!-- Overlay -->
     <div
       class="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-50"
@@ -46,10 +50,10 @@ body {
           <div class="card rounded-2 bg-danger">
   
             <div class="card-body p-4 p-md-5 bg-dark text-light">
-                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2 text-center bg-dark text-light">
-                  Registration Info
-                </h3>
-                <form class="px-md-2" method="post" enctype="multipart/form-data">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2 text-center bg-dark text-light">
+                Registration Info
+              </h3>
+              <form class="px-md-2" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-outline mb-4">
                   <label class="form-label" for="id_username">Username</label>
@@ -60,9 +64,9 @@ body {
                     required
                     id="id_username"
                     class="form-control"
-                    placeholder="Username"
-                    oninput="hideErrorMessageusername()"/>
-                    {% if form.email.errors %}
+                    placeholder="username"
+                    oninput=""/>
+                    {% if form.username.errors %}
                       <div class="text-danger" id="error-message">
                         {{ form.username.errors|join:", " }}
                       </div>
@@ -77,8 +81,8 @@ body {
                     required
                     id="id_email"
                     class="form-control"
-                    placeholder="YourEmail@gmail.com"
-                    oninput="hideMessageemail()"/>
+                    placeholder="example@gmail.com"
+                    oninput=""/>
                     {% if form.email.errors %}
                       <div class="text-danger" id="error-messageemail" >
                           {{ form.email.errors|join:", " }}
@@ -94,7 +98,7 @@ body {
                     required
                     id="id_password1"
                     class="form-control"
-                    placeholder="Password"
+                    placeholder="password"
                     tocomplete="new-password"
                   />
                 </div>
@@ -107,12 +111,11 @@ body {
                     required
                     id="id_password2"
                     class="form-control"
-                    placeholder="Password"
+                    placeholder="password"
                     autocomplete="new-password"
                     oninput="checkPassword()"/>
                     <div id="error-password"></div>
-                  </div>
-                <div class="row">
+                </div>
                 <div class="form-outline mb-4">
                   <label class="form-label" for="id_firstname">Firstname</label>
                   <input
@@ -122,7 +125,7 @@ body {
                     required
                     id="id_firstname "
                     class="form-control"
-                    placeholder="Firstname"/>
+                    placeholder="firstname"/>
                 </div>
                 <div class="form-outline mb-4">
                   <label class="form-label" for="id_lastname">Lastname</label>
@@ -133,8 +136,8 @@ body {
                     required
                     id="id_lastname"
                     class="form-control"
-                    placeholder="Lastname"/>
-                </div></div>
+                    placeholder="lastname"/>
+                </div>
                 <div class="row">
                   <div class="col-md-12 mb-4">
                     <div class="form-outline datepicker">
@@ -154,9 +157,7 @@ body {
                   </div>
                 </div>
                 <div class="position-relative mt-4">
-                  <div
-                    class="position-absolute top-100 start-50 translate-middle"
-                  >
+                  <div class="position-absolute top-100 start-50 translate-middle">
                     <button type="submit" class="btn btn-success btn-lg mb-1" id="getUser">
                       Register
                     </button>
@@ -169,32 +170,26 @@ body {
       </div>
     </div>
   </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</main>
+<script>
+  var today = new Date().toISOString().split("T")[0];
+  document.getElementById("id_date_of_birth").max = today;
+  // JavaScript code to format date as "วัน/เดือน/ปี"
+  document.getElementById("id_date_of_birth").addEventListener("change", function () {
+    var selectedDate = new Date(this.value);
+    var day = selectedDate.getDate();
+    var month = selectedDate.getMonth() + 1;
+    var year = selectedDate.getFullYear();
+    var formattedDate = day + "/" + month + "/" + year;
+  });
 
-  <script>
-
-    var today = new Date().toISOString().split("T")[0];
-    id_date_of_birth.max = today;
-    // JavaScript code to format date as "วัน เดือน ปี"
-    document.getElementById("bdate").addEventListener("change", function () {
-      var selectedDate = new Date(this.value);
-      var day = selectedDate.getDate();
-      var month = selectedDate.toLocaleDateString("th-TH", { month: "long" });
-      var year = selectedDate.getFullYear() + 543; // แปลงปีเป็น พ.ศ.
-      var formattedDate = day + " " + month + " " + year;
-      this.value = formattedDate;
-    });
-
-    document.getElementById('id_profile_image').addEventListener('change', function(event) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        document.getElementById('preview-image').src = e.target.result;
-    }
-    reader.readAsDataURL(event.target.files[0]);
-    });
+    // document.getElementById('id_profile_image').addEventListener('change', function(event) {
+    // const reader = new FileReader();
+    // reader.onload = function(e) {
+    //     document.getElementById('preview-image').src = e.target.result;
+    // }
+    // reader.readAsDataURL(event.target.files[0]);
+    // });
 
     function hideErrorMessageusername() {
       const input = document.getElementById("id_username");
@@ -216,7 +211,7 @@ body {
         errorMessageemail.style.display = "none"; // แสดงข้อความข้อผิดพลาดเมื่อมีข้อมูล
       }
     }
-function checkPassword() {
+  function checkPassword() {
     const password1 = document.getElementById("id_password1").value;
     const password2 = document.getElementById("id_password2").value;
     const texterror = document.getElementById("error-password");
@@ -231,7 +226,12 @@ function checkPassword() {
         texterror.style.display = "none";
     }
 }
- 
+new Awesomplete('input[type="email"]', {
+	list: ["aol.com", "att.net", "comcast.net", "facebook.com", "gmail.com", "gmx.com", "googlemail.com", "google.com", "hotmail.com", "hotmail.co.uk", "mac.com", "me.com", "mail.com", "msn.com", "live.com", "sbcglobal.net", "verizon.net", "yahoo.com", "yahoo.co.uk"],
+	data: function (text, input) {
+		return input.slice(0, input.indexOf("@")) + "@" + text;
+	},
+	filter: Awesomplete.FILTER_STARTSWITH
+});
 </script>
-  {% endblock %}
-</section>
+{% endblock %}

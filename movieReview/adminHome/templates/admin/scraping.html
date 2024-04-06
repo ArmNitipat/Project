@@ -1,0 +1,200 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+{% block bodyclass %}{{ block.super }} scraping {% endblock %}
+
+{% block content_title %} {% trans 'Scraping' %} {% endblock %}
+
+{% block breadcrumbs %}
+    
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item">{% trans 'Scraping' %}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-8">
+            {% csrf_token %}
+            <input class="form-control mr-sm-2 text-light bg-light buttonscp" id="Searchdata" type="search" placeholder="Search" aria-label="Search" >
+        </div>
+        <div class="col-2">
+            <button class="btn btn-outline-success buttonscp" id="Movie"  type="submit">Movie Scrap</button>
+        </div>
+        <div class="col-2">
+            <button class="btn btn-outline-success buttonscp" id="Actor" type="submit">Actor Scrap</button>
+        </div>
+    </div>
+    <div id="projectsuccess">
+
+    </div>
+</main>
+
+<style>
+    
+    .movierelease,.movieactor{
+      font-size: 18px;
+      opacity: 0.7;
+    }
+    .moviename{
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .movieposter{
+      height: 25vh;
+      width: 100%;
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .actorname{
+        font-size: 20px;
+    }
+    .actorrole{
+        font-size: 15px;
+    }
+    .buttonscp{
+    height: 5vh; 
+    font-size: 20px;
+    }
+    .card{
+        border: 2px solid rgba(255, 255, 255, 0.403);
+        text-decoration: none;
+    }
+    .phofileactor{
+        height: 10vh;
+        width: 10vh;
+        object-fit: cover;
+        border-radius: 50%;
+        object-position: 0px 20%;
+        border: 2px solid white;
+    }
+</style>
+
+<script>
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    const butactor = document.getElementById("Actor");
+    const butmovie = document.getElementById("Movie");
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    butmovie.addEventListener("click", async function () {
+      var search = document.getElementById("Searchdata").value;
+      const data = {
+        search: search,
+        type: "movie",
+      };
+
+      try {
+        console.log(search);
+        const response = await fetch('/scraping/', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (result){
+        console.log("Success:", result);
+        
+        const actorsList = document.getElementById('projectsuccess');
+        let content = '';
+        
+        for(let i =0; i< result.moviename.length;i++){
+            const moviename = result.moviename[i];
+            const movieimg = result.movieimg[i];
+            const movierelease = result.movierelease[i];
+            const movieactor = result.movieactor[i];
+            
+            const movielink = result.movielink[i];
+            content += ` 
+            <a href="/scraping/movie/${moviename}?movielink=${movielink}" id="Button-${moviename}">
+              {% csrf_token %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <img class="movieposter " src="${movieimg}">
+                            </div>
+                            <div class="col-10">
+                                <p class="moviename mt-3">${moviename}</p>
+                                <p class="movierelease">${movierelease}</p>
+                                <p class="movieactor">${movieactor}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            `;
+        }
+
+        actorsList.innerHTML = content;
+        
+      }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
+
+    butactor.addEventListener("click", async function () {
+      var search = document.getElementById("Searchdata").value;
+      const data = {
+        search: search,
+        type: "actor",
+      };
+
+      try {
+        console.log(search);
+        const response = await fetch('/scraping/', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        console.log("Success:", result);
+        const actorsList = document.getElementById('projectsuccess');
+        let content = '';
+        
+        for(let i =0; i< result.actorname.length;i++){
+            const actorname = result.actorname[i];
+            const actorimg = result.actorimg[i];
+            const actorrole = result.actorrole[i];
+            const actorlink = result.actorlink[i];
+            content += ` 
+                <a href="/scraping/actor/${actorname}?actorlink=${actorlink}" id="Button-${actorname}">
+                  {% csrf_token %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-2">
+                                    <img class="phofileactor" src="${actorimg}">
+                                </div>
+                                <div class="col-10">
+                                    <p class="actorname"> ${actorname}</p>
+                                    <p class="actorrole"> ${actorrole}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }
+        
+        actorsList.innerHTML = content;
+        
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
+  });
+</script>
+{% endblock %}

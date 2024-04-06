@@ -1,0 +1,252 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+{% block bodyclass %}{{ block.super }} scraping {% endblock %}
+
+{% block content_title %} {% trans 'Scraping' %} {% endblock %}
+
+{% block breadcrumbs %}
+    
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item">{% trans 'Scraping' %}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+<main>
+    <form id="form-actor" method="post">
+        <h1 class="mb-3">{{actorname}}</h1>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Actor Name : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorname}}" id="actorNameInput" name="actorname">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Actor Profile : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorphofile}}" id="actorProfileInput" name="actorprofile">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Alternative Name : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actoralternative}}" id="actorAlternativeNameInput" name="actorAlternativeName">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Actor History : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorhistory}}" id="actorHistoryInput" name="actorhistory">
+            </div>
+        </div>
+        <hr>
+        <h4> Personal </h4>
+        <br>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Actor Height : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorheight}}" id="actorHeightInput" name="actorheight">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Date of Birth : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actordob}}" id="actorDOBInput" name="actordob">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Birth Location : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorbirthlocation}}" id="actorBirthLocationInput" name="actorbirthlocation">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Children : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorchildren}}"id="actorChildrenInput" name="actorchildren">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Parent : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorparents}}" id="actorParentsInput" name="actorparents">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Otherworks : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorotherworks}}" id="actorOtherworksInput" name="actorotherworks">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Relative : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorrelative}}" id="actorRelativeInput" name="actorrelative">
+                <input class="inputtext mt-2" placeholder="* Manual Enter Data *" type="text" value="{{actorrelationship}}" id="actorRelationshipInput" name="actorrelationship">
+            
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Die date : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actordiedate}}" id="actorDiedateInput" name="actorDiedate">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Die Location : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actordielocation}}" id="actorDieLocationInput" name="actordielocation">
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Spouse : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{actorspousename}}" id="actorSpouseNameInput" name="actorspousename">
+                <input class="inputtext mt-2" placeholder="* Manual Enter Data *" type="text" value="{{actorspousedate}}" id="actorSpouseDateInput" name="actorspousedate">
+            </div>
+        </div>
+        <hr>
+        
+        <hr>
+
+        <h4>Other Photo</h4>
+        <br>
+        {% for i in actorotherpic %}
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Other Photo : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{i}}" id="actorOtherPhotoInput{{ forloop.counter }}" name="actorotherphoto">
+                
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+        <button type="button" class="btn btn-outline-success savebutton" id="butactor">SAVE</button>
+    </form>
+</main>
+<style>
+    .savebutton{
+        width: 100%;
+        height: 5vh;
+    }
+    ::placeholder {
+        color: red;
+    }
+    .ti01{
+        font-size: 19px;
+        font-weight: bold;
+    }
+    .inputtext{
+        height: 20vh;
+        width: 100%;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('#form-actor');
+        const butactor = document.querySelector('#butactor');
+        const baseUrl = "{% url 'scraping_actor_save' 'placeholder' %}".replace('placeholder', '');
+        const actorNameInput = document.querySelector('#actorNameInput');
+        const actorName = actorNameInput.value;
+        butactor.addEventListener("click", function (event) {
+            event.preventDefault();  // Prevent default form submission
+            
+            // Construct data object from form inputs
+            const formData = new FormData(form);
+            let data = {
+                actorname: formData.get('actorname'),
+                actorhistory: formData.get('actorhistory'),
+                actoralternative: formData.get('actoralternative'),
+                actorheight: formData.get('actorheight'),
+                actordob: formData.get('actordob'),
+                actorbirthlocation: formData.get('actorbirthlocation'),
+                actorchildren: formData.getAll('actorchildren'),
+                actorparents: formData.getAll('actorparents'),
+                actorotherworks: formData.getAll('actorotherworks'),
+                actorphofile: formData.get('actorphofile'),
+                actorotherphoto: formData.get('actorotherphoto'),
+                actorrelative: formData.getAll('actorrelative'),
+                actordiedate : formData.getAll('actordiedate'),
+                actordielocation : formData.getAll('actordielocation'),
+                actorspousename : formData.getAll('actorspousename'),
+                actorspousedate : formData.getAll('actorspousedate'),
+                actorrelationship : formData.getAll('actorrelationship'),
+            };
+
+            if (actorNameInput.value.trim() === "" || actorHistoryInput.value.trim() === "" || actorHeightInput.value.trim() === "") {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            // Append moviename to the URL
+            const url = baseUrl + encodeURIComponent(actorName);
+            console.log(url);
+            fetch(url, { 
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+{% endblock %}

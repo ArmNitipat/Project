@@ -1,28 +1,26 @@
 from django.contrib import admin
-from adminHome.models import Bannerslide, Comment, Report, Premium_list
+from adminHome.models import Bannerslide, Comment, Report,Premium
+#Premium_list
 
 
 class BannerslideAdmin(admin.ModelAdmin):
     list_display = ['title', 'active', 'order']
     list_filter = ['active']
     search_fields = ['title']
-
 admin.site.register(Bannerslide, BannerslideAdmin)
 
-
-from django.contrib import admin
-from .models import Premium
 
 class PremiumAdmin(admin.ModelAdmin):
     fieldsets = (
         ('General Information', {
-            'fields': ('name', 'title', 'price', 'num')
+            'fields': ('name', 'title', 'price', 'num'),
+            'description': 'Admin interface for managing premium products.'
         }),
         ('Image Information', {
-            'fields': ('imag','expires' )
+            'fields': ('image','expires' ),
+            'description': 'Admin interface for managing premium products.'
         }),
     )
-
 admin.site.register(Premium, PremiumAdmin)
 
 

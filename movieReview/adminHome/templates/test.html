@@ -1,73 +1,80 @@
 {% extends "base1.html" %}
 
 {% block title %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <title>Setting Profile</title>
 {% endblock %}
 
 {% block content %}
-<main class="container bg-light bg-dark text-light" style="width: auto;">
-<style>
-  canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
-</style>
-<div class="container">
-  <h1 class="text-center">Graph Home</h1>
-  <div class="row d-flex justify-content-end pt-2">
-    <div class="col">
-      <button id="bto-user-login">
-        <i class="fas fa-cog"></i>
-      </button>
-    </div>
-    <div class="col">
-      <button id="bto-movie-comment" data-toggle="modal" data-target="#movieModal">
-        <i class="fas fa-cog"></i>
-      </button>
-    </div>
-  </div>
-  <div class="row pt-2">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Users Logged In</h5>
-          <canvas id="loginChart" width="400" height="400"></canvas>
-        </div>
+<main class="container bg-light bg-dark" style="width: auto;">
+  <div class="row mt-4">
+      <div class="col-8">
+          {% csrf_token %}
+          <input class="form-control mr-sm-2 bg-light buttonscp" id="Searchdata" type="search" placeholder="Search" aria-label="Search" >
       </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Movies</h5>
-
-        </div>
+      <div class="col-2">
+          <button class="btn btn-outline-success buttonscp" id="Movie"  type="submit">Movie Scrap</button>
       </div>
-    </div>
+      <div class="col-2">
+          <button class="btn btn-outline-success buttonscp" id="Actor" type="submit">Actor Scrap</button>
+      </div>
   </div>
-</div>
+</main>
 
 <script>
-    var ctx = document.getElementById('loginChart').getContext('2d');
-    var loginChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ data.dates|safe }},
-            datasets: [{
-                label: 'Number of Logins',
-                data: {{ data.counts|safe }},
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+  document.addEventListener("DOMContentLoaded", function () {
+    const butactor = document.getElementById("Actor");
+    const butmovie = document.getElementById("Movie");
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    butmovie.addEventListener("click", async function () {
+      var search = document.getElementById("Searchdata").value;
+      const data = {
+        search: search,
+        type: "movie",
+      };
+
+      try {
+        console.log(search);
+        const response = await fetch('/test/', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        console.log("Success:", result);
+      } catch (error) {
+        console.error("Error:", error);
+      }
     });
+
+    butactor.addEventListener("click", async function () {
+      var search = document.getElementById("Searchdata").value;
+      const data = {
+        search: search,
+        type: "actor",
+      };
+
+      try {
+        console.log(search);
+        const response = await fetch('/test/', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        console.log("Success:", result);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
+  });
 </script>
+
 </main>
 {% endblock %}

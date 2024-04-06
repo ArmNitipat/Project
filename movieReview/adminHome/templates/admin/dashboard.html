@@ -16,170 +16,314 @@
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <main class="container text-light" style="width: auto; color: white !important;">
-    <style>
-      canvas {
-        width: 100% !important;
-        height: auto !important;
-      }
-      .tr, th, td{
-        color: white !important;
-      }
-    </style>
-    <div class="container">
-      <h1 class="text-center">Graph Home</h1>
-      <div class="row d-flex justify-content-end pt-2">
-        <div class="col">
-          <button class="btn btn-secondary" type="button" id="bto-user-login">
-            <i class="fas fa-cog"></i>
-          </button>
-        </div>
-        
-        <div id="exampleModal1" class="modal" style="display: none; position: absolute;">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Select Color</h5>
-                <button type="button" class="btn-close" id="close-button" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="form-group">
-                  <label for="colorSelect">Select a color:</label>
-                  <select class="form-control" id="colorSelect">
-                    <option value="red">Red</option>
-                    <option value="blue">Blue</option>
-                    <option value="green">Green</option>
-                    <option value="yellow">Yellow</option>
-                  </select>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="close-footer-button">Close</button>
-                <button type="button" class="btn btn-primary" id="save-changes-button">Save changes</button>
-              </div>
-            </div>
+  <style>
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+    .tr, th, td {
+      color: white !important;
+    }
+  </style>
+  <div class="container">
+    <h1 class="text-center">Graph Home</h1>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body d-flex justify-content-between align-items-center p-3">
+            <h5 class="card-title text-primary mb-0">Repost Comment</h5>
+            <h5 class="card-text mb-0"><span class="badge badge-secondary">{{ count_reports }}</span></h5>
           </div>
-        </div>
-        
-        <div class="col">
-          <button class="btn btn-secondary" type="button" id="bto-movie-comment">
-            <i class="fas fa-cog"></i>
-          </button>
-        </div>
-      </div>
-      <div class="row pt-2">
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Users Logged In</h5>
-              <canvas id="userChart" width="400" height="400"></canvas>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Latest 5 released movies</h5>
-              <canvas id="movieChart" width="400" height="400"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row pt-2 pb-4">
-        <div class="col-md-6">
-          <section class="card">
-            <div class="card-body">
-              <h5 class="card-title">Users Logged In</h5>
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Day</th>
-                    <th scope="col">Number of Users</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{{ count_day.day6_name }}</td>
-                    <td>{{ count_day.day6 }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ count_day.day5_name }}</td>
-                    <td>{{ count_day.day5 }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ count_day.day4_name }}</td>
-                    <td>{{ count_day.day4 }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ count_day.day3_name }}</td>
-                    <td>{{ count_day.day3 }}</td>
-                  </tr>
-                  <tr>
-                    <td>{{ count_day.day2_name }}</td>
-                    <td>{{ count_day.day2 }}</td>
-                  </tr>
-                    <td>{{ count_day.day1_name }}</td>
-                    <td>{{ count_day.day1 }}</td>
-                  </tr>
-                  <tr>
-                    <td>Today</td>
-                    <td>{{ count_day.today }}</td>
-                  </tr>
-                  <tr>
-                    <td>Nexday</td>
-                    <td>0</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </div>
-        <div class="col-md-6">
-          <section class="card">
-            <div class="card-body">
-              <h5 class="card-title">Latest 5 released movies</h5>
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Movie</th>
-                    <th scope="col">Comment</th>
-                    <th scope="col">Positive</th>
-                    <th scope="col">Negative</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for movie in movies %}
-                  <tr>
-                    <td>{{ movie.name }}</td>
-                    <td>{{ movie.comment }}</td>
-                    <td>{{ movie.positive }}</td>
-                    <td>{{ movie.negative }}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </section>
         </div>
       </div>
     </div>
-    
-    <script>
-    document.getElementById('bto-user-login').onclick = function() {
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body d-flex justify-content-between align-items-center p-3">
+            <h5 class="card-title text-primary mb-0">User All in Website</h5>
+            <h5 class="card-text mb-0"><span class="badge badge-secondary">{{ count_ip }}</span></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-end pt-2">
+      <div class="col">
+        <button class="btn btn-secondary" type="button" id="bto-user-login">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+
+      <div id="exampleModal1" class="modal" style="display: none; position: absolute;">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Select Color</h5>
+              <button type="button" class="btn-close" id="close-button" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="colorSelect">Select a color:</label>
+                <select class="form-control" id="colorSelect">
+                  <option value="red">Red</option>
+                  <option value="blue">Blue</option>
+                  <option value="green">Green</option>
+                  <option value="yellow">Yellow</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="close-footer-button">Close</button>
+              <button type="button" class="btn btn-primary" id="save-changes-button">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <button class="btn btn-secondary" type="button" id="bto-movie-comment">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+
+      <div id="movieSelectModal" class="modal" style="display: none; position: absolute;">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Select a Movie</h5>
+              <button type="button" class="btn-close2" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="movieSelect">Search a Movie:</label>
+                {% for i in '12345' %}
+                <div class="pt-2">
+                  <label for="movieAutocomplete{{i}}">Movie {{i}} :</label>
+                  <input type="text" class="form-control" id="movieAutocomplete{{i}}" placeholder="Movie to search...">
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="close-footer-movie">Close</button>
+              <button type="submit" class="btn btn-primary" id="save-changes-movie">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pt-2">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Users Logged In</h5>
+            <canvas id="userChart" width="400" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Latest 5 released movies</h5>
+            <canvas id="movieChart" width="400" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pt-2 pb-4">
+      <div class="col-md-6">
+        <section class="card">
+          <div class="card-body">
+            <h5 class="card-title">Users Logged In</h5>
+            <table class="table table-striped" id="table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Day</th>
+                  <th scope="col">Number of Users</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ count_day.day6_name }}</td>
+                  <td>{{ count_day.day6 }}</td>
+                </tr>
+                <tr>
+                  <td>{{ count_day.day5_name }}</td>
+                  <td>{{ count_day.day5 }}</td>
+                </tr>
+                <tr>
+                  <td>{{ count_day.day4_name }}</td>
+                  <td>{{ count_day.day4 }}</td>
+                </tr>
+                <tr>
+                  <td>{{ count_day.day3_name }}</td>
+                  <td>{{ count_day.day3 }}</td>
+                </tr>
+                <tr>
+                  <td>{{ count_day.day2_name }}</td>
+                  <td>{{ count_day.day2 }}</td>
+                </tr>
+                <td>{{ count_day.day1_name }}</td>
+                <td>{{ count_day.day1 }}</td>
+                </tr>
+                <tr>
+                  <td>Today</td>
+                  <td>{{ count_day.today }}</td>
+                </tr>
+                <tr>
+                  <td>Nexday</td>
+                  <td>0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <div class="col-md-6">
+        <section class="card">
+          <div class="card-body">
+            <h5 class="card-title">Latest 5 released movies</h5>
+            <table class="table table-striped" id="table-movie">
+              <thead>
+                <tr>
+                  <th scope="col">Movie</th>
+                  <th scope="col">Comment</th>
+                  <th scope="col">Positive</th>
+                  <th scope="col">Negative</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for movie in movies %}
+                <tr>
+                  <td>{{ movie.name }}</td>
+                  <td>{{ movie.comment }}</td>
+                  <td>{{ movie.positive }}</td>
+                  <td>{{ movie.negative }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ฟังชั่นการทำงานของปุ่ม -->
+  <script>
+    document.getElementById('bto-user-login').onclick = function () {
       document.getElementById('exampleModal1').style.display = 'block';
     };
 
-    document.getElementById('close-button').onclick = function() {
+    document.getElementById('close-button').onclick = function () {
       document.getElementById('exampleModal1').style.display = 'none';
     };
 
-    document.getElementById('close-footer-button').onclick = function() {
+    document.getElementById('close-footer-button').onclick = function () {
       document.getElementById('exampleModal1').style.display = 'none';
     };
-    </script>
 
-    <script>
+    document.getElementById('bto-movie-comment').onclick = function () {
+      document.getElementById('movieSelectModal').style.display = 'block';
+    };
+
+    document.querySelector('.btn-close2').onclick = function () {
+      document.getElementById('movieSelectModal').style.display = 'none';
+    };
+
+    document.getElementById('close-footer-movie').onclick = function () {
+      document.getElementById('movieSelectModal').style.display = 'none';
+    };
+  </script>
+  <!-- ฟังชั่นค้นหาหนัง -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // ตั้งค่า autocomplete สำหรับทุก input ที่มี id เริ่มต้นด้วย "movieAutocomplete"
+      document.querySelectorAll('[id^="movieAutocomplete"]').forEach(function (input) {
+        let awesomplete = new Awesomplete(input, {
+          list: [] // รายการเริ่มต้นว่างเปล่า
+        });
+
+        input.addEventListener("input", async function () {
+          // การเรียกข้อมูลหนัง
+          await fetch("/search_admin/?q=" + encodeURIComponent(input.value))
+            .then(response => response.json()) // แปลง response เป็น JSON
+            .then(data => {
+              // ปรับแต่งข้อมูลให้เป็นรูปแบบที่ Awesomplete ต้องการ: อาเรย์ของ { label: "Name", value: "Id" }
+              awesomplete.list = data.map(movie => ({ label: movie.name, value: movie.name }));
+            })
+            .catch(error => console.error("Error fetching data:", error));
+        });
+      });
+    });
+  </script>
+
+  <!-- ฟังชั่นการส่งข้อมูลไปยังเซิร์ฟเวอร์ -->
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      function getCsrfToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+      }
+
+      document.getElementById('save-changes-movie').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        var formData = new FormData();
+
+        for (let i = 1; i <= 5; i++) {
+          var input = document.getElementById('movieAutocomplete' + i);
+          if (input.value.trim() !== '') {
+            formData.append('movieName' + i, input.value);
+          }
+        }
+
+        fetch('/dashboard/', {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCsrfToken()
+          },
+          body: formData
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // อัปเดตกราฟที่นี่
+            movieChart.data.labels = data.movies_comments_info.map(movie => movie.name);
+            movieChart.data.datasets[0].data = data.movies_comments_info.map(movie => movie.positive);
+            movieChart.data.datasets[1].data = data.movies_comments_info.map(movie => movie.negative);
+            movieChart.options.scales.y.max = data.max_comment;
+            movieChart.update();
+
+            // อัปเดตตารางที่นี่
+            const tableBody = document.querySelector('#table-movie tbody');
+            tableBody.innerHTML = '';
+
+            data.movies_comments_info.forEach(movie => {
+              const row = tableBody.insertRow();
+              row.insertCell(0).textContent = movie.name;
+              row.insertCell(1).textContent = movie.comment;
+              row.insertCell(2).textContent = movie.positive;
+              row.insertCell(3).textContent = movie.negative;
+            });
+          })
+          .catch(error => console.error('Error:', error));
+      });
+    });
+  </script>
+
+  <!-- กราฟ 1 -->
+  <script>
     var ctx = document.getElementById('userChart').getContext('2d');
     var userChart = new Chart(ctx, {
       type: 'line', // เปลี่ยนเป็นกราฟเส้น
@@ -188,12 +332,12 @@
         datasets: [{
           label: 'Number of Users',
           // สมมติว่านี่คือข้อมูลจำนวนผู้ใช้สำหรับแต่ละวัน
-          data: [{{count_day.day1}}, {{count_day.day2}}, {{count_day.day3}}, {{count_day.day4}}, {{count_day.day5}}, {{count_day.day6}}, {{ count_day.today }}], // แกน y แสดงจำนวนผู้ใช้
+          data: [`{{count_day.day6}}`, `{{count_day.day5}}`, `{{count_day.day4}}`, `{{count_day.day3}}`, `{{count_day.day2}}`, `{{count_day.day1}}`, `{{ count_day.today }}`], // แกน y แสดงจำนวนผู้ใช้
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
           fill: false, // กำหนดไม่ให้พื้นที่ใต้กราฟเส้นถูกเติมสี
-          tension: 0.2 // กำหนดความโค้งของเส้น
+          tension: 0.2 // กำ หนดความโค้งของเส้น
         }]
       },
       options: {
@@ -211,7 +355,7 @@
           },
           y: {
             beginAtZero: true, // กำหนดให้แกน y ของกราฟเริ่มที่ 0
-            max: {{count_day.max_user}}, // กำหนดค่าสูงสุดของแกน y
+            max: `{{count_day.max_user}}`, // กำหนดค่าสูงสุดของแกน y
             grid: {
               color: 'rgba(230, 230, 230, 0.2)' // ปรับสีของ grid เป็นสีขาว
             },
@@ -229,108 +373,100 @@
         }
       }
     });
-    </script>
+  </script>
 
-<script>
-  // เพิ่ม Event Listener ให้กับปุ่ม "Save changes"
-  document.getElementById('save-changes-button').addEventListener('click', function() {
-    // อ่านค่าสีที่เลือก
-    var selectedColor = document.getElementById('colorSelect').value;
+  <script>
+    // เพิ่ม Event Listener ให้กับปุ่ม "Save changes"
+    document.getElementById('save-changes-button').addEventListener('click', function () {
+      // อ่านค่าสีที่เลือก
+      var selectedColor = document.getElementById('colorSelect').value;
 
-    // กำหนดสีสำหรับ backgroundColor และ borderColor ของ dataset
-    var newBackgroundColor = 'rgba(0, 0, 0, 0.2)';
-    var newBorderColor = 'rgba(0, 0, 0, 1)';
+      // กำหนดสีสำหรับ backgroundColor และ borderColor ของ dataset
+      var newBackgroundColor = 'rgba(0, 0, 0, 0.2)';
+      var newBorderColor = 'rgba(0, 0, 0, 1)';
 
-    switch (selectedColor) {
-      case 'red':
-        newBackgroundColor = 'rgba(255, 99, 132, 0.2)';
-        newBorderColor = 'rgba(255, 99, 132, 1)';
-        break;
-      case 'blue':
-        newBackgroundColor = 'rgba(54, 162, 235, 0.2)';
-        newBorderColor = 'rgba(54, 162, 235, 1)';
-        break;
-      case 'green':
-        newBackgroundColor = 'rgba(75, 192, 192, 0.2)';
-        newBorderColor = 'rgba(75, 192, 192, 1)';
-        break;
-      case 'yellow':
-        newBackgroundColor = 'rgba(255, 206, 86, 0.2)';
-        newBorderColor = 'rgba(255, 206, 86, 1)';
-        break;
-    }
+      switch (selectedColor) {
+        case 'red':
+          newBackgroundColor = 'rgba(255, 99, 132, 0.2)';
+          newBorderColor = 'rgba(255, 99, 132, 1)';
+          break;
+        case 'blue':
+          newBackgroundColor = 'rgba(54, 162, 235, 0.2)';
+          newBorderColor = 'rgba(54, 162, 235, 1)';
+          break;
+        case 'green':
+          newBackgroundColor = 'rgba(75, 192, 192, 0.2)';
+          newBorderColor = 'rgba(75, 192, 192, 1)';
+          break;
+        case 'yellow':
+          newBackgroundColor = 'rgba(255, 206, 86, 0.2)';
+          newBorderColor = 'rgba(255, 206, 86, 1)';
+          break;
+      }
 
-    // อัปเดตสีสำหรับ dataset และรีเฟรชกราฟ
-    userChart.data.datasets[0].backgroundColor = newBackgroundColor;
-    userChart.data.datasets[0].borderColor = newBorderColor;
-    userChart.update();
+      // อัปเดตสีสำหรับ dataset และรีเฟรชกราฟ
+      userChart.data.datasets[0].backgroundColor = newBackgroundColor;
+      userChart.data.datasets[0].borderColor = newBorderColor;
+      userChart.update();
 
-    // ปิด modal
-    document.getElementById('exampleModal1').style.display = 'none';
-  });
-</script>
+      // ปิด modal
+      document.getElementById('exampleModal1').style.display = 'none';
+    });
+  </script>
 
-    <script>
-    console.log([{% for movie in movies %}'{{ movie.name }}',{% endfor %}]);
+  <script>
+    console.log([{% for movie in movies %}'{{ movie.name }}', {% endfor %}]);
     var ctx = document.getElementById('movieChart').getContext('2d');
     var movieChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [{% for movie in movies %}`{{ movie.name }}`,{% endfor %}],
-            datasets: [{
-                label: 'Positive',
-                data: [{% for movie in movies %}{{ movie.positive }},{% endfor %}],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
+      type: 'bar',
+      data: {
+        labels: [{% for movie in movies %}`{{ movie.name }}`,{% endfor %}],
+    datasets: [{
+      label: 'Positive',
+      data: [{% for movie in movies %} `{{ movie.positive }}`, {% endfor %}],
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
             }, {
-                label: 'Negative',
-                data: [{% for movie in movies %}{{ movie.negative }},{% endfor %}],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
+      label: 'Negative',
+        data: [{% for movie in movies %} `{{ movie.negative }}`, {% endfor %}],
+    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
             }]
         },
-        options: {
-            scales: {
-                x: {
-                    stacked: true,
-                    grid: { color: 'rgba(230, 230, 230, 0.2)' },
-                    ticks: {
-                        color: 'white', // ปรับสีของ ticks เป็นสีขาว
-                        font: {
-                            size: 10
-                        },
-                        callback: function(value, index, values) {
-                          // ตรวจสอบว่าค่าเป็นสตริง
-                          if (typeof value === 'string' && value.length > 10) {
-                              return value.substr(0, 10) + '...'; // ตัดข้อความหากยาวเกิน 30 ตัวอักษร
-                          }
-                          return value;
-                      }
-                    },            
-
-                },
-                y: {
-                    stacked: true,
-                    max: {{ max_comment }}, // กำหนดค่าสูงสุดของแกน y 
-                    beginAtZero: true, // เริ่มต้นแกน y ที่ 0
-                    grid: { color: 'rgba(230, 230, 230, 0.2)' },
-                    ticks: {
-                        color: 'white' // ปรับสีของ ticks เป็นสีขาว
-                    }
-                }
+    options: {
+      scales: {
+        x: {
+          stacked: true,
+            grid: { color: 'rgba(230, 230, 230, 0.2)' },
+          ticks: {
+            color: 'white', // ปรับสีของ ticks เป็นสีขาว
+              font: {
+              size: 10
             },
-            plugins: {
-                legend: {
-                    labels: {
-                        color: 'white' // ปรับสีของ label เป็นสีขาว
-                    }
-                }
-            }
+          },
+
+        },
+        y: {
+          stacked: true,
+            max: `{{ max_comment }}`, // กำหนดค่าสูงสุดของแกน y 
+              beginAtZero: true, // เริ่มต้นแกน y ที่ 0
+                grid: { color: 'rgba(230, 230, 230, 0.2)' },
+          ticks: {
+            color: 'white' // ปรับสีของ ticks เป็นสีขาว
+          }
         }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: 'white' // ปรับสีของ label เป็นสีขาว
+          }
+        }
+      }
+    }
     });
-    
-    </script>
+  </script>
 </main>
 {% endblock %}

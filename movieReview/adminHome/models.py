@@ -3,15 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from movies.models import Movie
 from django.core.validators import MaxValueValidator, MinValueValidator
-# Create your models here.
-
-# class Post(models.Model):
-#     title = models.CharField(max_length=200)
-#     content = models.TextField()
-
-#     def __str__(self):
-#         return self.title
-
 
 
 class Bannerslide(models.Model):
@@ -26,39 +17,41 @@ class Bannerslide(models.Model):
         verbose_name = 'Banner Slide'
         verbose_name_plural = 'Banner Slides'
 
-    def delete(self, *args, **kwargs):
-      # ลบรูปภาพก่อน
-      self.image.delete()
-      super().delete(*args, **kwargs)  
-
     def __str__(self):
         return self.title
-    
+
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+
+@receiver(pre_delete, sender=Bannerslide)
+def bannerslide_delete(sender, instance, **kwargs):
+    # ตรวจสอบก่อนว่าฟิลด์ image มีไฟล์หรือไม่
+    if instance.image:
+        instance.image.delete(save=False)
+
 
 class Premium(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Name")
-    title = models.CharField(max_length=255, null=True, blank=True, verbose_name="Title")
-    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Price")
-    num = models.PositiveIntegerField(verbose_name="Number")
+    name = models.CharField(max_length=100, verbose_name="Name", help_text="Enter the name of the premium item.")
+    title = models.CharField(max_length=255, null=True, blank=True, verbose_name="Title", help_text="Enter the title of the premium item.")
+    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Price", help_text="Enter the price of the premium item.")
+    num = models.PositiveIntegerField(verbose_name="Number", help_text="Enter the number of the premium item.")
     # maximum
-    imag = models.ImageField(upload_to='premium_images/', verbose_name="Image")
-    update_date = models.DateTimeField(auto_now=True,verbose_name="Date")
-    expires = models.DateField(verbose_name="Expires")
+    image = models.ImageField(upload_to='premium_images/', verbose_name="Image", help_text="Upload an image for the premium item.")
+    update_date = models.DateTimeField(auto_now=True,verbose_name="Date", help_text="The date when the premium item was last updated.")
+    expires = models.DateField(verbose_name="Expires", help_text="The expiration date of the premium item.")
 
     class Meta:
         verbose_name = 'Premium iteam'
         verbose_name_plural = 'Premium iteam'
 
-    def delete(self, *args, **kwargs):
-        # ลบรูปภาพก่อน
-        self.imag.delete()
-        super().delete(*args, **kwargs)
-
     def __str__(self):
          return self.name
 
-from django.db import models
-
+@receiver(pre_delete, sender=Premium)
+def Premium_delete(sender, instance, **kwargs):
+    # ตรวจสอบก่อนว่าฟิลด์ image มีไฟล์หรือไม่
+    if instance.image:
+        instance.image.delete(save=False)
 
 class Premium_list(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")

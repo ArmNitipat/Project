@@ -9,7 +9,7 @@ from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-
+import re
 from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 
@@ -18,6 +18,7 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth import login, authenticate, logout
+import pandas as pd
 
 from star.models import *
 from movies.models import *
@@ -36,28 +37,6 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from adminHome.models import Premium, Premium_list
 #---------------------------------------------
-
-# def signup_view(request):
-#     if request.method == 'POST':
-#         form = SignupForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             # Here, you can save any additional data or perform other operations as required
-#             return redirect('login')  # or redirect to some other page
-#     else:
-#         form = SignupForm()
-#     return render(request, 'your_template_name.html', {'form': form})
-
-def log_user_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-
-    with open('ad.txt', 'a') as file:
-        file.write(ip + '\n')
-
 # from django.db.models import Q
 from django.shortcuts import render
 from django.template import RequestContext
@@ -66,14 +45,80 @@ import requests
 from bs4 import BeautifulSoup
 from django.shortcuts import render
 import datetime
+#=======================================================================================================
+def log_user_ip(request):
+    # ตรวจสอบ IP จาก HTTP headers
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
 
-def list_Time_login (user):
-    user = user
+    # กำหนดเวลาปัจจุบัน
+    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # กำหนดชื่อไฟล์ Excel
+    filename = 'log_user_ip.xlsx'
+
+    # สร้าง DataFrame จากข้อมูล IP และ Timestamp
+    df = pd.DataFrame([[ip, now]], columns=['IP', 'Timestamp'])
+
+    # ตรวจสอบว่าไฟล์ Excel มีอยู่แล้วหรือไม่ ถ้ามีแล้วเพิ่มข้อมูล ถ้าไม่มีสร้างไฟล์ใหม่
+    try:
+        # โหลดไฟล์ Excel ที่มีอยู่และเพิ่มข้อมูลใหม่
+        existing_df = pd.read_excel(filename)
+        updated_df = pd.concat([existing_df, df], ignore_index=True)
+        updated_df.to_excel(filename, index=False)
+    except FileNotFoundError:
+        # ไฟล์ไม่มีอยู่ สร้างไฟล์ใหม่
+        df.to_excel(filename, index=False)
+
+def list_Time_login(user):
     # บันทึกข้อมูลผู้ใช้เมื่อล็อกอินสำเร็จ
-    with open('login_records.txt', 'a') as file:
-        login_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        file.write(f"{user.id}, {user.username}, {login_time}\n")
+    login_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    data = {'ID': [user.id], 'Username': [user.username], 'Login Time': [login_time]}
+    
+    df = pd.DataFrame(data)
+    
+    # Check if file exists
+    try:
+        # Read existing data
+        df_existing = pd.read_excel('login_records.xlsx')
+        # Filter data where Login Time is within the last 7 days
+        # df_existing['Login Time'] = pd.to_datetime(df_existing['Login Time'])
+        # df_existing = df_existing[df_existing['Login Time'] >= pd.Timestamp.now() - pd.DateOffset(days=7)]
+        # Append new data
+        df = pd.concat([df_existing, df])
+    except FileNotFoundError:
+        pass
+    # Save data to Excel
+    df.to_excel('login_records.xlsx', index=False)
 
+# ดึงข้อมูลจากไฟล์ ip log
+def count_todays_ip():
+    # ตรวจสอบว่าไฟล์มีอยู่หรือไม่
+    try:
+        # โหลดข้อมูลจากไฟล์ Excel
+        df = pd.read_excel('log_user_ip.xlsx')
+
+        # แปลงคอลัมน์ Timestamp ให้เป็น datetime
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+
+        # กำหนดวันที่ปัจจุบัน
+        today = datetime.datetime.now().date()
+
+        # กรองข้อมูลเพื่อเอาเฉพาะรายการที่มีวันที่เท่ากับวันที่ปัจจุบัน
+        todays_logs = df[df['Timestamp'].dt.date == today]
+
+        # นับจำนวน IP ที่มีในวันนี้
+        ip_count = todays_logs['IP'].nunique()
+
+        return ip_count
+
+    except FileNotFoundError:
+        print("ไฟล์ไม่พบ")
+        return 0
+#=======================================================================================================
 
 # Calendar scraper
 def calendarscraper(request, year=None, month=None):
@@ -141,8 +186,6 @@ def calendarscraper(request, year=None, month=None):
                 if date not in headdate :
                     headdate.append(date)
 
-
-
     context = {
         'all_list': all_list,
         'headdate': headdate,
@@ -150,7 +193,6 @@ def calendarscraper(request, year=None, month=None):
         'year':year,
         'month':month,
         'url':url
-
     }
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({'success': True})
@@ -240,6 +282,7 @@ def handler404(request, *args, **argv):
     return response
 
 # search.html 
+#=======================================================================================================
 def search(request):
     search_query = request.GET.get('q', '')  # รับค่าจากคิวรีพารามิเตอร์ 'q'
     # search_query = search.replace(" ", "") # ฟังก์ชั่นฟวย
@@ -311,7 +354,33 @@ def search(request):
         }# context จะถูกส่งไปยัง template ทุกครั้ง แต่จะมี stars เฉพาะเมื่อมีการค้นหา
     return render(request, 'search.html', context)
 
+def search_api(request):
+    query = request.GET.get('q', '')
+    stars = []
+    movies =[]
+    # stars_images = []
+    # movies_images = []
+    try:
+        search_year = int(query)
+        year_lookup = True
+    except ValueError:
+        year_lookup = False
+    if year_lookup:
+        # stars = Star.objects.filter(born_date__year=search_year).values('id', 'name', 'born_date__year')[:5]
+        movies = Movie.objects.filter(release_date__year=search_year).values('id', 'name', 'release_date__year')[:5]  
+    else:
+        stars = Star.objects.filter(name__icontains=query).values('id', 'name', 'born_date__year')[:5]
+        movies = Movie.objects.filter(name__icontains=query).values('id', 'name', 'release_date__year')[:5]
+    results = [{'id': star['id'], 'name': star['name'], 'year': star['born_date__year'], 'type': "actor"} for star in stars]
+    results += [{'id': movie['id'], 'name': movie['name'], 'year': movie['release_date__year'], 'type': "movie"} for movie in movies]
+    return JsonResponse(results, safe=False)
 
+def search_admin(request):
+    query = request.GET.get('q', '')
+    movies = Movie.objects.filter(name__icontains=query)[:5] # จำกัดเพียง 5 ผลลัพธ์
+    results = [{'id': movie.id, 'name': movie.name} for movie in movies]
+    return JsonResponse(results, safe=False)
+#=======================================================================================================
 @login_required
 def update_user(request):
     user = request.user
@@ -387,9 +456,16 @@ def signup_view(request):
                 user.save()
             login(request, user)
             return redirect('home')  # Redirect to a 'home' view, for instance.
+        else:
+            return render(request, 'Login_Register/register.html', {'form': form})
     else:
         form = SignupForm()
-    return render(request, 'Login_Register/register.html', {'form': form}) #form จะถูกหรือไม่ view จะส่งกลับ HttpResponse ในทุกสถานการณ์.
+        today = date.today().isoformat(),
+        context = {
+            'form': form,
+            'today': today
+        }
+    return render(request, 'Login_Register/register.html', context) #form จะถูกหรือไม่ view จะส่งกลับ HttpResponse ในทุกสถานการณ์.
 
 #Login
 def login_view(request):
@@ -575,21 +651,6 @@ def account(request):
 #     return render(request, 'settingprofile.html')  # หากเป็น GET request ให้แสดงแบบฟอร์มข้อมูลแก้ไขผู้ใช้
 
 
-# @login_required
-# def settingprofile(request):
-#     user = request.user  # Get the logged-in user
-#     user_age = calculate_age(user.date_of_birth)
-#     context = {
-#         'username': user.username,
-#         'first_name': user.first_name,
-#         'last_name': user.last_name,
-#         'email': user.email,
-#         'date_of_birth' : user.date_of_birth,
-#         'user_age': user_age,
-#     }
-#     return render(request, 'Account/settingprofile.html', context)
-
-
 @login_required
 def settingprofile(request):
     user = request.user  # Get the logged-in user
@@ -670,7 +731,7 @@ def changepassword(request):
 
 from .models import Bannerslide
 
-# หน้าหลัก
+#Home page
 def home(request):
     log_user_ip(request)
     slides = Bannerslide.objects.filter(active=True).order_by('order')
@@ -1265,6 +1326,8 @@ def error_404_view(request, exception):
 
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
+from collections import Counter
+import datetime
 
 
 @staff_member_required
@@ -1372,70 +1435,65 @@ def about_us(request):
 # ========================================================================================================================
 # ใช้เพื่อทดสอบ
 def test(request):
+    # data = json.loads(request.body.decode('utf-8'))
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        if data.get('type') == 'movie':
+            print(data)
+            context = {
+                'status': 'success',
+                'message': 'Movie data received'
+            }
+            return JsonResponse(context, safe=False)
+        elif data.get('type') == 'actor':
+            print(data)
+            context = {
+                'status': 'success',
+                'message': 'Actor data received'
+            }
+            return JsonResponse(context, safe=False)
+    else:
+        return render(request, 'test.html')
+# ========================================================================================================================
+#admin custom view
+# my_custom_view
+    # views.py
 
-    # # วันนี้
-    # today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    # today_end = today_start + timezone.timedelta(days=1)
+def get_day_name(date):
+    return date.strftime('%A')
 
-    # # เมื่อวานนี้
-    # yesterday_start = today_start - timezone.timedelta(days=1)
-    # yesterday_end = today_start
-
-    # # ผู้ใช้ที่เข้าสู่ระบบเมื่อวาน
-    # users_logged_in_yesterday = User.objects.filter(last_login__range=(yesterday_start, yesterday_end))
-    # print(users_logged_in_yesterday)
-    # # ผู้ใช้ที่เข้าสู่ระบบวันนี้
-    # users_logged_in_today = User.objects.filter(last_login__range=(today_start, today_end))
-    # print(users_logged_in_today)
-    # # ไอดีผู้ใช้ที่เข้าสู่ระบบเมื่อวาน
-    # yesterday_user_ids = set(users_logged_in_yesterday.values_list('id', flat=True))
-    # print(yesterday_user_ids)
-    # # ไอดีผู้ใช้ที่เข้าสู่ระบบวันนี้
-    # today_user_ids = set(users_logged_in_today.values_list('id', flat=True))
-    # print(yesterday_user_ids)
-    # # หาไอดีผู้ใช้ที่ปรากฏในทั้งสองชุด
-    # users_logged_in_both_days = yesterday_user_ids.intersection(today_user_ids)
-    # print(users_logged_in_both_days)
-    # # นับจำนวนผู้ใช้ที่เข้าสู่ระบบทั้งสองวัน
-    # count_users_logged_in_both_days = len(users_logged_in_both_days)
-    # print(count_users_logged_in_both_days)
-
-    # # request_type = request.GET.get('type')
-
-    # # if request_type == 'get_movies':
-    # #     movies = Movie.objects.filter(is_show=True).values('id', 'name')
-    # #     return JsonResponse(list(movies), safe=False)
-
-    # # elif request_type == 'get_user_login_count':
-    # #     user_login_count = 10  # Replace with your actual logic to get the count
-    # #     return JsonResponse({'count': user_login_count})
-
-    # # elif request_type == 'get_comments_data':
-    # #     movie_id = request.GET.get('movie_id')
-    # #     comments = Comment.objects.filter(movie_id=movie_id).values('sentiment').annotate(count=Count('sentiment'))
-    # #     data = {sentiment['sentiment']: sentiment['count'] for sentiment in comments}
-    # #     return JsonResponse(data)
-
-    # # elif request_type == 'get_movie_sentiments':
-    # #     movie_id = request.GET.get('movie_id')
-    # #     sentiment_data = MovieSentiment.objects.filter(movie_id=movie_id).values('positive', 'negative')
-    # #     if sentiment_data:
-    # #         return JsonResponse(sentiment_data[0])
-    # #     return JsonResponse({'positive': 0, 'negative': 0})
-
-    # # return JsonResponse({'error': 'Invalid request type'}, status=400)
+def dashboard_view(request):
     
-    # movie_all = Movie.objects.all().values('id', 'name')
-    # if request.method == 'POST':
-    #     movie = {}
-    #     movies_id = 3
-    #     for movie_id in movies_id:
-    #         movie_name = Movie.objects.filter(id = movie_id).values('name')
-    #         movie['name'] = movie_name
-    #         movie_sentiment = Comment.objects.filter(movie_id = movies_id).values('sentiment')
-    #         movie_count = movie_sentiment.count()
-            
-    # # print(newmovie)
+    if request.method == 'POST':
+        latest_movie = []
+        movies_comments_info = []
+        for i in range(1, 6):  # รับข้อมูลจาก movieName1 ถึง movieName5
+            movie_name = request.POST.get(f'movieName{i}')
+            if movie_name:
+                movie = Movie.objects.filter(is_show=1, name=movie_name).values('id', 'name').first()
+                latest_movie.append(movie)
+        print(latest_movie)
+        for movie in latest_movie:
+            movie_id = movie['id']
+            comments_count = Comment.objects.filter(movie_id=movie_id).count()
+            positive_count = Comment.objects.filter(movie_id=movie_id, sentiment='positive').count()
+            negative_count = Comment.objects.filter(movie_id=movie_id, sentiment='negative').count()
+            movies_comments_info.append({
+                "id": int(movie_id),
+                "name": movie['name'],
+                "comment": int(comments_count),
+                "positive": int(positive_count),
+                "negative": int(negative_count)
+            })
+        max_comment = max(movies_comments_info, key=lambda x: x['comment'])['comment']
+        max_comment += 2
+        print(movies_comments_info)
+        context = {
+            'movies_comments_info': movies_comments_info,
+            'max_comment': max_comment
+        }
+        return JsonResponse(context)
+
     # count_day = {}
     # today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     # day1 = today - timezone.timedelta(days=1)
@@ -1472,152 +1530,601 @@ def test(request):
     # users_logged_in_day6 = User.objects.filter(last_login__range=(day6, day5))
     # count_users_logged_in_day6 = users_logged_in_day6.count()
     # count_day['day6'] = count_users_logged_in_day6
-    
-    # max_user = max(count_day.values()) + 4
+
+
+    # max_user = max(count_day.values()) + 3
     # count_day['max_user'] = max_user
-    # movie = [{ "name": "The Shawshank", "comment": "8", "positive": "6", "negative": "2"},
-    #         {"name": "The Dark Knight", "comment": "2", "positive": "1", "negative": "1"},
-    #         {"name": "The Godfather", "comment": "5", "positive": "3", "negative": "2"},
-    #         {"name": "The Godfather: Part II", "comment": "4", "positive": "2", "negative": "2"},
-    #         {"name": "The Lord of the Rings: The Return of the King", "comment": "7", "positive": "3", "negative": "4"},
-    #         {"name": "Pulp Fiction", "comment": "2", "positive": "1", "negative": "1"},
-    #         {"name": "Schindler's List", "comment": "3", "positive": "2", "negative": "1"}]
-    # max_comment = 10
-    # context = {
-    #     'count_day': count_day,
-    #     'movies': movie,
-    #     'max_comment': max_comment,
-    #     'movie_all': movie_all
-    # }
 
-    user_data = pd.read_csv('E:\Project_MovieReview707\movieReview\user_comment_converted.txt', sep='\t')
-    user_data['timestamp'] = pd.to_datetime(user_data['timestamp'])
-    login_counts = user_data.groupby(user_data['timestamp'].dt.date).size().reset_index(name='login_count')
+    # # Get the day of the week for today
+    # day_of_week = get_day_name(today)
+    # count_day['day_name'] = day_of_week
+    # day_of_week = get_day_name(day1)
+    # count_day['day1_name'] = day_of_week
+    # day_of_week = get_day_name(day2)
+    # count_day['day2_name'] = day_of_week
+    # day_of_week = get_day_name(day3)
+    # count_day['day3_name'] = day_of_week
+    # day_of_week = get_day_name(day4)
+    # count_day['day4_name'] = day_of_week
+    # day_of_week = get_day_name(day5)
+    # count_day['day5_name'] = day_of_week
+    # day_of_week = get_day_name(day6)
+    # count_day['day6_name'] = day_of_week
 
-    # จัดเตรียมข้อมูลสำหรับส่งไปยัง template
+    # ได้หนัง 5 เรื่องล่าสุดที่กำลังฉาย
+    latest_movie = Movie.objects.filter(is_show=1).order_by('-release_date')[:5].values('id', 'name')
+    # print(latest_movie)
+    movies_comments_info = []
+
+    for movie in latest_movie:
+        # นับคอมเมนต์ทั้งหมดสำหรับหนังแต่ละเรื่อง
+        comments_count = Comment.objects.filter(movie_id=movie['id']).count()
+
+        # นับคอมเมนต์บวก
+        positive_count = Comment.objects.filter(movie_id=movie['id'], sentiment='positive').count()
+
+        # นับคอมเมนต์ลบ
+        negative_count = Comment.objects.filter(movie_id=movie['id'], sentiment='negative').count()
+
+        # เพิ่มข้อมูลลงในรายการ
+        movies_comments_info.append({
+            "id": int(movie['id']),
+            "name": movie['name'],
+            "comment": int(comments_count),
+            "positive": int(positive_count),
+            "negative": int(negative_count)
+        })
+
+    # หา max comment ดัวยการใช้ฟังก์ชัน max และ lambda
+    max_comment = max(movies_comments_info, key=lambda x: x['comment'])['comment']
+    max_comment += 2
+
+    from datetime import datetime, timedelta
+    df = pd.read_excel('login_records.xlsx')
+    # แปลงคอลัมน์ 'Login Time' เป็น datetime
+    df['Login Time'] = pd.to_datetime(df['Login Time'])
+
+    # สร้าง dictionary เพื่อเก็บข้อมูล
+    data = {}
+    max_user = 0
+    # หาจำนวนผู้ใช้ที่ไม่ซ้ำกันในแต่ละวันและเพิ่มข้อมูลลงใน dictionary
+    for i in range(7):
+        date = datetime.now() - timedelta(days=i)
+        filtered_df = df[df['Login Time'].dt.date == date.date()]
+        user_count = filtered_df['Username'].nunique()
+        max_user = user_count if user_count > max_user else max_user
+        if i == 0:
+            data['today'] = user_count
+            data['day_name'] = date.strftime('%A')
+        else:
+            data[f'day{i}'] = user_count
+            data[f'day{i}_name'] = date.strftime('%A')
+
+    # หาจำนวนผู้ใช้สูงสุดในช่วง 7 วัน
+    data['max_user'] = max_user+2
+    
+    # นับจำนวนรายงาน
+    count_reports = Report.objects.count()
+
+    # นับจำนวน IP ที่เข้าใช้งานในวันนี้
+    count_ip = count_todays_ip()
+
     context = {
-        'labels': login_counts['timestamp'].dt.strftime('%Y-%m-%d').tolist(),
-        'values': login_counts['login_count'].tolist(),
-    }
-    print(context)
-    return render(request, 'test.html')
-# ========================================================================================================================
-#admin custom view
-# my_custom_view
-    # views.py
-
-def get_day_name(date):
-    return date.strftime('%A')
-
-def dashboard_view(request):
-    count_day = {}
-    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    day1 = today - timezone.timedelta(days=1)
-    day2 = today - timezone.timedelta(days=2)
-    day3 = today - timezone.timedelta(days=3)
-    day4 = today - timezone.timedelta(days=4)
-    day5 = today - timezone.timedelta(days=5)
-    day6 = today - timezone.timedelta(days=6)
-
-    users_logged_in_today = User.objects.filter(last_login__gte=today)
-    count_users_logged_in_today = users_logged_in_today.count()
-    count_day['today'] = count_users_logged_in_today
-
-    users_logged_in_day1 = User.objects.filter(last_login__range=(day1, today))
-    count_users_logged_in_day1 = users_logged_in_day1.count()
-    count_day['day1'] = count_users_logged_in_day1
-
-    users_logged_in_day2 = User.objects.filter(last_login__range=(day2, day1))
-    count_users_logged_in_day2 = users_logged_in_day2.count()
-    count_day['day2'] = count_users_logged_in_day2
-
-    users_logged_in_day3 = User.objects.filter(last_login__range=(day3, day2))
-    count_users_logged_in_day3 = users_logged_in_day3.count()
-    count_day['day3'] = count_users_logged_in_day3
-
-    users_logged_in_day4 = User.objects.filter(last_login__range=(day4, day3))
-    count_users_logged_in_day4 = users_logged_in_day4.count()
-    count_day['day4'] = count_users_logged_in_day4
-
-    users_logged_in_day5 = User.objects.filter(last_login__range=(day5, day4))
-    count_users_logged_in_day5 = users_logged_in_day5.count()
-    count_day['day5'] = count_users_logged_in_day5
-
-    users_logged_in_day6 = User.objects.filter(last_login__range=(day6, day5))
-    count_users_logged_in_day6 = users_logged_in_day6.count()
-    count_day['day6'] = count_users_logged_in_day6
-
-
-    max_user = max(count_day.values()) + 3
-    count_day['max_user'] = max_user
-
-    # Get the day of the week for today
-    day_of_week = get_day_name(today)
-    count_day['day_name'] = day_of_week
-    day_of_week = get_day_name(day1)
-    count_day['day1_name'] = day_of_week
-    day_of_week = get_day_name(day2)
-    count_day['day2_name'] = day_of_week
-    day_of_week = get_day_name(day3)
-    count_day['day3_name'] = day_of_week
-    day_of_week = get_day_name(day4)
-    count_day['day4_name'] = day_of_week
-    day_of_week = get_day_name(day5)
-    count_day['day5_name'] = day_of_week
-    day_of_week = get_day_name(day6)
-    count_day['day6_name'] = day_of_week
-
-
-    # for i in range(7):
-    #     day = today - timezone.timedelta(days=i)
-    #     next_day = today - timezone.timedelta(days=i-1) if i > 0 else today + timezone.timedelta(days=1)
-    #     print(day, next_day)
-    #     users_logged_in = User.objects.filter(last_login__range=(day, next_day))
-    #     count_users_logged_in = users_logged_in.count()
-    #     print(count_users_logged_in)
-    #     # ใช้ฟังก์ชัน strftime เพื่อรับชื่อของวัน
-    #     day_name = get_day_name(day)
-    #     count_day[day_name] = count_users_logged_in
-
-    # # ได้หนัง 5 เรื่องล่าสุดที่กำลังฉาย
-    # latest_movie = Movie.objects.filter(is_show=1).order_by('-release_date')[:5].values('id', 'name')
-
-    # movies_comments_info = []
-
-    # for movie in latest_movie:
-    #     # นับคอมเมนต์ทั้งหมดสำหรับหนังแต่ละเรื่อง
-    #     comments_count = Comment.objects.filter(movie_id=movie['id']).count()
-        
-    #     # นับคอมเมนต์บวก
-    #     positive_count = Comment.objects.filter(movie_id=movie['id'], sentiment='positive').count()
-        
-    #     # นับคอมเมนต์ลบ
-    #     negative_count = Comment.objects.filter(movie_id=movie['id'], sentiment='negative').count()
-
-    #     # เพิ่มข้อมูลลงในรายการ
-    #     movies_comments_info.append({
-    #         "id": int(movie['id']),
-    #         "name": movie['name'],
-    #         "comment": int(comments_count),
-    #         "positive": int(positive_count),
-    #         "negative": int(negative_count)
-    #     })
-
-    # # หา max comment ดัวยการใช้ฟังก์ชัน max และ lambda
-    # max_comment = max(movies_comments_info, key=lambda x: x['comment'])['comment']
-    # max_comment += 2
-
-    movie = [{"name": "The Lord of the Rings: The Return of the King", "comment": "15", "positive": "12", "negative": "3"},
-             {"name": "The Dark Knight", "comment": " 10", "positive": "8", "negative": "2"},
-             {"name": "The Shawshank", "comment": "8", "positive": "6", "negative": "2"},
-             {"name": "The Godfather: Part II", "comment": "7", "positive": "5", "negative": "2"},
-             {"name": "The Godfather", "comment": "12", "positive": "9", "negative": "3"},]
-    max_comment = 18
-    movie_all = Movie.objects.all().values('id', 'name')
-    context = {
-        'count_day': count_day,
-        'movies': movie,
+        'count_day': data,
+        'movies': movies_comments_info,
         'max_comment': max_comment,
-        'movie_all': movie_all
+        'count_reports': count_reports,
+        'count_ip': count_ip,
     }
     return render(request, 'admin/dashboard.html' ,context)
+
+def scraping_view(request):
+    # this is a custom code
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        if data.get('type') == 'movie':
+            searchname = data['search']
+            url = "https://www.imdb.com/find/?s=tt&q="+searchname+"&ref_=nv_sr_sm"
+            moviedata = requests.get(url, headers=headers)
+            soup = BeautifulSoup(moviedata.text)
+            movieName = [] 
+            movieRelease = []
+            movieActor = []
+            movieImg = []
+            movieLink = []
+            pattern = r'._V1.*'
+            for m in soup.find_all('li',{'class':'ipc-metadata-list-summary-item ipc-metadata-list-summary-item--click find-result-item find-title-result'}):
+                movieName.append(m.find('a',{'class':'ipc-metadata-list-summary-item__t'}).text)
+                
+                
+                release_element = m.find('span',{'class':'ipc-metadata-list-summary-item__li'})
+                movieRelease.append(release_element.text if release_element else "Coming Soon")
+                
+                movieActor.append(m.find('ul',{'class':'ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--no-wrap ipc-inline-list--inline ipc-metadata-list-summary-item__stl base'}).text)
+                
+                img = m.find('img',{'class':'ipc-image'})
+                img_src = img.get('src') if img else "https://img.freepik.com/free-vector/coming-soon-background-with-spot-light-design_1017-25515.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1712102400&semt=ais"
+                img_element = re.sub(pattern, '._V1', img_src) + '.jpg'
+                movieImg.append(img_element)
+                
+                movieLink.append('https://www.imdb.com' + m.find('a',{'class':'ipc-metadata-list-summary-item__t'}).get('href'))
+            
+            if movieName is None:
+                return JsonResponse({'message':'No movie'})
+            
+            context = {
+                'moviename' : movieName,
+                'movierelease' : movieRelease,
+                'movieactor' : movieActor,
+                'movieimg' : movieImg,
+                'movielink' : movieLink,
+            }
+            return JsonResponse(context)
+        elif data.get('type') == 'actor':
+                print('actor eieieieieieieiei')
+                searchname = data['search']
+                
+                url = "https://www.imdb.com/find/?s=nm&q="+searchname+"&ref_=nv_sr_sm"
+
+                actordata = requests.get(url, headers=headers)
+
+                soup = BeautifulSoup(actordata.text)
+                actorImg=[]
+                actorName=[]
+                actorRole=[]
+                actorLink=[]
+                pattern = r',.*'
+                pattern2 = r'._V1.*'
+                for a in soup.find_all('li',{'class':'ipc-metadata-list-summary-item ipc-metadata-list-summary-item--click find-result-item find-name-result'}):
+                    
+                    try :
+                        img_element = a.find('div',{'class':'ipc-media ipc-media--avatar ipc-image-media-ratio--avatar ipc-media--base ipc-media--custom ipc-media--avatar-circle ipc-media__img'}).find('img',{'class':'ipc-image'})
+                        img_src = img_element.get('src') 
+                        acimg =  re.sub(pattern2, '._V1', img_src) + '.jpg'
+                        actorImg.append(acimg)
+                    except AttributeError:
+                        actorImg.append('https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg')
+                    
+                    
+                    
+                    
+                    actorName.append(a.find('a',{'class':'ipc-metadata-list-summary-item__t'}).text)
+                    
+                    role = a.find('li',{'class':'ipc-inline-list__item'}).text
+                    role_element = re.sub(pattern, ',', role).replace(',','')
+                    actorRole.append(role_element if role_element else ' ')
+                    
+                    actorLink.append('https://www.imdb.com'+a.find('a',{'class':'ipc-metadata-list-summary-item__t'}).get('href'))
+
+                if actorName is None:
+                    return JsonResponse({"message": "No actor"})
+                context = {
+                    'actorimg' : actorImg,
+                    'actorname' : actorName,
+                    'actorrole' : actorRole,
+                    'actorlink' : actorLink,
+                }
+                return JsonResponse(context)
+        else:
+            return JsonResponse({'message': 'Invalid request'})
+        
+    else:
+        return render(request, 'admin/scraping.html')
+    
+
+def scraping_Movie(request,name):
+    try:
+        movielink = request.GET.get('movielink', '')
+        print(movielink)
+    except:
+        return render(request, 'admin/scraping.html')
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    print('this is movielink : ' + movielink)
+    url = movielink
+    data = requests.get(url,headers=headers)
+    soup = BeautifulSoup(data.text)
+    movieName = soup.find('div',{'class':'sc-67fa2588-0 cFndlt'}).find('span',{'class':'hero__primary-text'}).text
+    movieRelease = ""
+    movieRate = ""
+    movieTime = ""
+    num = 0
+    head = soup.find('div',{'class':'sc-67fa2588-0 cFndlt'})
+
+    for i in head.find_all('li',{'class':'ipc-inline-list__item'}):
+        num +=1
+        if num == 1 :
+            movieRelease = i.text
+        elif num == 2 :
+            movieRate = i.text
+            if movieRate == '18':
+                movieRate = 'R'
+            elif movieRate == 'G':
+                movieRate = 'PG'
+        elif num == 3 :
+            movieTime = i.text
+        else :
+            break
+    directors = []
+    writer = []
+    stars = []
+    num = 0
+
+    for i in soup.find('div',{'class':'sc-410d722f-1 lgrCIy'}).find_all('li',{'class':'ipc-metadata-list__item'}):
+        num+=1
+        for j in i.find_all('li',{'class':'ipc-inline-list__item'}):
+            if num == 1 :
+                directors.append(j.text)
+            elif num == 2 :
+                writer.append(j.text)
+            elif num == 3 :
+                stars.append(j.text)
+    actorname = []
+    rolename = []
+    movieactorandrole = {}
+    for i in soup.find_all('div',{'class':'sc-bfec09a1-5 hNfYaW'}):
+        actorname.append(i.find('a',{'class':'sc-bfec09a1-1 gCQkeh'}).text)
+        rolename.append(i.find('div',{'class':'title-cast-item__characters-list'}).find('span',{'class':'sc-bfec09a1-4 kvTUwN'}).text)
+    url2 = 'https://www.imdb.com'+ soup.find('a',{'class':'ipc-lockup-overlay ipc-focusable'}).get('href')
+
+    data2 = requests.get(url2,headers=headers)
+
+    soup2 = BeautifulSoup(data2.text)
+
+    mainposter = soup2.find('img',{'class':'sc-7c0a9e7c-0 eWmrns'}).get('src')
+
+    import re
+    otherphoto = []
+    pattern = r'._V1.*'
+    for i in soup.find_all('div',{'class':'ipc-photo ipc-photo--base ipc-photo--dynamic-width photos-image ipc-sub-grid-item ipc-sub-grid-item--span-2'}):
+        imgelement = i.find('img',{'class':'ipc-image'}).get('src')
+        acimg =  re.sub(pattern, '._V1', imgelement) + '.jpg'
+        otherphoto.append(acimg)
+    trailerlink = ''
+    try :
+        url3 = 'https://search.yahoo.com/search?p='+movieName.replace(' ','+')+'+official+trailer&fr=uh3_entertainment_web&fr2=p%3Aent%2Cm%3Asb%2Cv%3Aartcl&.tsrc=uh3_entertainment_web'
+
+        data3 = requests.get(url3,headers=headers)
+
+        soup3 = BeautifulSoup(data3.text)
+
+        for i in soup3.find('ul',{'class':'s-cardlist d-f'}).find_all('li',{'class':'s-card bdr-8 phx'}):
+            if i.find('p',{'class':'s-card-txt s-card-cite lh-16 mah-16 mt-4'}).text == 'youtube.com' :
+                trailerlink = i.find('a',{'class':'s-card-wrapAnchor'}).get('href')
+                break
+            else :
+                continue
+        
+        url4 = trailerlink
+
+        data4 = requests.get(url4,headers=headers)
+
+        soup4 = BeautifulSoup(data4.text)
+
+        trailer = soup4.find('iframe').get('src').replace('//','https://').replace('?autoplay=1&wmode=transparent&origin=https:https://video.search.yahoo.com','')
+    except AttributeError :
+        trailer = ''
+    
+    daterelease = ''
+    try :
+        soup.find('section',{'class':'ipc-page-section ipc-page-section--base celwidget'}).find('a',{'class':'ipc-metadata-list-item__icon-link'}).get('href')
+        datereleaselink = ''
+        for i in soup.find_all('section',{'class':'ipc-page-section ipc-page-section--base celwidget'}):
+            if i.find('span').text == 'Details':
+                datereleaselink = i.find('a',{'class':'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link'}).get('href')
+                break
+            else :
+                continue
+            
+        url5 = 'https://www.imdb.com'+datereleaselink
+        data5 = requests.get(url5,headers=headers)
+        soup5 = BeautifulSoup(data5.text)
+        daterelease = soup5.find('section',{'class':'ipc-page-section ipc-page-section--base'}).find('span',{'class':'ipc-metadata-list-item__list-content-item'}).text
+    except AttributeError :
+        daterelease = ''
+
+
+
+    movieactorandrole = list(zip(actorname,rolename))
+
+    context = {
+        'moviename' : movieName,
+        'movierelease' : movieRelease,
+        'movierate' : movieRate,
+        'movietime':movieTime,
+        'moviedate' : daterelease,
+        'moviedirector':directors,
+        'moviewriter' : writer,
+        'moviestars': stars,
+
+        'movieactorandrole':movieactorandrole,
+
+        'movieposter' : mainposter,
+        'movieotherphoto' : otherphoto,
+        'movietrailer': trailer,
+    }
+    return render(request, 'admin/scraping_movie.html', context)
+
+def scraping_Actor(request,name):
+    
+    actorlink = request.GET.get('actorlink', '')
+    headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+
+    url = actorlink
+
+    data = requests.get(url,headers=headers)    
+
+    soup = BeautifulSoup(data.text)
+
+    actorname = soup.find('h1',{'class':'sc-d8941411-0 dxeMrU'}).find('span',{'class':'hero__primary-text'}).text
+
+    role = soup.find('ul',{'class':'ipc-inline-list ipc-inline-list--show-dividers sc-d8941411-2 cdJsTz baseAlt'})
+
+    actorrole = []
+    for i in role.find_all('li',{'class':'ipc-inline-list__item'}):
+        actorrole.append(i.text)
+
+    
+    text = soup.find('div', {'class': 'ipc-html-content-inner-div'}).text
+    fifth_dot_index = -1
+    for i, char in enumerate(text):
+        if char == '.':
+            fifth_dot_index += 1
+            if fifth_dot_index == 10:
+                break
+    
+    otherworks = ''
+    actorhistory = text[:i+1]
+    alternative_names = ''
+    height = ''
+    dateofbirth = ''
+    date_location = ''
+    parents = ''
+    relativename = ''
+    relationship = ''
+    diedate = ''
+    dielocation = ''
+    spousename = ''
+    spousedate = ''
+    children = ''
+    for i in soup.find_all('section', {'class': 'ipc-page-section ipc-page-section--base celwidget'}):
+        if i.find('span').text == 'Personal details':
+            personalzone = i.find('div', {'class': 'sc-f65f65be-0 bBlII'}).find('ul', {'class': 'ipc-metadata-list ipc-metadata-list--dividers-all ipc-metadata-list--base'})
+            for j in personalzone.find_all('li', {'class': 'ipc-metadata-list__item'}):
+                try :
+                    title = j.find('span',{'class':'ipc-metadata-list-item__label'}).text
+                    if title == 'Height':
+                        height = j.find('div',{'class':'ipc-metadata-list-item__content-container'}).text
+                    elif title == 'Born': 
+                        dateofbirth = j.find('li',{'class':'ipc-inline-list__item test-class-react'}).text
+                        date_location = j.find('a',{'class':'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link'}).text
+                    elif title == 'Parents': 
+                        parents = j.find('div',{'class':'ipc-metadata-list-item__content-container'}).text
+                    
+                    elif title == 'Relatives': 
+                        relativename = j.find('a',{'class':'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link'}).text
+                        relationship = j.find('span',{'class':'ipc-metadata-list-item__list-content-item--subText'}).text.replace('(','').replace(')','')
+                
+                    elif title == 'Alternative name':
+                        alternative_names = j.find('div',{'class':'ipc-metadata-list-item__content-container'}).text
+                    
+                    elif title == 'Alternative names':
+                        alternative_names = j.find('li',{'class':'ipc-inline-list__item'}).text
+            
+                    elif title == 'Died':
+                        diedate = j.find('li',{'class':'ipc-inline-list__item test-class-react'}).text
+                        dielocation = j.find('a',{'class':'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link'}).text
+                    
+                    elif title == 'Spouse' :
+                        spousename = j.find('span',{'class':'ipc-metadata-list-item__list-content-item'}).text
+                        spousedate = j.find('span',{'class':'ipc-metadata-list-item__list-content-item--subText'}).text
+                    
+                    elif title == 'Spouses' :
+                        spousename = j.find('a',{'class':'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link'}).text
+                        spousedate = j.find('span',{'class':'ipc-metadata-list-item__list-content-item--subText'}).text
+                    
+                    elif title == 'Children':
+                        children = j.find('ul',{'class':'ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--no-wrap ipc-inline-list--inline ipc-metadata-list-item__list-content base'}).text
+                
+                except AttributeError as e:
+                    print('Dont know')
+    try:
+        for i in soup.find_all('li',{'class':'ipc-metadata-list__item ipc-metadata-list-item--link'}):
+        
+            if i.find('a',{'class':'ipc-metadata-list-item__label ipc-metadata-list-item__label--link'}).text == 'Other works':
+                otherworks = i.find('div',{'class':'ipc-html-content-inner-div'}).text
+            else:
+                continue
+    except AttributeError:
+        otherworks = ''
+    
+    mainphotolink = soup.find('a',{'class':'ipc-lockup-overlay ipc-focusable'}).get('href')
+
+    url2 = 'https://www.imdb.com'+ mainphotolink
+
+    data2 = requests.get(url2,headers=headers)
+
+    soup2 = BeautifulSoup(data2.text)
+
+    mainprofile = soup2.find('img',{'class':'sc-7c0a9e7c-0 eWmrns'}).get('src')
+
+
+
+
+    otherpiczone = soup.find('div',{'class':'ipc-shoveler ipc-shoveler--base ipc-shoveler--page0'}).find('div',{'class':'ipc-sub-grid ipc-sub-grid--page-span-2 ipc-sub-grid--nowrap ipc-shoveler__grid'})
+
+
+    otherpic = []
+    num = 0
+    pattern = r'._V1.*'
+    for i in otherpiczone.find_all('div',{'class':'ipc-media ipc-media--photo ipc-image-media-ratio--photo ipc-media--base ipc-media--photo-m ipc-photo__photo-image ipc-media__img'}):
+        num += 1
+        img_src = i.find('img',{'class':'ipc-image'}).get('src')
+        acimg =  re.sub(pattern, '._V1', img_src) + '.jpg'
+        otherpic.append(acimg)
+        if num == 5:
+            break
+    
+   
+    context = {
+        'actorname' : actorname,
+        'actorhistory': actorhistory,
+        'actoralternative' : alternative_names,
+        'actorheight' : height,
+        'actordob' : dateofbirth,
+        'actorbirthlocation' : date_location,
+        'actorchildren' : children,
+        'actorparents': parents,
+        'actorotherworks':otherworks,
+        'actorphofile':mainprofile,
+        'actorotherpic':otherpic,
+        
+        'actorrelative' : relativename,
+        'actorrelationship' : relationship,
+        'actordiedate' : diedate,
+        'actordielocation' : dielocation,
+        'actorspousename' : spousename,
+        'actorspousedate' : spousedate,
+
+    }
+    return render(request, 'admin/scraping_actor.html',context)
+
+def scraping_movie_save(request, name):
+    # Assume that the data is sent in JSON format in the body of the reques
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+        
+    #data in actor
+    moviename = data.get('moviename', '')
+    moviedate_str = data.get('moviedate', '')
+    moviestoryline = data.get('moviestoryline', '')
+    movierelease = data.get('movierelease', '')
+    movierate = data.get('movierate', '')
+    movietime = data.get('movietime', '')
+    moviedirector = data.get('moviedirector', [])
+    moviewriter = data.get('moviewriter', [])
+    moviestars = data.get('moviestars', [])
+    movieposter = data.get('movieposter', '')
+    movietrailer = data.get('movietrailer', '')
+    movieotherphoto = data.get('movieotherphoto', [])
+    movieactor = data.get('movieactor', [])
+    movierole = data.get('movierole', [])
+
+    # Initialize moviedate to None or a default value
+     # Date processing
+    moviedate = None
+    if moviedate_str:
+        try:
+            date_object = datetime.datetime.strptime(moviedate_str, '%B %d, %Y')
+            moviedate = date_object.strftime('%Y-%m-%d')
+        except ValueError:
+            return JsonResponse({'error': 'Invalid date format'}, status=400)
+
+    # Check if movie exists
+    jingjo = Movie.objects.filter(name=moviename).exists()
+    print(jingjo)
+    if Movie.objects.filter(name=moviename).exists():
+        # Process for existing movie, maybe update or notify
+        return JsonResponse({'error': 'Movie already exists'}, status=400)
+    else:
+        # Save the new movie
+        try:
+            movie = Movie(
+                name=moviename, 
+                release_date=moviedate, 
+                story=moviestoryline, 
+                time=movietime, is_show=1)
+            movie.save()
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    
+        # Once saved, redirect or render a template
+        return render(request, 'admin/scraping.html', {'movie': movie})
+
+def scraping_actor_save(request, name):
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    actorname = data.get('actorname', '')
+    actordob_str = data.get('actordob', '')
+    actorbirth_location = data.get('actorbirthlocation', '')
+    actorheight = data.get('actorheight', '')
+    actordied_date = data.get('actordiedate', '')
+    actordied_location = data.get('actordielocation', '')
+    actorhistory = data.get('actorhistory','')
+    actorother_works = data.get('actorotherworks', '')
+    actorrelatives = data.get('actorrelative', '')
+    actorrelationship = data.get('actorrelationship')
+    actorspouse = data.get('actorspousename', '')
+    actorspouse_date = data.get('actorspousedate', '')
+    actorparents = data.get('actorparents', '')
+
+    actordob = None
+    print(actordob)
+    if actordob_str:
+        try:
+            date_object = datetime.datetime.strptime(actordob_str, '%B %d, %Y')
+            actordob = date_object.strftime('%Y-%m-%d')
+        except ValueError:
+            return JsonResponse({'error': 'Invalid date format'}, status=400)
+    
+    if not actordob:
+        actordob = '-'
+    
+    if not actorbirth_location:
+        actorbirth_location = '-'
+
+    if not actordied_date:
+        actordied_date = ''
+
+        
+    if not actordied_location:
+        actordied_location = ''
+
+    if not actorother_works:
+        actorother_works = '-'
+
+    if not actorrelatives:
+        actorrelatives = '-'
+
+    if not actorrelationship:
+        actorrelationship = '-'
+    print(actorname)
+    check_star = not Star.objects.filter(name=actorname).exists()
+    print(check_star)
+    if check_star:
+        print('Actor already exists')
+        try:
+            star = Star(
+                name = actorname,
+                active = 1,
+                born_date = actordob,
+                born_location = actorbirth_location,
+                died_date = actordied_date,
+                died_location = actordied_location,
+                height = actorheight,
+                history = actorhistory,
+            )
+            star.save()
+            # actorstar_id = Star.objects.filter(name=actorname).values("id").first()
+            # otherworks = OtherWorks(
+            #     star_id = actorstar_id,
+            #     work_description = actorother_works,      
+            # )
+            # otherworks.save()
+            # relatives = Relatives(
+            #     star_id = actorstar_id,
+            #     relative_name = actorrelatives,
+            #     relationship = actorrelationship,
+            # )
+            # relatives.save()
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return render(request, 'admin/scraping_actor.html')

@@ -1,0 +1,258 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+{% block bodyclass %}{{ block.super }} scraping {% endblock %}
+
+{% block content_title %} {% trans 'Scraping' %} {% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item">{% trans 'Scraping' %}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+<main>
+    <form id="form-movie" method="post">
+        {% csrf_token %}
+        <h1 class="mb-3">{{ moviename }}</h1>
+        <!-- Movie Name -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Movie Name : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ moviename }}" id="movieNameInput" name="moviename">
+            </div>
+        </div>
+        <hr>
+        <!-- Storyline -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Storyline : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" id="movieStorylineInput" name="moviestoryline">
+            </div>
+        </div>
+        <hr>
+        <!-- Date Release -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Date Release : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ moviedate }}" id="movieDateInput" name="moviedate">
+            </div>
+        </div>
+        <hr>
+        <!-- Movie Release -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Movie Release : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ movierelease }}" id="movieReleaseInput" name="movierelease">
+            </div>
+        </div>
+        <hr>
+        <!-- Movie Rate -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Movie Rate : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ movierate }}" id="movieRateInput" name="movierate">
+            </div>
+        </div>
+        <hr>
+        <!-- Movie Time -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Movie Time : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ movietime }}" id="movieTimeInput" name="movietime">
+            </div>
+        </div>
+        <hr>
+        <!-- Directors -->
+        <!-- Note: For multiple directors, ensure each input has a unique ID and name -->
+        {% for i in moviedirector %}
+            <div class="row mt-2">
+                <div class="col-5">
+                    <h6 class="mt-1 ti01">Director : </h6>
+                </div>
+                <div class="col-7">
+                    <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ i }}" id="movieDirectorInput{{ forloop.counter }}" name="moviedirector">
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+        <!-- Writers -->
+        <!-- Note: For multiple writers, ensure each input has a unique ID and name -->
+        {% for i in moviewriter %}
+            <div class="row mt-2">
+                <div class="col-5">
+                    <h6 class="mt-1 ti01">Writer : </h6>
+                </div>
+                <div class="col-7">
+                    <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ i }}" id="movieWriterInput{{ forloop.counter }}" name="moviewriter">
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+        <!-- Top Cast -->
+        <!-- Note: For multiple cast members, ensure each input has a unique ID and name -->
+        {% for i in moviestars %}
+            <div class="row mt-2">
+                <div class="col-5">
+                    <h6 class="mt-1 ti01">Top Cast : </h6>
+                </div>
+                <div class="col-7">
+                    <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ i }}" id="movieStarInput{{ forloop.counter }}" name="moviestars">
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+        <!-- Movie Poster -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Movie Poster : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ movieposter }}" id="moviePosterInput" name="movieposter">
+            </div>
+        </div>
+        <hr>
+        <!-- Movie Trailer -->
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Movie Trailer : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ movietrailer }}" id="movieTrailerInput" name="movietrailer">
+            </div>
+        </div>
+        <hr>
+        <!-- Other Photo -->
+        <!-- Note: For multiple photos, ensure each input has a unique ID and name -->
+        {% for i in movieotherphoto %}
+            <div class="row mt-2">
+                <div class="col-5">
+                    <h6 class="mt-1 ti01">Other Photo : </h6>
+                </div>
+                <div class="col-7">
+                    <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ i }}" id="movieOtherPhotoInput{{ forloop.counter }}" name="movieotherphoto">
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+        <!-- Actor and Role -->
+        <!-- Note: Ensure each actor and role input has a unique ID and name -->
+        {% for actorname, rolename in movieactorandrole %}
+            <div class="mt-2">
+                <div class="row mt-2">
+                    <div class="col-5">
+                        <h6 class="mt-1 ti01">Actor : </h6>
+                    </div>
+                    <div class="col-7">
+                        <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ actorname }}" id="actorNameInput{{ forloop.counter }}" name="actorname">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-5">
+                        <h6 class="mt-1 ti01">Role : </h6>
+                    </div>
+                    <div class="col-7">
+                        <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{ rolename }}" id="roleNameInput{{ forloop.counter }}" name="rolename">
+                    </div>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+        <button type="button" class="btn btn-outline-success savebutton" id="butmovie">SAVE</button>
+    </form>
+</main>
+
+<style>
+    .savebutton{
+        width: 100%;
+        height: 5vh;
+    }
+    ::placeholder {
+        color: red;
+    }
+    .ti01{
+        font-size: 19px;
+        font-weight: bold;
+    }
+    .inputtext{
+        height: 20vh;
+        width: 100%;
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('#form-movie');
+        const butmovie = document.querySelector('#butmovie');
+        const baseUrl = "{% url 'scraping_movie_save' 'placeholder' %}".replace('placeholder', '');
+        const movieNameInput = document.querySelector('#movieNameInput');
+        const movieName = movieNameInput.value;
+        butmovie.addEventListener("click", function (event) {
+            event.preventDefault();  // Prevent default form submission
+            
+            // Construct data object from form inputs
+            const formData = new FormData(form);
+            let data = {
+                moviename: formData.get('moviename'),
+                moviedate: formData.get('moviedate'),
+                moviestoryline: formData.get('moviestoryline'),
+                movierelease: formData.get('movierelease'),
+                movierate: formData.get('movierate'),
+                movietime: formData.get('movietime'),
+                moviedirector: formData.getAll('moviedirector'),
+                moviewriter: formData.getAll('moviewriter'),
+                moviestars: formData.getAll('moviestars'),
+                movieposter: formData.get('movieposter'),
+                movietrailer: formData.get('movietrailer'),
+                movieotherphoto: formData.getAll('movieotherphoto'),
+                movieactor : formData.getAll('actorname'),
+                movierole : formData.getAll('rolename'),
+            };
+
+            // Check for empty values and alert
+            // for (let key in data) {
+            //     if (data[key] === "" || (Array.isArray(data[key]) && data[key].length === 0)) {
+            //         alert(`Please fill in the ${key.replace(/([A-Z])/g, ' $1').trim()}.`);
+            //         return;  // Stop the function if an empty field is found
+            //     }
+            // }
+
+            // Append moviename to the URL
+            const url = baseUrl + encodeURIComponent(movieName);
+            console.log(url);
+            fetch(url, { 
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+{% endblock %}

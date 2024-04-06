@@ -72,10 +72,10 @@
                     <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light " 
                       data-mdb-ripple-color="light">
                       {% if premiums.num == 0 %}
-                      <img class="producttopimg-sold" src="{{ premiums.imag.url }}" 
+                      <img class="producttopimg-sold" src="{{ premiums.image.url }}" 
                         class="w-100" />
                       {% else %}
-                      <img class="producttopimg" src="{{ premiums.imag.url }}" 
+                      <img class="producttopimg" src="{{ premiums.image.url }}" 
                         class="w-100" />
                       {% endif %}
                       <a href="#!">
@@ -115,7 +115,7 @@
                           <button style="width: 80%;" class="btn btn-primary btn-sm trade-button" type="button" 
                             data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ premiums.id }}" 
                             data-name="{{ premiums.name }}" data-title="{{ premiums.title }}" data-description="{{ premiums.description }}" 
-                            data-image="{{ premiums.imag.url }}" data-price="{{ premiums.price }}">Trade
+                            data-image="{{ premiums.image.url }}" data-price="{{ premiums.price }}">Trade
                           </button>
                         {% endif %}
                       </div>
@@ -161,10 +161,10 @@
                       <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
                         <div class="bg-image hover-zoom ripple rounded ripple-surface">
                           {% if premiums.num == 0 %}
-                          <img src="{{ premiums.imag.url }}" style="filter: grayscale(100%); width: 300px;  height: 170px; object-fit: cover; "
+                          <img src="{{ premiums.image.url }}" style="filter: grayscale(100%); width: 300px;  height: 170px; object-fit: cover; "
                             class="w-100" />
                           {% else %}
-                          <img src="{{ premiums.imag.url }}" style=" width: 300px;  height: 170px; object-fit: cover;"
+                          <img src="{{ premiums.image.url }}" style=" width: 300px;  height: 170px; object-fit: cover;"
                             class="w-100" />
                           {% endif %}
                           <a href="#!">
@@ -193,11 +193,11 @@
                         </div>
                         <div class="d-flex flex-column mt-4">
                           {% if premiums.num == 0 %}
-                          <button class="btn btn-secondary btn-sm trade-button" disabled type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ premiums.id }}" data-name="{{ premiums.name }}" data-title="{{ premiums.title }}" data-description="{{ premiums.description }}" data-image="{{ premiums.imag.url }}" data-price="{{ premiums.price }}">
+                          <button class="btn btn-secondary btn-sm trade-button" disabled type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ premiums.id }}" data-name="{{ premiums.name }}" data-title="{{ premiums.title }}" data-description="{{ premiums.description }}" data-image="{{ premiums.image.url }}" data-price="{{ premiums.price }}">
                             OUT OF STOCK 
                           </button>
                           {% else %}
-                          <button class="btn btn-primary btn-sm trade-button" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ premiums.id }}" data-name="{{ premiums.name }}" data-title="{{ premiums.title }}" data-description="{{ premiums.description }}" data-image="{{ premiums.imag.url }}" data-price="{{ premiums.price }}">
+                          <button class="btn btn-primary btn-sm trade-button" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ premiums.id }}" data-name="{{ premiums.name }}" data-title="{{ premiums.title }}" data-description="{{ premiums.description }}" data-image="{{ premiums.image.url }}" data-price="{{ premiums.price }}">
                             Trade 
                           </button>
                           {% endif %}

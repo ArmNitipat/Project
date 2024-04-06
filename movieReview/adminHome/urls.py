@@ -38,6 +38,13 @@ urlpatterns = [
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     #admin
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('scraping/', views.scraping_view, name='scraping'),
+    path('scraping/movie/<str:name>/', views.scraping_Movie, name='scraping_Movie'),
+    path('scraping/actor/<str:name>/', views.scraping_Actor, name='scraping_Actor'),
+    path('scraping/movie/scrapingsave/<str:name>', views.scraping_movie_save, name='scraping_movie_save'),
+    path('scraping/actor/scrapingsave/<str:name>', views.scraping_actor_save, name='scraping_actor_save'),
+    path('search_api/', views.search_api, name='search_api'),
+    path('search_admin/', views.search_admin, name='search_admin'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('send_my_email/', send_my_email, name='send_my_email'),
     # path('password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name='password_reset'),
@@ -60,6 +67,7 @@ urlpatterns = [
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
     # path('my_custom_view/', views.my_custom_view, name='my_custom_view')
     path('test/', views.test, name='test'),
+    path('scrapingmovie/', views.scraping_Movie, name = 'scraping_movieTest'),
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
 ]    
 if settings.DEBUG:
