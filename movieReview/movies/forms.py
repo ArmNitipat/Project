@@ -10,3 +10,16 @@
 #     class Meta:
 #         model = Movie
 #         fields = '__all__'
+
+from django import forms
+from .models import LocalImage, URLImage
+
+class LocalImageForm(forms.ModelForm):
+    class Meta:
+        model = LocalImage
+        fields = ['image', 'mainstar', 'mainmovie', 'is_visible', 'star', 'movie']
+
+class URLImageForm(forms.ModelForm):
+    class Meta:
+        model = URLImage
+        fields = ['image_url', 'mainstar', 'mainmovie', 'is_visible', 'star', 'movie']

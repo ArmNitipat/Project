@@ -354,9 +354,10 @@
             },
           },
           y: {
+            stepSize: 1,
             beginAtZero: true, // กำหนดให้แกน y ของกราฟเริ่มที่ 0
-            max: `{{count_day.max_user}}`, // กำหนดค่าสูงสุดของแกน y
-            grid: {
+            max: `{{count_day.max_user|floatformat:0}}`, // กำหนดค่าสูงสุดของแกน y
+            grid: { 
               color: 'rgba(230, 230, 230, 0.2)' // ปรับสีของ grid เป็นสีขาว
             },
             ticks: {

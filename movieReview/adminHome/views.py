@@ -29,6 +29,7 @@ from django.contrib.auth import update_session_auth_hash
 # from .forms import SignupForm
 
 from .models import *
+from movies.forms import URLImageForm
 
 #---------------------------------------------
 from django.shortcuts import render, redirect, get_object_or_404
@@ -745,8 +746,12 @@ def home(request):
             movie.main_image = main_local_image
         else:
             main_url_image = URLImage.objects.filter(movie_id=movie.id, mainmovie=True).first()
+            if movie_main_images == '':
+                movie_main_images = movienoposter(movies.name)
             movie.main_image = main_url_image
         
+        
+
         # ตรวจสอบและกำหนด sentiment
         movie_sentiment = MovieSentiment.objects.filter(movie_id=movie.id).values('positive','negative').first()
         if movie_sentiment:
@@ -925,17 +930,41 @@ def movieSentiment(id):
     )
 
 
-def filter_comment(queryset):
+# def filter_comment(queryset):
+#     print(queryset)
+#     with open('adminHome/ai/bad-words.txt', 'r') as file:
+#         bad_words = [word.strip() for word in file.readlines()]
+
+#     for comment in queryset:
+#         filtered_text = comment.data
+#         for word in bad_words:
+#             filtered_text = filtered_text.replace(word, '*' * len(word))
+#         comment.filtered_data = filtered_text  # สร้าง attribute ใหม่ไม่ได้บันทึกลงฐานข้อมูล
+
+#     return queryset
+
+import nltk
+from nltk.tokenize import word_tokenize
+
+def filter_comment(queryset):    
     with open('adminHome/ai/bad-words.txt', 'r') as file:
         bad_words = [word.strip() for word in file.readlines()]
-
+    
+    # ดาวน์โหลดโมดูล word_tokenize ของ NLTK
+    # nltk.download('punkt')
+    
     for comment in queryset:
         filtered_text = comment.data
-        for word in bad_words:
-            filtered_text = filtered_text.replace(word, '*' * len(word))
+        words = word_tokenize(filtered_text)  # ใช้ NLTK ในการแยกคำ
+        
+        for word in words:
+            if word.lower() in bad_words:
+                filtered_text = filtered_text.replace(word, '*' * len(word))
+        
         comment.filtered_data = filtered_text  # สร้าง attribute ใหม่ไม่ได้บันทึกลงฐานข้อมูล
-
+    
     return queryset
+
 
 from django.db.models import Avg
 from django.db.models import Count
@@ -948,46 +977,7 @@ def moviereview(request, id):
     directors = movie.director.all()
     writers = movie.writer.all()
     top_stars = MovieDetail.objects.filter(movie=movie, is_top=True)
-    #######################################################
-    #Scraping Movie Point
-    # pointIMDB = moviepointscraping(str(movie.name))
-    
-    # linkscrapingcomment = moviecommentlink(movie.name)
-    # urls=linkscrapingcomment
-    # headers = {
-    # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-    # data = requests.get(urls, headers=headers)
-    # soup = BeautifulSoup(data.text)
-    # pointcomment = []
-    # headcomment=[]
-    # detailcomment = []
-    # spoilcomment = []
-    # for idx, m in enumerate(soup.find_all('div',{'class':'review-container'})):
-    #     if idx >= 10:
-    #         break
-    #     rating_container = m.find('span', {'class': 'rating-other-user-rating'})
-    #     if rating_container is not None:
-    #         point = rating_container.find('span').text
-    #         print(point)
-    #         pointcomment.append(point)
-    #     else:
-    #         point = "Don't give point."
-    #         print(point)
-    #         pointcomment.append(point)
-    #     headcomment.append(m.find('a',{'class':'title'}).text.replace('\n',''))
-    #     detailcomment.append(m.find('div',{'class':'text show-more__control'}).text)
-    #     spoil = m.find('span',{'class':'spoiler-warning'})
-    #     if spoil is not None:
-    #         spoilcomment.append(spoil.text)
-    #     else:
-    #         spoil = "Normal"
-    #         spoilcomment.append(spoil)
 
-
-    
-    # all_list = zip(pointcomment,headcomment,spoilcomment,detailcomment)
-    # moviecommentformIMDB()
-    #######################################################
     #Star Image
     top_star_images = []  # ใช้ list เพื่อเก็บ URL ของรูปภาพ
     for star_detail in top_stars:
@@ -1112,6 +1102,9 @@ def moviereview(request, id):
            other_comments = filter_comment(list(other_comments))
         commented = commented[0] if commented else None
         print(top_comment)
+
+        movieposterscrap = movienoposter(movie.name)
+        print(movieposterscrap)
         context = {
             'combined_data': combined_data,
             'movie': movie,
@@ -1132,6 +1125,7 @@ def moviereview(request, id):
             'liked_comments':liked_commentsss,
             'positive': positive,
             'negative': negative,
+            'movieposterscrap': movieposterscrap,
         }
         return render(request, 'moviereview.html', context)
     return render(request, 'moviereview.html', context)
@@ -1175,9 +1169,12 @@ def scrape_movie_data(request, movie):
                 spoil = "Normal"
                 spoilcomment.append(spoil)
         all_list = zip(pointcomment, headcomment, spoilcomment, detailcomment)
+        
         context = {
             'all_list': [dict(zip(['point', 'head', 'spoil', 'detail'], item)) for item in all_list],
+            
         }
+        print(context)
         return JsonResponse(context)
     else:
         # หากไม่ได้รับ id หรือชื่อของภาพยนตร์
@@ -1338,6 +1335,9 @@ def admin_view(request):
     
     return render(request, 'admin/dashboard.html', context)
 
+
+
+
 # ========================================================================================================================
 # minigame
 def minigame(request):
@@ -1345,7 +1345,8 @@ def minigame(request):
     print(category)
     if not request.user.is_authenticated:
         return redirect('login')
-        
+       
+       
     if category == 'Movie':
         movies = list(Movie.objects.order_by('?')[:4])
         mainmovie_images = []
@@ -1359,7 +1360,11 @@ def minigame(request):
                 if main_url_image:
                     mainmovie_images.append(main_url_image.image_url)
                 else:
-                    mainmovie_images.append(None) # หรือ URL รูปภาพเริ่มต้น
+                    mainmovie_images.append(movienoposter(answer))
+
+
+
+
         mainmovie_image = mainmovie_images[0]
         movie_names = [movie.name for movie in movies]
         random.shuffle(movie_names)
@@ -1601,7 +1606,7 @@ def dashboard_view(request):
             data[f'day{i}_name'] = date.strftime('%A')
 
     # หาจำนวนผู้ใช้สูงสุดในช่วง 7 วัน
-    data['max_user'] = max_user+2
+    data['max_user'] = round(max_user + 3)
     
     # นับจำนวนรายงาน
     count_reports = Report.objects.count()
@@ -1764,7 +1769,10 @@ def scraping_Movie(request,name):
     movieactorandrole = {}
     for i in soup.find_all('div',{'class':'sc-bfec09a1-5 hNfYaW'}):
         actorname.append(i.find('a',{'class':'sc-bfec09a1-1 gCQkeh'}).text)
-        rolename.append(i.find('div',{'class':'title-cast-item__characters-list'}).find('span',{'class':'sc-bfec09a1-4 kvTUwN'}).text)
+        try:
+            rolename.append(i.find('div',{'class':'title-cast-item__characters-list'}).find('span',{'class':'sc-bfec09a1-4 kvTUwN'}).text)
+        except AttributeError:
+            rolename.append(' ')
     url2 = 'https://www.imdb.com'+ soup.find('a',{'class':'ipc-lockup-overlay ipc-focusable'}).get('href')
 
     data2 = requests.get(url2,headers=headers)
@@ -1823,7 +1831,24 @@ def scraping_Movie(request,name):
     except AttributeError :
         daterelease = ''
 
+    try:
+        url6 = 'https://www.boxofficemojo.com/search/?q='+movieName.replace(' ','+')
 
+        data6 = requests.get(url6,headers=headers)
+
+        soup6 = BeautifulSoup(data6.text)
+
+        storylink = soup6.find('div',{'class':'a-fixed-left-grid-col a-col-left'}).find('a',{'class':'a-link-normal'}).get('href')
+
+        url7 = 'https://www.boxofficemojo.com'+storylink
+
+        data7 = requests.get(url7,headers=headers)
+
+        soup7 = BeautifulSoup(data7.text)
+
+        storyline = soup7.find('div',{'class':'a-section mojo-heading-summary'}).find('div',{'class':'a-fixed-left-grid-col a-col-right'}).find('span',{'class':'a-size-medium'}).text
+    except AttributeError:
+        storyline = ''
 
     movieactorandrole = list(zip(actorname,rolename))
 
@@ -1836,7 +1861,7 @@ def scraping_Movie(request,name):
         'moviedirector':directors,
         'moviewriter' : writer,
         'moviestars': stars,
-
+        'moviestory' : storyline,
         'movieactorandrole':movieactorandrole,
 
         'movieposter' : mainposter,
@@ -1857,7 +1882,7 @@ def scraping_Actor(request,name):
 
     soup = BeautifulSoup(data.text)
 
-    actorname = soup.find('h1',{'class':'sc-d8941411-0 dxeMrU'}).find('span',{'class':'hero__primary-text'}).text
+    actorname = soup.find('h1',{'class':'sc-d8941411-0 dxeMrU'}).find('span').text
 
     role = soup.find('ul',{'class':'ipc-inline-list ipc-inline-list--show-dividers sc-d8941411-2 cdJsTz baseAlt'})
 
@@ -1947,25 +1972,35 @@ def scraping_Actor(request,name):
 
     soup2 = BeautifulSoup(data2.text)
 
-    mainprofile = soup2.find('img',{'class':'sc-7c0a9e7c-0 eWmrns'}).get('src')
+    profiletest = soup2.find('img',{'class':'sc-7c0a9e7c-1 kkfYZR'})
 
-
-
-
-    otherpiczone = soup.find('div',{'class':'ipc-shoveler ipc-shoveler--base ipc-shoveler--page0'}).find('div',{'class':'ipc-sub-grid ipc-sub-grid--page-span-2 ipc-sub-grid--nowrap ipc-shoveler__grid'})
-
+    if profiletest:
+        mainprofile = profiletest.get('src')
+    else :
+        mainprofile = soup2.find('img',{'class':'sc-7c0a9e7c-0 eWmrns'}).get('src')
 
     otherpic = []
-    num = 0
-    pattern = r'._V1.*'
-    for i in otherpiczone.find_all('div',{'class':'ipc-media ipc-media--photo ipc-image-media-ratio--photo ipc-media--base ipc-media--photo-m ipc-photo__photo-image ipc-media__img'}):
-        num += 1
-        img_src = i.find('img',{'class':'ipc-image'}).get('src')
-        acimg =  re.sub(pattern, '._V1', img_src) + '.jpg'
-        otherpic.append(acimg)
-        if num == 5:
-            break
+
+    actorrole = []
+
+    for i in soup.find('div',{'class':'sc-4e4cc5f9-3 dDRspk'}).find_all('li',{'class':'ipc-inline-list__item'}):
+        actorrole.append(i.text)
+
     
+    try:
+        otherpiczone = soup.find('div',{'class':'ipc-shoveler ipc-shoveler--base ipc-shoveler--page0'}).find('div',{'class':'ipc-sub-grid ipc-sub-grid--page-span-2 ipc-sub-grid--nowrap ipc-shoveler__grid'})
+
+        num = 0
+        pattern = r'._V1.*'
+        for i in otherpiczone.find_all('div',{'class':'ipc-media ipc-media--photo ipc-image-media-ratio--photo ipc-media--base ipc-media--photo-m ipc-photo__photo-image ipc-media__img'}):
+            num += 1
+            img_src = i.find('img',{'class':'ipc-image'}).get('src')
+            acimg =  re.sub(pattern, '._V1', img_src) + '.jpg'
+            otherpic.append(acimg)
+            if num == 5:
+                break
+    except AttributeError:
+        print('No other pic')
    
     context = {
         'actorname' : actorname,
@@ -1979,7 +2014,7 @@ def scraping_Actor(request,name):
         'actorotherworks':otherworks,
         'actorphofile':mainprofile,
         'actorotherpic':otherpic,
-        
+        'actorjob':actorrole,
         'actorrelative' : relativename,
         'actorrelationship' : relationship,
         'actordiedate' : diedate,
@@ -2027,8 +2062,6 @@ def scraping_movie_save(request, name):
             return JsonResponse({'error': 'Invalid date format'}, status=400)
 
     # Check if movie exists
-    jingjo = Movie.objects.filter(name=moviename).exists()
-    print(jingjo)
     if Movie.objects.filter(name=moviename).exists():
         # Process for existing movie, maybe update or notify
         return JsonResponse({'error': 'Movie already exists'}, status=400)
@@ -2041,6 +2074,13 @@ def scraping_movie_save(request, name):
                 story=moviestoryline, 
                 time=movietime, is_show=1)
             movie.save()
+            # movie_id = Movie.objects.filter(name = moviename).values("id").first()
+            # form = URLImageForm(request.POST)
+            # if form.is_valid():
+            #     movie = Movie.objects.get(name=moviename)  # หากต้องการใช้วัตถุ Movie จากชื่อภาพยนตร์
+            #     form.instance.movie = movie  # กำหนดวัตถุ Movie ให้กับ instance ของ URLImage
+            #     form.save()
+
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
     
@@ -2055,7 +2095,7 @@ def scraping_actor_save(request, name):
     actorname = data.get('actorname', '')
     actordob_str = data.get('actordob', '')
     actorbirth_location = data.get('actorbirthlocation', '')
-    actorheight = data.get('actorheight', '')
+    actorheight_str = data.get('actorheight', '')
     actordied_date = data.get('actordiedate', '')
     actordied_location = data.get('actordielocation', '')
     actorhistory = data.get('actorhistory','')
@@ -2065,7 +2105,7 @@ def scraping_actor_save(request, name):
     actorspouse = data.get('actorspousename', '')
     actorspouse_date = data.get('actorspousedate', '')
     actorparents = data.get('actorparents', '')
-
+    actorphofile = data.get('actorphofile','')
     actordob = None
     print(actordob)
     if actordob_str:
@@ -2074,46 +2114,34 @@ def scraping_actor_save(request, name):
             actordob = date_object.strftime('%Y-%m-%d')
         except ValueError:
             return JsonResponse({'error': 'Invalid date format'}, status=400)
+    actorheight_str = actorheight_str.replace(' m','')
     
-    if not actordob:
-        actordob = '-'
-    
-    if not actorbirth_location:
-        actorbirth_location = '-'
+    actorheight = ''
+    if actorheight_str:
+        try:
+            actorheight = float(actorheight_str)
+        except ValueError:
+            return JsonResponse({'error': 'Invalid height format'}, status=400)
+    print(actorphofile)
 
-    if not actordied_date:
-        actordied_date = ''
 
-        
-    if not actordied_location:
-        actordied_location = ''
-
-    if not actorother_works:
-        actorother_works = '-'
-
-    if not actorrelatives:
-        actorrelatives = '-'
-
-    if not actorrelationship:
-        actorrelationship = '-'
-    print(actorname)
     check_star = not Star.objects.filter(name=actorname).exists()
     print(check_star)
     if check_star:
         print('Actor already exists')
         try:
+            
             star = Star(
-                name = actorname,
-                active = 1,
-                born_date = actordob,
-                born_location = actorbirth_location,
-                died_date = actordied_date,
-                died_location = actordied_location,
-                height = actorheight,
-                history = actorhistory,
+                name=actorname,
+                active=1,
+                born_date=actordob,
+                born_location=actorbirth_location,
+                height=actorheight,
+                history=actorhistory,
             )
             star.save()
-            # actorstar_id = Star.objects.filter(name=actorname).values("id").first()
+            
+            actorstar_id = Star.objects.filter(name=actorname).values("id").first()
             # otherworks = OtherWorks(
             #     star_id = actorstar_id,
             #     work_description = actorother_works,      
@@ -2125,6 +2153,57 @@ def scraping_actor_save(request, name):
             #     relationship = actorrelationship,
             # )
             # relatives.save()
+
+
+            imagURL = ImageBase(
+                image_url = actorphofile,
+                is_visible = 1,
+                mainmovie = 0,
+                mainstar = 1,
+            )
+            imagURL.save()
+            print('imageURL is successsave')
+            starimage_id = imagURL.id
+            starurlimage = URLImage(
+                urlimage_id = starimage_id,
+                star_id = actorstar_id,
+            )
+
+            starurlimage.save()
+            print('starurlimage is successsave')
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
     return render(request, 'admin/scraping_actor.html')
+
+
+def movienoposter(request):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    try:
+        moviename = request
+        url = 'https://www.imdb.com/find/?s=tt&q='+moviename+'&ref_=nv_sr_sm'
+                
+        data = requests.get(url,headers=headers)
+
+        soup = BeautifulSoup(data.text)
+
+        movielink = soup.find('li',{'class':'ipc-metadata-list-summary-item ipc-metadata-list-summary-item--click find-result-item find-title-result'}).find('div',{'class':'ipc-metadata-list-summary-item__tc'}).find('a',{'class':'ipc-metadata-list-summary-item__t'}).get('href')
+
+        url2 = 'https://www.imdb.com'+movielink
+
+        data2 = requests.get(url2,headers=headers)
+
+        soup2 = BeautifulSoup(data2.text)
+
+        movieposterlink = soup2.find('a',{'class':'ipc-lockup-overlay ipc-focusable'}).get('href')
+
+        url3 = 'https://www.imdb.com'+movieposterlink
+
+        data3 = requests.get(url3,headers=headers)
+
+        soup3 = BeautifulSoup(data3.text)
+
+        movieposter = soup3.find('div',{'class':'sc-7c0a9e7c-2 ghbUKT'}).find('img').get('src')
+    except AttributeError:
+        movieposter = ''
+    return movieposter

@@ -81,8 +81,7 @@ class StarAdmin(admin.ModelAdmin):
     children_star.short_description = 'Children'
     relatives.short_description = 'Relatives'
     other_works.short_description = 'Other Works'
-
-
+    
 @admin.register(Children)
 class ChildrenAdmin(admin.ModelAdmin):
     search_fields = ['child_name__name', 'star__name']
@@ -95,3 +94,4 @@ admin.site.register(AlternativeNames)
 admin.site.register(Spouses)
 admin.site.register(Relatives)
 admin.site.register(OtherWorks)
+admin.site.register(StarType)

@@ -68,7 +68,7 @@ async function postScore() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
+                'X-CSRFToken': '{{ csrf_token }}',
             },
             body: JSON.stringify({})
         });

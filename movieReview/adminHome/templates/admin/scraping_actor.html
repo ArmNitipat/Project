@@ -37,6 +37,19 @@
             </div>
         </div>
         <hr>
+
+        {% for i in actorjob %}
+        <div class="row mt-2">
+            <div class="col-5">
+                <h6 class="mt-1 ti01">Actor Job : </h6>
+            </div>
+            <div class="col-7">
+                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{i}}" id="actorJobInput{{ forloop.counter }}" name="actorjob">
+            </div>
+        </div>
+        {% endfor %}
+
+        <hr>
         <div class="row mt-2">
             <div class="col-5">
                 <h6 class="mt-1 ti01">Alternative Name : </h6>
@@ -152,21 +165,22 @@
         <hr>
         
         <hr>
-
-        <h4>Other Photo</h4>
-        <br>
-        {% for i in actorotherpic %}
-        <div class="row mt-2">
-            <div class="col-5">
-                <h6 class="mt-1 ti01">Other Photo : </h6>
+        {% if actorotherphoto %}
+            <h4>Other Photo</h4>
+            <br>
+            {% for i in actorotherpic %}
+            <div class="row mt-2">
+                <div class="col-5">
+                    <h6 class="mt-1 ti01">Other Photo : </h6>
+                </div>
+                <div class="col-7">
+                    <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{i}}" id="actorOtherPhotoInput{{ forloop.counter }}" name="actorotherphoto">
+                    
+                </div>
             </div>
-            <div class="col-7">
-                <input class="inputtext" placeholder="* Manual Enter Data *" type="text" value="{{i}}" id="actorOtherPhotoInput{{ forloop.counter }}" name="actorotherphoto">
-                
-            </div>
-        </div>
-        <hr>
-        {% endfor %}
+            <hr>
+            {% endfor %}
+        {% endif %}
         <button type="button" class="btn btn-outline-success savebutton" id="butactor">SAVE</button>
     </form>
 </main>
@@ -210,7 +224,7 @@
                 actorchildren: formData.getAll('actorchildren'),
                 actorparents: formData.getAll('actorparents'),
                 actorotherworks: formData.getAll('actorotherworks'),
-                actorphofile: formData.get('actorphofile'),
+                actorphofile: formData.get('actorprofile'),
                 actorotherphoto: formData.get('actorotherphoto'),
                 actorrelative: formData.getAll('actorrelative'),
                 actordiedate : formData.getAll('actordiedate'),
@@ -218,6 +232,7 @@
                 actorspousename : formData.getAll('actorspousename'),
                 actorspousedate : formData.getAll('actorspousedate'),
                 actorrelationship : formData.getAll('actorrelationship'),
+                actorjob : formData.getAll('actorjob'),
             };
 
             if (actorNameInput.value.trim() === "" || actorHistoryInput.value.trim() === "" || actorHeightInput.value.trim() === "") {

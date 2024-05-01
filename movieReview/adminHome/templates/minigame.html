@@ -6,6 +6,7 @@
 {% endblock %} {%block content%}
 <main class="container bg-light bg-dark text-light border border-light" style="width: auto;">
     <div class="p-4 p-md-8 text-white rounded bg-dark flex-column">
+        {% csrf_token %}
         <h1 class="display-4 text-center">MiniGame</h1>
         <div class="row">
             Play the game and earn points User

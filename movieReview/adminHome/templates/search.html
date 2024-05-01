@@ -140,12 +140,13 @@
                       
                       {% if result.main_image %}
                         {% if result.main_image.image %}
-                            <img class="imgmoviepro" src="{{ result.main_image.image.url }}" alt="Main Image of {{ result.movie.name }}">
+                          <img class="imgmoviepro" src="{{ result.main_image.image.url }}" alt="Main Image of {{ result.movie.name }}">
                         {% elif result.main_image.image_url %}
-                            <img class="imgmoviepro" src="{{ result.main_image.image_url }}" alt="Main Image of {{ result.movie.name }}">
+                          <img class="imgmoviepro" src="{{ result.main_image.image_url }}" alt="Main Image of {{ result.movie.name }}">
                         {% endif %}
                       {% else %}
-                        <p>No main image available</p>
+                        <!-- <p>No main image available</p> -->
+                        <img class="imgmoviepro" src="https://msdb.tv/no_poster.jpg" alt="Main Image of {{ result.movie.name }}">
                       {% endif %}
                       
                       </div>
