@@ -261,17 +261,17 @@ def moviecommentlink(moviename):
     print(search_url)
     data = requests.get(search_url, headers=headers)
     soup = BeautifulSoup(data.text)
-    linkmovie = soup.find('div',{'class':'sc-17bafbdb-2 iUyFfD'})
-    link_element = linkmovie.find('a', {'class': 'ipc-metadata-list-summary-item__t'})
+    linkmovie = soup.find('div',{'class':'sc-e8e4ce7-2 gdpdyr'})
+    # link_element = linkmovie.find('a', {'class': 'ipc-metadata-list-summary-item__t'})
     linkcomment = ""
     link_element = linkmovie.find('a', {'class': 'ipc-metadata-list-summary-item__t'})
     if link_element:
         href_value = link_element.get('href')
         linkcomment = href_value.split('?')[0]
+        url = 'https://www.imdb.com' + linkcomment + 'reviews?ref_=tt_urv'
+        print("moviecommentlink: succeed")
     else:
         print("Link element not found")
-    url = 'https://www.imdb.com' + linkcomment + 'reviews?ref_=tt_urv'
-    
     return url
 
 
@@ -440,6 +440,7 @@ def check_email(request):
 
 
 def signup_view(request):
+    print(request)
     if request.method == 'POST':
         form = SignupForm(request.POST, request.FILES)
         
@@ -928,7 +929,7 @@ def movieSentiment(id):
         movie=movie,
         defaults={'positive': positive_percent, 'negative': negative_percent}
     )
-
+    print(sentiment)
 
 # def filter_comment(queryset):
 #     print(queryset)
@@ -1174,7 +1175,7 @@ def scrape_movie_data(request, movie):
             'all_list': [dict(zip(['point', 'head', 'spoil', 'detail'], item)) for item in all_list],
             
         }
-        print(context)
+        print("scrape_movie_data: succeed")
         return JsonResponse(context)
     else:
         # หากไม่ได้รับ id หรือชื่อของภาพยนตร์

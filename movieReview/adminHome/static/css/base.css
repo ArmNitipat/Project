@@ -75,6 +75,7 @@ body {
   background-color: var(--background-color); 
 }
 
+.col .card-title,
 .col-md-3 .card-title,
 .col-md-3 .card-body span{
   color: rgb(0, 0, 0);

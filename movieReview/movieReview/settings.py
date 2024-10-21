@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'star',
     'movies',
     'jazzmin',
+    'bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -258,22 +259,14 @@ LOGOUT_REDIRECT_URL = "/"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# ของเดิมเตรียม (ลบ)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dbmovie',
         'USER': 'admin01',
         'PASSWORD': 'mypassword',
-        'HOST': 'localhost',  # หรือ IP ที่ MySQL Server ทำงานอยู่
-        'PORT': '3306',       # หรือ Port ที่ MySQL Server ทำงานอยู่
+        'HOST': 'localhost',  # IP ที่ MySQL Server ทำงานอยู่
+        'PORT': '3306',       # Port ที่ MySQL Server ทำงานอยู่
     }
 }
 

@@ -20,6 +20,12 @@
   object-fit: cover; /* ให้รูปภาพถูกยืดหรือย่อให้พอดีโดยไม่เสียสัดส่วน */
 }
 
+.card-title, span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .card, .cardmovie {
   width: 250px;
   height: auto;
@@ -67,7 +73,13 @@
 }
 
 /* Media queries */
-@media screen and (max-width: 768px) {
+@media (max-width: 576px) {
+  .text-success, .text-danger, .text-warning {
+    font-size: 0.8rem; /* Smaller text for small screens */
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
   .cardmovie, .imgnewmovie {
     width: 48vw;
     margin-left: 15px;
@@ -81,23 +93,14 @@
     font-size: 1rem; /* Smaller screens */
   }
   
+  .text-success, .text-danger, .text-warning {
+    font-size: 1rem; /* Text size for medium and larger screens */
+  }
 }
 
 @media (min-width: 769px) {
   .card-title {
     font-size: 1.4rem; /* Larger screens */
-  }
-}
-
-@media (max-width: 576px) {
-  .text-success, .text-danger, .text-warning {
-    font-size: 0.8rem; /* ขนาดข้อความเล็กลงสำหรับหน้าจอขนาดเล็ก */
-  }
-}
-
-@media (min-width: 577px) {
-  .text-success, .text-danger, .text-warning {
-    font-size: 1rem; /* ขนาดข้อความสำหรับหน้าจอขนาดกลางและใหญ่ */
   }
 }
 
@@ -138,20 +141,17 @@ ul li {
 <div style="background-color: #000000;">
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="display: block;margin-left: auto; margin-right: auto;width: 100%;">
     <div class="carousel-inner">
-
-        <div class="carousel-inner">
-          {% for slide in slides %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="8000">
-            <img src="{{ slide.image.url }}" alt="Banner Slide Image" class="d-block w-100" style=" background-color: #000000; ">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>{{ slide.title }}</h5>
-                <p>{{ slide.description }}</p>
-            </div>
-          </div>
-          {% endfor %}
+      {% for slide in slides %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="8000">
+        <img src="{{ slide.image.url }}" alt="Banner Slide Image" class="d-block w-100" style=" background-color: #000000;" />
+        <div class="carousel-caption d-none d-md-block">
+          <h5>{{ slide.title }}</h5>
+          <p>{{ slide.description }}</p>
         </div>
+      </div>
+      {% endfor %}
     </div>
-
+    
     <!-- ตำแหน่งปุ่มก่อนหน้าและถัดไป -->
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -165,65 +165,67 @@ ul li {
     <!-- เพิ่มปุ่มสำหรับแต่ละรูป -->
     <div class="carousel-indicators">
       {% for slide in slides %}
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}">
+      <button 
+        type="button" 
+        data-bs-target="#carouselExampleCaptions" 
+        data-bs-slide-to="{{ forloop.counter0 }}" 
+        {% if forloop.first %}class="active"{% endif %} 
+        aria-label="Slide {{ forloop.counter }}">
       </button>
       {% endfor %}
     </div>
   </div>
 
-
 <div class="overlay" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
   <div class="row justify-content-center">
       <div class="col-12 col-md-6 px-0">
-           <h1 class="display-4 fst-italic text-center" style="color: white; text-shadow: 2px 2px 4px #000000; font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 48px;">10 New Movie in Theaters</h1>
+           <h1 class="display-4 fst-italic text-center text-light" style="text-shadow: 2px 2px 4px #000000; font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 48px;">10 New Movie in Theaters</h1>
       </div>
   </div>
 </div>
 
-
-
-  <div class="row pt-4 justify-content-center align-items-center d-flex">
-    <div class="col-md-8">
+<!-- 10 New Movie in Theaters -->
+<div class="container">
+  <div class="row">
     <div class="splide red" id="a">
-    <div class="splide__track">
-    <ul class="splide__list ">
-    {% for img , name , release in newMovie %}
-    <li class="splide__slide align-items-center justify-content-center d-flex">
-    <div class="card border cardmovie mb-4">
-      <div class="card-body p-2 border">
-        <a href="#">
-          <img class="img-fluid" src="{{ img }}" alt="main_iame_{{ name }}">
-        </a>
-        <hr>
-        <h5 class="card-title mt-2 text-center" style="height: 65px;"><strong>{{ name }}</strong></h5>
-        <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
-        <div class="d-flex justify-content-between">
-          <span class="text-warning">
-            <i class="fas fa-star px-1"></i>{{0}} / 10</span>
-          <span class="text-warning">{{ release }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <div class="text-success">Positive: {{0}}%</div>
-          <div class="text-danger">Negative: {{0}}%</div>
-        </div>
+      <div class="splide__track">
+        <ul class="splide__list">
+          {% for img , name , release in newMovie %}
+            <li class="splide__slide" style="width: calc(25%);left: 23px;">
+            <div class="col px-2 justify-content-center align-items-center d-flex" style="background-color: #000;">
+              <div class="card border" style="width: 18rem;">
+                <a href="#">
+                  <img src="{{ img }}" class="card-img-top" alt="main_iame_{{ name }}" />
+                </a>
+                <div class="card-body p-0">
+                  <hr>
+                  <a href="#" style="text-decoration: none">
+                    <h5 class="card-title text-center fw-bold">{{ name }}</h5>
+                  </a>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <span class="text-warning">
+                      <i class="fas fa-star px-1"></i>{{0}} / 10</span>
+                    <span class="text-warning">{{ release }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <div class="text-success">Positive: {{0}}%</div>
+                    <div class="text-danger">Negative: {{0}}%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
-    </li>
-    {% endfor %}
-    </ul>
-    </div>
-    </div>
-    </div>
   </div>
-
+</div>
 
   <!--Bottom-->
-  <div class="bg-dark text-light text-center mt-1 mb-5">
-
-  <!-- <div
-    class="overlay"
-    style="background-size: cover">
-  </div> -->
+  <div class="mt-4 text-light text-center mt-1 mb-5">
   <hr style="width: 100%; margin: 0 auto;">
   <div class="overlay" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 15px;">
     <div class="row justify-content-center">
@@ -233,46 +235,43 @@ ul li {
     </div>
   </div>
   <hr style="width: 100%; margin: 0 auto;">
-  <div class="container">
-  </div>
-
-    <div class="album overlay" style="background-color: #000;">
-      <div class="container">
-        <div class="row">
-          {% for movie in movies %}
-          <div class="col-md-3 pt-4 justify-content-center align-items-center d-flex" style="background-color: #000;">
-            <div class="card border">
-              <div class="card-body p-2">
-                <a href="{% url 'moviereview' movie.id %}">
+  <div class="album overlay" style="background-color: #000;">
+    <div class="container">
+      <div class="row">
+        {% for movie in movies %}
+        <div class="col-md-3 pt-4 justify-content-center align-items-center d-flex" style="background-color: #000;">
+          <div class="card border">
+            <div class="card-body p-2">
+              <a href="{% url 'moviereview' movie.id %}">
                 {% if movie.main_image %}
-                  {% if movie.main_image.image %}
-                    <img class="img-fluid" src="{{ movie.main_image.image.url }}" alt="main_iame_{{ movie.name }}">
-                  {% elif movie.main_image.image_url %}
-                    <img class="card-img-top" src="{{ movie.main_image.image_url }}" alt="main_iame_{{ movie.name }}">
-                  {% endif %}
-                {% else %}
-                  <img class="img-fluid" src="https://msdb.tv/no_poster.jpg" alt="main_iame_{{ movie.name }}">
+                {% if movie.main_image.image %}
+                <img class="img-fluid" src="{{ movie.main_image.image.url }}" alt="main_iame_{{ movie.name }}">
+                {% elif movie.main_image.image_url %}
+                <img class="card-img-top" src="{{ movie.main_image.image_url }}" alt="main_iame_{{ movie.name }}">
                 {% endif %}
-                </a><hr>
-                <h5 class="card-title mt-2" style="height: 65px;"><strong>{{ movie.name }}</strong></h5>
-                <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
-                <div class="d-flex justify-content-between">
-                  <span class="text-warning">
-                    <i class="fas fa-star px-1"></i>{{ movie.avg_score }} / 10</span>
-                  <span class="text-warning">{{ movie.release_date.year }}</span>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <div class="text-success">Positive: {{ movie.positive }}%</div>
-                  <div class="text-danger">Negative: {{ movie.negative }}%</div>
-                </div>
+                {% else %}
+                <img class="img-fluid" src="https://msdb.tv/no_poster.jpg" alt="main_iame_{{ movie.name }}">
+                {% endif %}
+              </a>
+              <hr>
+              <h5 class="card-title mt-2" style="height: 65px;"><strong>{{ movie.name }}</strong></h5>
+              <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
+              <div class="d-flex justify-content-between">
+                <span class="text-warning">
+                  <i class="fas fa-star px-1"></i>{{ movie.avg_score }} / 10</span>
+                <span class="text-warning">{{ movie.release_date.year }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <div class="text-success">Positive: {{ movie.positive }}%</div>
+                <div class="text-danger">Negative: {{ movie.negative }}%</div>
               </div>
             </div>
           </div>
-          {% endfor %}
         </div>
-        
+        {% endfor %}
       </div>
     </div>
+  </div>
 
   </div>
 
@@ -322,8 +321,6 @@ ul li {
   </script>
   <script>
     const menu = document.querySelectorAll('.menu li')
-
-
   </script>
 
   <script>

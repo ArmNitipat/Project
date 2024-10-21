@@ -26,8 +26,8 @@ function startGame() {
     update_session_game().then(() => {
         nextRound();
     }).catch(error => {
+        // show err and reload web
         console.log("Game cannot proceed:", error);
-        // Handle the failure (e.g., by disabling game controls or showing an error message)
         window.location.reload();
     });
 }

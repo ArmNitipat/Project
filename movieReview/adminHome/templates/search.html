@@ -52,9 +52,6 @@
     justify-content: center;
     overflow: hidden; 
   }
-
-
-
 </style>
 <main class="container bg-light  text-dark border border-light border" style="width: 100%;">
   <div >
@@ -79,7 +76,7 @@
         </button>
       </h2>
       <!--Star item-->
-      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse {% if stars_images %}show{% endif %}" aria-labelledby="panelsStayOpen-headingOne">
         <div class="accordion-body">
           {% if stars_images %}
             {% for result in stars_images %}
@@ -118,7 +115,7 @@
       </div>
     </div>
   </div>
-  <div class="accordion text-dark " id="accordionPanelsStayOpenExample2">
+  <div class="accordion text-dark mb-3" id="accordionPanelsStayOpenExample2">
     <!-- Movie -->
     <div class="accordion-item">
       <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
@@ -127,7 +124,7 @@
         </button>
       </h2>
       <!--Movie Item-->
-      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse {% if movies_images %}show{% endif %}" aria-labelledby="panelsStayOpen-headingTwo">
         <div class="accordion-body">
           {% if movies_images %}
             {% for result in movies_images %}
@@ -166,15 +163,6 @@
         </div>
       </div>
     </div>
-    
   </div>
 </main>
-<!-- {% for star in stars %}
-    <div class="star-card">
-        <img src="{{ star.mainstar_image.url }}" alt="{{ star.name }}">
-        <h2>{{ star.name }}</h2>
-        <p>{{ star.job }}</p> -->
-        <!-- Add more details as needed -->
-    <!-- </div>
-{% endfor %} -->
 {% endblock %}
